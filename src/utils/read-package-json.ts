@@ -6,7 +6,7 @@ import { readJsonFile } from "./read-json-file";
  * Read `package.json` file from the template.
  *
  * @public
- * @since %version%
+ * @since v1.0.0
  * @param dir - Directory root directory
  */
 export async function readPackageJson(dir: string): Promise<PackageJson> {

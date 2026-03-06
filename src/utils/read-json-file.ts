@@ -4,7 +4,7 @@ import fs from "node:fs/promises";
  * Read a JSON file.
  *
  * @public
- * @since %version%
+ * @since v1.0.0
  * @param filePath - Full path to configuration file.
  */
 export async function readJsonFile<T = unknown>(filePath: string): Promise<T> {

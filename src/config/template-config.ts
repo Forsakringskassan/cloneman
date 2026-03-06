@@ -2,7 +2,7 @@
  * cloneman template configuration.
  *
  * @public
- * @since %version%
+ * @since v1.0.0
  */
 export interface TemplateConfig {
     /** list of files managed by this template */
@@ -17,7 +17,7 @@ export interface TemplateConfig {
  * Normalized version of [[TemplateConfig]].
  *
  * @public
- * @since %version%
+ * @since v1.0.0
  */
 export interface NormalizedTemplateConfig {
     /** list of files managed by this template */

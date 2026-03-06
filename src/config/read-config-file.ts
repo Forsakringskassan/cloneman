@@ -9,7 +9,7 @@ import {
  * Read and normalize a template configuration file.
  *
  * @public
- * @since %version%
+ * @since v1.0.0
  * @param filePath - Full path to configuration file.
  */
 export async function readConfigFile(

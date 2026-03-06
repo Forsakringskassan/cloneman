@@ -9,7 +9,7 @@ import { createMassagedTemplatePackageJson } from "./utils/create-massaged-templ
 
 /**
  * @public
- * @since %version%
+ * @since v1.0.0
  * @returns List of template files.
  */
 export async function buildTemplate(
