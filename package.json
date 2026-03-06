@@ -1,12 +1,11 @@
 {
-  "name": "@forsakringskassan/cloneman",
+  "name": "cloneman",
   "version": "0.0.1",
   "description": "Application template and lifecycle management tool",
   "keywords": [
     "template",
     "lifecycle"
   ],
-  "private:": true,
   "homepage": "https://github.com/Forsakringskassan/cloneman#readme",
   "bugs": {
     "url": "https://github.com/Forsakringskassan/cloneman/issues"
