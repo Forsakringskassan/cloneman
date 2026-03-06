@@ -126,7 +126,14 @@ async function getUserToken(
     return (await response.json()) as TokenResponse;
 }
 
-export async function start(targetDir: string): Promise<void> {
+export async function writeNpmRc(
+    content: string,
+    targetDir: string,
+): Promise<void> {
+    await fs.writeFile(path.join(targetDir, ".npmrc"), content);
+}
+
+export async function start(targetDir: string): Promise<string> {
     if (server) {
         throw new Error("server already started");
     }
@@ -138,7 +145,8 @@ export async function start(targetDir: string): Promise<void> {
     authEnv["NPM_TOKEN"] = token;
 
     const content = `//${getRegistryHost()}/:_authToken="${authEnv["NPM_TOKEN"]}"`;
-    await fs.writeFile(path.join(targetDir, ".npmrc"), content);
+    await writeNpmRc(content, targetDir);
+    return content;
 }
 
 export async function stop(): Promise<void> {

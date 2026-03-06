@@ -31,7 +31,26 @@ export async function buildTemplate(
         ".cloneman/**",
     ];
 
+    const indexJs = `
+        import fs from "node:fs/promises";
+        import path from "node:path";
+
+        const packageJsonFile = await fs.readFile(path.join(import.meta.dirname, "package.json"), "utf8");
+        const packageJson = JSON.parse(packageJsonFile);
+
+
+        const options = {
+            ...packageJson.cloneman,
+            filesDir: path.join(import.meta.dirname, "files"),
+        }
+
+
+        export default options;
+    `;
+
     const files = await copyFiles(filesDir, ignoredFiles);
+
+    await fs.writeFile(path.join(targetDir, "index.js"), indexJs);
 
     const clonemanPackageJson = await createclonemanPackageJson(
         path.join(targetDir, "package.json"),

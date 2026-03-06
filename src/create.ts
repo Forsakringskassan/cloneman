@@ -3,32 +3,8 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import spawn from "nano-spawn";
 import { readJsonFile } from "./utils";
-import { isTemplatePackageJson } from "./utils/is-template";
-import {
-    type PackageJson,
-    type TemplatePackageJson,
-} from "./utils/package-json";
-
-async function readTemplatePackage(
-    appPath: string,
-    templatePackage: string,
-): Promise<[filesDir: string, packagejson: TemplatePackageJson]> {
-    const templateDir = path.join(appPath, "node_modules", templatePackage);
-    const filesDir = path.join(templateDir, "files");
-    const pkgPath = path.join(templateDir, "package.json");
-
-    const templatePkg = await readJsonFile<PackageJson | TemplatePackageJson>(
-        pkgPath,
-    );
-
-    if (!isTemplatePackageJson(templatePkg)) {
-        throw new Error(
-            `Package ${templatePackage} is not a valid cloneman template package (missing "cloneman" field in package.json)`,
-        );
-    }
-
-    return [filesDir, templatePkg];
-}
+import { getTemplateInfo } from "./utils/get-template-info";
+import { type PackageJson } from "./utils/package-json";
 
 /**
  * Returns `true` if the template package is a local tarball instead of NPM package name.
@@ -70,7 +46,6 @@ export async function create(options: {
     );
 
     await fs.mkdir(appPath, { recursive: true });
-    let installedTemplatePackage;
     let templatePackageName: string;
     let templatePackageVersion: string;
 
@@ -105,15 +80,14 @@ export async function create(options: {
                 "Failed to determine installed template package name from devDependencies",
             );
         }
-        installedTemplatePackage = templatePackageName;
     } catch (err) {
         const message = err instanceof Error ? err.message : "unknown error";
         throw new Error(`Failed to install template package: ${message}`);
     }
 
-    const [filesDir, { cloneman }] = await readTemplatePackage(
+    const [filesDir, boilerplateFiles] = await getTemplateInfo(
+        templatePackageName,
         appPath,
-        installedTemplatePackage,
     );
 
     const templatePackageJson = await readJsonFile<PackageJson>(
@@ -135,7 +109,7 @@ export async function create(options: {
         "utf-8",
     );
     await Promise.all(
-        cloneman.boilerplateFiles.map((filename) =>
+        boilerplateFiles.map((filename) =>
             fs.copyFile(
                 path.join(filesDir, filename),
                 path.join(appPath, filename),

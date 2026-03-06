@@ -143,7 +143,7 @@ describe("create from base template from npm registry", () => {
                 env: createEnv,
             });
         }).rejects.toThrow(
-            `Package @forsakringskassan/non-template-package is not a valid cloneman template package (missing "cloneman" field in package.json)`,
+            `Package @forsakringskassan/non-template-package is not a valid cloneman template package`,
         );
     });
 });

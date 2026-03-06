@@ -1,13 +1,17 @@
 import { Console } from "node:console";
 import path from "node:path";
 import { WritableStreamBuffer } from "stream-buffers";
-import { beforeEach, expect, it } from "vitest";
+import { beforeEach, expect, it, vi } from "vitest";
 import { createParser } from "./cli";
 
 const fixtureDir = path.resolve(import.meta.dirname, "../../fixtures");
 const baseTemplate = path.join(fixtureDir, "base-template");
 
 let stream: WritableStreamBuffer;
+
+vi.mock(import("../update"), () => ({
+    update: vi.fn(),
+}));
 
 beforeEach(() => {
     stream = new WritableStreamBuffer();

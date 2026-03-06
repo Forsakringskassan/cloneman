@@ -13,7 +13,11 @@ export async function createclonemanPackageJson(
     const { name, version, boilerplateFiles, managedFiles } = options;
     const pkg = {
         name,
+        type: "module",
         version,
+        exports: {
+            ".": "./index.js",
+        },
         cloneman: {
             boilerplateFiles,
             managedFiles,

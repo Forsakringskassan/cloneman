@@ -1,17 +1,21 @@
 import { type CommandModule } from "yargs";
+import { update } from "../update";
 import { type Context } from "./context";
 
 interface UpdateArguments {
     target: string | undefined;
 }
 
-function updateHandler(
-    _context: Context,
+async function updateHandler(
+    context: Context,
     argv: UpdateArguments,
 ): Promise<void> {
     const { target } = argv;
-    console.log(`Updating the application to version ${target ?? "latest"}...`);
-    return Promise.resolve();
+    const { cwd } = context;
+
+    const version = target ?? "latest";
+    console.log(`Updating the application to version ${version}...`);
+    await update(cwd, version, {});
 }
 
 /**

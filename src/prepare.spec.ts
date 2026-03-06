@@ -68,7 +68,11 @@ describe("prepare base template", () => {
                 "managed.txt",
               ],
             },
+            "exports": {
+              ".": "./index.js",
+            },
             "name": "@forsakringskassan/base-template",
+            "type": "module",
             "version": "1.0.0",
           }
         `);
