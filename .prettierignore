@@ -1,0 +1,8 @@
+CHANGELOG.md
+package-lock.json
+
+coverage/
+dist/
+etc/*.api.md
+node_modules/
+temp/
