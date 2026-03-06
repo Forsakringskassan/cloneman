@@ -4,26 +4,8 @@ import path from "node:path";
 import spawn from "nano-spawn";
 import { readJsonFile } from "./utils";
 import { getTemplateInfo } from "./utils/get-template-info";
+import { normalizeTemplatePackage } from "./utils/normalize-template-package";
 import { type PackageJson } from "./utils/package-json";
-
-/**
- * Returns `true` if the template package is a local tarball instead of NPM package name.
- */
-function isTarball(templatePackage: string): boolean {
-    return templatePackage.endsWith(".tgz");
-}
-
-function normalizeTemplatePackage(
-    appPath: string,
-    templatePackage: string,
-): string {
-    if (!isTarball(templatePackage) || path.isAbsolute(templatePackage)) {
-        return templatePackage;
-    }
-
-    const absolutePath = path.resolve(templatePackage);
-    return path.relative(appPath, absolutePath);
-}
 
 /**
  * @internal

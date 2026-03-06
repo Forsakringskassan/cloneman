@@ -20,11 +20,18 @@ You can also refer to a local template file:
 
 ### Update your application
 
+> Note: You can only update your application using the same template it was created with.
+
 To latest version:
 `npx cloneman update`
 
 You can also update to a specific version:
 `npx cloneman update 1.2.3`
+
+### Local tarball
+
+As with the create command, you can also point to a local tarball:
+`npx cloneman update ../directory/template.tgz`
 
 ## Usage when creating and managing templates
 

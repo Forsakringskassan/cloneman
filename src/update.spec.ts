@@ -1,8 +1,17 @@
 import { existsSync } from "node:fs";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+} from "vitest";
 import { create } from "./create";
+import { pack } from "./pack";
 import { prepare } from "./prepare";
 import { publish } from "./publish";
 import {
@@ -14,6 +23,8 @@ import {
 } from "./test-utils/npm-registry";
 import { temporaryDirectory } from "./test-utils/temporary-directory";
 import { update } from "./update";
+import { type PackageJson } from "./utils/package-json";
+import { readJsonFile } from "./utils/read-json-file";
 
 const fixtureDir = path.resolve(import.meta.dirname, "../fixtures");
 const baseTemplate = path.join(fixtureDir, "base-template");
@@ -39,6 +50,7 @@ describe("update from npm registry", () => {
         await writeNpmRc(authToken, targetDir);
 
         await publish({ cwd: targetDir, env: authEnv });
+        await pack({ cwd: targetDir, targetDir });
 
         await fs.mkdir(cwd, { recursive: true });
 
@@ -46,7 +58,9 @@ describe("update from npm registry", () => {
             /* eslint-disable-next-line camelcase -- outside our control */
             npm_config_registry: getRegistryUrl(),
         };
+    });
 
+    beforeEach(async () => {
         await create({
             name: "mock-app",
             templatePackage,
@@ -95,5 +109,48 @@ describe("update from npm registry", () => {
         expect(managedFile).toContain(
             "Updated file from Base-template - 1.0.1",
         );
+    });
+
+    it("should update existing project from local tar", async () => {
+        expect.hasAssertions();
+
+        expect(existsSync(appDir)).toBeTruthy();
+
+        const templatePackage = path.join(
+            targetDir,
+            "forsakringskassan-base-template-1.0.1.tgz",
+        );
+
+        await update(appDir, templatePackage, createEnv);
+
+        const managedFile = await fs.readFile(
+            path.join(appDir, "managed.txt"),
+            "utf8",
+        );
+
+        const packageJson = await readJsonFile<PackageJson>(
+            path.join(appDir, "package.json"),
+        );
+
+        expect(
+            packageJson.devDependencies?.["@forsakringskassan/base-template"],
+        ).toContain("forsakringskassan-base-template-1.0.1.tgz");
+
+        expect(managedFile).toContain(
+            "Updated file from Base-template - 1.0.1",
+        );
+    });
+
+    it("should crash if invalid tar path", async () => {
+        expect.hasAssertions();
+
+        const templatePackage = path.join(
+            targetDir,
+            "forsakringskassan-base-template-4.0.4.tgz",
+        );
+
+        await expect(async () => {
+            await update(appDir, templatePackage, createEnv);
+        }).rejects.toThrow(`Tarball not found at path`);
     });
 });
