@@ -41,7 +41,7 @@ export async function update(
         },
     );
 
-    const [filesDir, , managedFiles] = await getTemplateInfo(
+    const { filesDir, managedFiles } = await getTemplateInfo(
         templatePackage,
         cwd,
     );
