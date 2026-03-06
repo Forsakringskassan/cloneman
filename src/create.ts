@@ -85,7 +85,7 @@ export async function create(options: {
         throw new Error(`Failed to install template package: ${message}`);
     }
 
-    const [filesDir, boilerplateFiles] = await getTemplateInfo(
+    const { filesDir, boilerplateFiles } = await getTemplateInfo(
         templatePackageName,
         appPath,
     );
