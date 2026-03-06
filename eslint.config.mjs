@@ -32,4 +32,13 @@ export default [
             "no-console": "off",
         },
     },
+
+    {
+        name: "local/dist",
+        files: ["fixtures/**/.cloneman/build.mjs"],
+        rules: {
+            /* depends on dist folder being built */
+            "import/no-unresolved": "off",
+        },
+    },
 ];
