@@ -2,7 +2,6 @@
 
 import fs from "node:fs/promises";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
 import { startVerdaccio as startServer } from "verdaccio";
 import { temporaryDirectory } from "./temporary-directory";
 
@@ -13,7 +12,7 @@ const NPM_EMAIL = "integration@example.net";
 const storage = temporaryDirectory();
 const config = {
     storage,
-    self_path: path.dirname(fileURLToPath(import.meta.url)),
+    self_path: import.meta.dirname,
     auth: {
         htpasswd: {
             file: path.join(storage, "htpasswd"),
@@ -42,14 +41,14 @@ export const authEnv: Record<string, string> = {
     NPM_TOKEN: "",
 };
 
-let server: import("http").Server | null = null;
+let server: import("node:http").Server | null = null;
 let registryHost: string = "";
 let registryUrl: string = "";
 
 /* eslint-disable-next-line sonarjs/pseudo-random -- for testing */
 const port = Math.ceil(Math.random() * 50000 + 5000);
 
-function startVerdaccio(): Promise<import("http").Server> {
+function startVerdaccio(): Promise<import("node:http").Server> {
     return new Promise((resolve, reject) => {
         try {
             startServer(

@@ -34,6 +34,6 @@ export async function readPackageJsonFromTarball(
         );
     }
 
-    const content = Buffer.concat(chunks).toString("utf-8");
+    const content = Buffer.concat(chunks).toString("utf8");
     return JSON.parse(content) as TemplatePackageJson;
 }
