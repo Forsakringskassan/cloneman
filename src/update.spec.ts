@@ -149,8 +149,8 @@ describe("update from npm registry", () => {
             "forsakringskassan-base-template-4.0.4.tgz",
         );
 
-        await expect(async () => {
-            await update(appDir, templatePackage, createEnv);
-        }).rejects.toThrow(`Tarball not found at path`);
+        await expect(
+            update(appDir, templatePackage, createEnv),
+        ).rejects.toThrowError(`Tarball not found at path`);
     });
 });

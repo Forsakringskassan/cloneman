@@ -88,7 +88,7 @@ export async function create(options: {
     await fs.writeFile(
         path.join(appPath, "package.json"),
         JSON.stringify(templatePackageJson, null, 2),
-        "utf-8",
+        "utf8",
     );
     await Promise.all(
         boilerplateFiles.map((filename) =>
