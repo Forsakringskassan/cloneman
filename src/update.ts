@@ -65,6 +65,4 @@ export async function update(
             );
         }),
     );
-
-    return Promise.resolve();
 }

@@ -84,9 +84,7 @@ describe("prepare non-template package", () => {
         expect.hasAssertions();
         const cwd = path.join(fixtureDir, "non-template-package");
 
-        await expect(async () => {
-            await prepare(cwd, targetDir);
-        }).rejects.toThrow(
+        await expect(prepare(cwd, targetDir)).rejects.toThrowError(
             `Current directory is not a valid cloneman template (missing ".cloneman")`,
         );
     });

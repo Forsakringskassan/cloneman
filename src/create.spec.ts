@@ -29,7 +29,7 @@ const nonTemplatePackage = path.join(fixtureDir, "non-template-package");
 let createEnv: Record<string, string>;
 
 async function readFile(appDir: string, filePath: string): Promise<string> {
-    return fs.readFile(path.join(appDir, filePath), "utf-8");
+    return fs.readFile(path.join(appDir, filePath), "utf8");
 }
 
 describe("create from base template from npm registry", () => {
@@ -91,25 +91,25 @@ describe("create from base template from npm registry", () => {
     it("should throw error if directory already exists", async () => {
         expect.hasAssertions();
         await fs.mkdir(appDir, { recursive: true });
-        await expect(async () => {
-            await create({
+        await expect(
+            create({
                 name: "mock-app",
                 templatePackage,
                 cwd,
-            });
-        }).rejects.toThrow("application dir already exists");
+            }),
+        ).rejects.toThrowError("application dir already exists");
     });
 
     it("should throw error if package do not exist", async () => {
         expect.hasAssertions();
-        await expect(async () => {
-            await create({
+        await expect(
+            create({
                 name: "mock-app",
                 templatePackage: "@forsakringskassan/non-existing-package",
                 cwd,
                 env: createEnv,
-            });
-        }).rejects.toThrow(
+            }),
+        ).rejects.toThrowError(
             `Failed to install template package: Command failed with exit code 1: npm install --save-dev --save-exact '@forsakringskassan/non-existing-package'`,
         );
     });
@@ -135,14 +135,14 @@ describe("create from base template from npm registry", () => {
             env: authEnv,
         });
 
-        await expect(async () => {
-            await create({
+        await expect(
+            create({
                 name: "mock-app",
                 templatePackage: "@forsakringskassan/non-template-package",
                 cwd,
                 env: createEnv,
-            });
-        }).rejects.toThrow(
+            }),
+        ).rejects.toThrowError(
             `Package @forsakringskassan/non-template-package is not a valid cloneman template package`,
         );
     });
