@@ -2,9 +2,10 @@
 
 import fs from "node:fs/promises";
 import { type Server } from "node:http";
+import { type AddressInfo } from "node:net";
 import path from "node:path";
 import { type ConfigYaml } from "@verdaccio/types";
-import { startVerdaccio as startServer } from "verdaccio";
+import { runServer } from "verdaccio";
 import { temporaryDirectory } from "./temporary-directory";
 
 const NPM_USERNAME = "integration";
@@ -52,36 +53,19 @@ let server: Server | null = null;
 let registryHost: string = "";
 let registryUrl: string = "";
 
-/* eslint-disable-next-line sonarjs/pseudo-random -- for testing */
-const port = Math.ceil(Math.random() * 50000 + 5000);
-
 function startVerdaccio(): Promise<Server> {
-    return new Promise((resolve, reject) => {
-        try {
-            /* eslint-disable-next-line @typescript-eslint/no-deprecated -- technical debt */
-            startServer(
-                config,
-                port as unknown as string,
-                {} as unknown as string,
-                "1.0.0",
-                "verdaccio",
-                (
-                    server: Server,
-                    addr: { port: number; host: string; proto: string },
-                ) => {
-                    server.listen(addr.port, addr.host, () => {
-                        registryHost = `${addr.host}:${addr.port}`;
-                        registryUrl = `${addr.proto}://${registryHost}`;
-                        userEnv.npm_config_registry = registryUrl;
-                        authEnv.npm_config_registry = registryUrl;
-                        resolve(server);
-                    });
-                },
-            );
-        } catch (error) {
-            /* eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors -- it probably is an Error object, we just pass it through */
-            reject(error);
-        }
+    return new Promise((resolve) => {
+        return runServer(config).then((server: Server) => {
+            server.listen(0, "127.0.0.1", () => {
+                const addr = server.address() as AddressInfo;
+                registryHost = `${addr.address}:${addr.port}`;
+                registryUrl = `http://${registryHost}`;
+                console.log({ registryHost, registryUrl });
+                userEnv.npm_config_registry = registryUrl;
+                authEnv.npm_config_registry = registryUrl;
+                resolve(server);
+            });
+        });
     });
 }
 
