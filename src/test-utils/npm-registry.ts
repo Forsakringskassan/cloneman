@@ -1,8 +1,9 @@
-/* eslint-disable @typescript-eslint/prefer-nullish-coalescing, @typescript-eslint/prefer-promise-reject-errors, @typescript-eslint/restrict-template-expressions, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-explicit-any, @typescript-eslint/no-deprecated , @typescript-eslint/no-unsafe-argument, camelcase -- technical debt */
+/* eslint-disable camelcase -- environment variables */
 
 import fs from "node:fs/promises";
 import { type Server } from "node:http";
 import path from "node:path";
+import { type ConfigYaml } from "@verdaccio/types";
 import { startVerdaccio as startServer } from "verdaccio";
 import { temporaryDirectory } from "./temporary-directory";
 
@@ -11,8 +12,9 @@ const NPM_PASSWORD = "suchsecure"; // eslint-disable-line sonarjs/no-hardcoded-p
 const NPM_EMAIL = "integration@example.net";
 
 const storage = temporaryDirectory();
-const config = {
+const config: ConfigYaml = {
     storage,
+    /* @ts-expect-error -- documentation says this should not be set in verdaccio v6 but it doesn't work without it (and the type definition disallows it) */
     self_path: import.meta.dirname,
     auth: {
         htpasswd: {
@@ -23,12 +25,12 @@ const config = {
     uplinks: {},
     packages: {
         "@*/*": {
-            access: "$all",
-            publish: "$all",
+            access: ["$all"],
+            publish: ["$all"],
         },
         "**": {
-            access: "$all",
-            publish: "$all",
+            access: ["$all"],
+            publish: ["$all"],
         },
     },
     log: { type: "stdout", format: "pretty", level: "error" },
@@ -56,23 +58,28 @@ const port = Math.ceil(Math.random() * 50000 + 5000);
 function startVerdaccio(): Promise<Server> {
     return new Promise((resolve, reject) => {
         try {
+            /* eslint-disable-next-line @typescript-eslint/no-deprecated -- technical debt */
             startServer(
                 config,
-                port as any,
-                {} as any,
+                port as unknown as string,
+                {} as unknown as string,
                 "1.0.0",
                 "verdaccio",
-                (webServer: any, addr: any) => {
-                    webServer.listen(addr.port || addr.path, addr.host, () => {
+                (
+                    server: Server,
+                    addr: { port: number; host: string; proto: string },
+                ) => {
+                    server.listen(addr.port, addr.host, () => {
                         registryHost = `${addr.host}:${addr.port}`;
                         registryUrl = `${addr.proto}://${registryHost}`;
                         userEnv.npm_config_registry = registryUrl;
                         authEnv.npm_config_registry = registryUrl;
-                        resolve(webServer);
+                        resolve(server);
                     });
                 },
             );
         } catch (error) {
+            /* eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors -- it probably is an Error object, we just pass it through */
             reject(error);
         }
     });
@@ -146,7 +153,7 @@ export async function start(): Promise<typeof authEnv> {
 }
 
 export async function stop(): Promise<void> {
-    await fs.rm(config.storage, { recursive: true });
+    await fs.rm(storage, { recursive: true });
     return new Promise((resolve, reject) => {
         if (server) {
             server.close((error?: Error | null) => {
