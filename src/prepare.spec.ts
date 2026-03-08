@@ -6,7 +6,7 @@ import { readJsonFile } from "./utils";
 import { type PackageJson } from "./utils/package-json";
 
 const fixtureDir = path.resolve(import.meta.dirname, "../fixtures");
-const baseTemplate = path.join(fixtureDir, "base-template");
+const baseTemplate = path.join(fixtureDir, "base-template@1.0.0");
 const targetDir = path.resolve("temp/prepare-test");
 
 describe("prepare base template", () => {

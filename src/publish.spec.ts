@@ -7,7 +7,7 @@ import { authEnv, start, stop } from "./test-utils/npm-registry";
 import { temporaryDirectory } from "./test-utils/temporary-directory";
 
 const fixtureDir = path.resolve(import.meta.dirname, "../fixtures");
-const baseTemplate = path.join(fixtureDir, "base-template");
+const baseTemplate = path.join(fixtureDir, "base-template@1.0.0");
 const targetDir = temporaryDirectory();
 
 beforeAll(async () => {

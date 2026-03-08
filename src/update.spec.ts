@@ -27,8 +27,8 @@ import { type PackageJson } from "./utils/package-json";
 import { readJsonFile } from "./utils/read-json-file";
 
 const fixtureDir = path.resolve(import.meta.dirname, "../fixtures");
-const baseTemplate = path.join(fixtureDir, "base-template");
-const baseTemplateUpdated = path.join(fixtureDir, "base-template-updated");
+const baseTemplate = path.join(fixtureDir, "base-template@1.0.0");
+const baseTemplateUpdated = path.join(fixtureDir, "base-template@1.0.1");
 
 const targetDir = temporaryDirectory();
 
