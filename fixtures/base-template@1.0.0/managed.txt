@@ -1,1 +1,1 @@
-Updated file from Base-template
+managed file at v1.0.0

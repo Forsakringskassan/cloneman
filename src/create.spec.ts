@@ -1,20 +1,27 @@
-import { existsSync } from "node:fs";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    describe,
+    expect,
+    inject,
+    it,
+} from "vitest";
 import { create } from "./create";
 import { pack } from "./pack";
 import { prepare } from "./prepare";
-import { publish } from "./publish";
-import {
-    authEnv,
-    getRegistryUrl,
-    start,
-    stop,
-} from "./test-utils/npm-registry";
 import { temporaryDirectory } from "./test-utils/temporary-directory";
-import { readJsonFile } from "./utils";
-import { type PackageJson } from "./utils/package-json";
+
+expect.addSnapshotSerializer({
+    test() {
+        return true;
+    },
+    serialize(value) {
+        return String(value);
+    },
+});
 
 const fixtureDir = path.resolve(import.meta.dirname, "../fixtures");
 const baseTemplate = path.join(fixtureDir, "base-template@1.0.0");
@@ -22,27 +29,19 @@ const targetDir = temporaryDirectory();
 
 const cwd = "temp/create-test";
 const appDir = path.join(cwd, "mock-app");
+const userEnv = inject("userEnv");
 
-const templatePackage = "@forsakringskassan/base-template";
-const nonTemplatePackage = path.join(fixtureDir, "non-template-package");
-
-let createEnv: Record<string, string>;
-
-async function readFile(appDir: string, filePath: string): Promise<string> {
+async function readFile(filePath: string): Promise<string> {
     return fs.readFile(path.join(appDir, filePath), "utf8");
+}
+
+async function readJsonFile<T = unknown>(filePath: string): Promise<T> {
+    return JSON.parse(await readFile(filePath)) as T;
 }
 
 describe("create from base template from npm registry", () => {
     beforeAll(async () => {
-        await prepare(baseTemplate, targetDir);
-        await start(targetDir);
-        await publish({ cwd: targetDir, env: authEnv });
         await fs.mkdir(cwd, { recursive: true });
-
-        createEnv = {
-            /* eslint-disable-next-line camelcase -- outside our control */
-            npm_config_registry: getRegistryUrl(),
-        };
     });
 
     afterEach(async () => {
@@ -51,40 +50,33 @@ describe("create from base template from npm registry", () => {
 
     afterAll(async () => {
         await fs.rm(cwd, { recursive: true, force: true });
-        await stop();
     });
 
     it("should create new project", async () => {
-        expect.hasAssertions();
+        expect.assertions(3);
         await create({
             name: "mock-app",
-            templatePackage,
+            templatePackage: "@forsakringskassan/base-template@1.0.0",
             cwd,
-            env: createEnv,
+            env: userEnv,
         });
-        expect(existsSync(appDir)).toBeTruthy();
-
-        expect(await readFile(appDir, "package.json")).toMatchInlineSnapshot(
-            `
-          "{
-            "name": "mock-app",
-            "version": "0.0.0",
-            "private": true,
-            "description": "",
-            "files": [],
-            "dependencies": {},
-            "devDependencies": {
-              "@forsakringskassan/base-template": "1.0.0"
+        expect(await readJsonFile("package.json")).toEqual({
+            name: "mock-app",
+            version: "0.0.0",
+            private: true,
+            description: "",
+            files: [],
+            dependencies: {},
+            devDependencies: {
+                "@forsakringskassan/base-template": "1.0.0",
             },
-            "cloneman": "@forsakringskassan/base-template"
-          }"
-        `,
+            cloneman: "@forsakringskassan/base-template",
+        });
+        expect(await readFile("boilerplate.txt")).toMatchInlineSnapshot(
+            `boilerplate file at v1.0.0`,
         );
-        expect(await readFile(appDir, "boilerplate.txt")).toMatchInlineSnapshot(
-            `"Boilerplate file copied in create command"`,
-        );
-        expect(await readFile(appDir, "managed.txt")).toMatchInlineSnapshot(
-            `"Updated file from Base-template"`,
+        expect(await readFile("managed.txt")).toMatchInlineSnapshot(
+            `managed file at v1.0.0`,
         );
     });
 
@@ -94,7 +86,7 @@ describe("create from base template from npm registry", () => {
         await expect(
             create({
                 name: "mock-app",
-                templatePackage,
+                templatePackage: "@forsakringskassan/base-template@1.0.0",
                 cwd,
             }),
         ).rejects.toThrowError("application dir already exists");
@@ -107,7 +99,7 @@ describe("create from base template from npm registry", () => {
                 name: "mock-app",
                 templatePackage: "@forsakringskassan/non-existing-package",
                 cwd,
-                env: createEnv,
+                env: userEnv,
             }),
         ).rejects.toThrowError(
             `Failed to install template package: Command failed with exit code 1: npm install --save-dev --save-exact '@forsakringskassan/non-existing-package'`,
@@ -116,31 +108,13 @@ describe("create from base template from npm registry", () => {
 
     it("should throw error if package is not a template", async () => {
         expect.hasAssertions();
-        // Create and publish a package that does not have the "cloneman" field in its package.json */
-        await fs.cp(
-            nonTemplatePackage,
-            path.join(targetDir, "non-template-package"),
-            {
-                recursive: true,
-            },
-        );
-
-        await fs.copyFile(
-            path.join(targetDir, ".npmrc"),
-            path.join(targetDir, "non-template-package", ".npmrc"),
-        );
-
-        await publish({
-            cwd: path.join(targetDir, "non-template-package"),
-            env: authEnv,
-        });
-
+        // non-template-package is already published by vitest.setup.ts
         await expect(
             create({
                 name: "mock-app",
                 templatePackage: "@forsakringskassan/non-template-package",
                 cwd,
-                env: createEnv,
+                env: userEnv,
             }),
         ).rejects.toThrowError(
             `Package @forsakringskassan/non-template-package is not a valid cloneman template package`,
@@ -149,12 +123,6 @@ describe("create from base template from npm registry", () => {
 });
 
 describe("create from local template package", () => {
-    beforeAll(async () => {
-        await prepare(baseTemplate, targetDir);
-        await pack({ cwd: targetDir, targetDir });
-        await fs.mkdir(cwd, { recursive: true });
-    });
-
     afterEach(async () => {
         await fs.rm(appDir, { recursive: true, force: true });
     });
@@ -164,29 +132,43 @@ describe("create from local template package", () => {
     });
 
     it("should create new project from local .tgz file", async () => {
-        expect.hasAssertions();
+        expect.assertions(3);
 
+        /* create a local tarball for version 1.0.0 */
+        const tarballPath = path.join(
+            targetDir,
+            "forsakringskassan-base-template-1.0.0.tgz",
+        );
+        await prepare(baseTemplate, targetDir);
+        await pack({ cwd: targetDir, targetDir });
+        await fs.mkdir(cwd, { recursive: true });
+
+        /* create the application using the local tarball */
         await create({
             name: "mock-app",
-            templatePackage: path.join(
-                targetDir,
-                "forsakringskassan-base-template-1.0.0.tgz",
-            ),
+            templatePackage: tarballPath,
             cwd,
             env: {},
         });
-
-        const json = await readJsonFile<PackageJson>(
-            path.join(appDir, "package.json"),
+        expect(await readJsonFile("package.json")).toEqual({
+            name: "mock-app",
+            version: "0.0.0",
+            private: true,
+            description: "",
+            files: [],
+            dependencies: {},
+            devDependencies: {
+                "@forsakringskassan/base-template": expect.stringContaining(
+                    tarballPath.replaceAll("\\", "/"),
+                ),
+            },
+            cloneman: "@forsakringskassan/base-template",
+        });
+        expect(await readFile("boilerplate.txt")).toMatchInlineSnapshot(
+            `boilerplate file at v1.0.0`,
         );
-
-        expect(json.name).toBe("mock-app");
-        expect(json.devDependencies).toHaveProperty(
-            "@forsakringskassan/base-template",
+        expect(await readFile("managed.txt")).toMatchInlineSnapshot(
+            `managed file at v1.0.0`,
         );
-
-        expect(
-            json.devDependencies!["@forsakringskassan/base-template"],
-        ).toContain("file:");
     });
 });
