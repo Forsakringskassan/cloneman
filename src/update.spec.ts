@@ -1,156 +1,143 @@
-import { existsSync } from "node:fs";
 import fs from "node:fs/promises";
 import path from "node:path";
-import {
-    afterAll,
-    afterEach,
-    beforeAll,
-    beforeEach,
-    describe,
-    expect,
-    it,
-} from "vitest";
+import { afterAll, afterEach, beforeAll, expect, inject, it } from "vitest";
 import { create } from "./create";
 import { pack } from "./pack";
 import { prepare } from "./prepare";
-import { publish } from "./publish";
-import {
-    authEnv,
-    getRegistryUrl,
-    start,
-    stop,
-    writeNpmRc,
-} from "./test-utils/npm-registry";
 import { temporaryDirectory } from "./test-utils/temporary-directory";
 import { update } from "./update";
-import { type PackageJson } from "./utils/package-json";
-import { readJsonFile } from "./utils/read-json-file";
 
-const fixtureDir = path.resolve(import.meta.dirname, "../fixtures");
-const baseTemplate = path.join(fixtureDir, "base-template@1.0.0");
-const baseTemplateUpdated = path.join(fixtureDir, "base-template@1.0.1");
-
-const targetDir = temporaryDirectory();
+expect.addSnapshotSerializer({
+    test() {
+        return true;
+    },
+    serialize(value) {
+        return String(value);
+    },
+});
 
 const cwd = "temp/update-test";
 const appDir = path.join(cwd, "mock-app");
+const userEnv = inject("userEnv");
 
-const templatePackage = "@forsakringskassan/base-template@1.0.0";
+function readFile(filePath: string): Promise<string> {
+    return fs.readFile(path.join(appDir, filePath), "utf8");
+}
 
-let createEnv: Record<string, string>;
+async function readJsonFile<T = unknown>(filePath: string): Promise<T> {
+    return JSON.parse(await readFile(filePath)) as T;
+}
 
-describe("update from npm registry", () => {
-    beforeAll(async () => {
-        await prepare(baseTemplate, targetDir);
+beforeAll(async () => {
+    await fs.mkdir(cwd, { recursive: true });
+});
 
-        const authToken = await start(targetDir);
-        await publish({ cwd: targetDir, env: authEnv });
+afterEach(async () => {
+    await fs.rm(appDir, { recursive: true, force: true });
+});
 
-        await prepare(baseTemplateUpdated, targetDir);
-        await writeNpmRc(authToken, targetDir);
+afterAll(async () => {
+    await fs.rm(cwd, { recursive: true, force: true });
+});
 
-        await publish({ cwd: targetDir, env: authEnv });
-        await pack({ cwd: targetDir, targetDir });
+it("should update existing project", async () => {
+    expect.assertions(5);
 
-        await fs.mkdir(cwd, { recursive: true });
+    /* create the initial application using template at version 1.0.0 */
+    await create({
+        name: "mock-app",
+        templatePackage: "@forsakringskassan/base-template@1.0.0",
+        cwd,
+        env: userEnv,
+    });
+    expect(await readFile("boilerplate.txt")).toMatchInlineSnapshot(
+        `boilerplate file at v1.0.0`,
+    );
+    expect(await readFile("managed.txt")).toMatchInlineSnapshot(
+        `managed file at v1.0.0`,
+    );
 
-        createEnv = {
-            /* eslint-disable-next-line camelcase -- outside our control */
-            npm_config_registry: getRegistryUrl(),
-        };
+    /* update the application to version 1.0.1 */
+    await update(appDir, "1.0.1", userEnv);
+    expect(await readJsonFile("package.json")).toEqual(
+        expect.objectContaining({
+            devDependencies: {
+                "@forsakringskassan/base-template": "1.0.1",
+            },
+        }),
+    );
+    expect(await readFile("boilerplate.txt")).toMatchInlineSnapshot(
+        `boilerplate file at v1.0.0`,
+    );
+    expect(await readFile("managed.txt")).toMatchInlineSnapshot(
+        `managed file at v1.0.1`,
+    );
+});
+
+it("should update existing project from local tar", async () => {
+    expect.assertions(5);
+
+    /* create the initial application using template at version 1.0.0 */
+    await create({
+        name: "mock-app",
+        templatePackage: "@forsakringskassan/base-template@1.0.0",
+        cwd,
+        env: userEnv,
+    });
+    expect(await readFile("boilerplate.txt")).toMatchInlineSnapshot(
+        `boilerplate file at v1.0.0`,
+    );
+    expect(await readFile("managed.txt")).toMatchInlineSnapshot(
+        `managed file at v1.0.0`,
+    );
+
+    /* create a local tarball for version 1.0.1 */
+    const fixturePath = path.resolve(
+        import.meta.dirname,
+        "../fixtures",
+        "base-template@1.0.1",
+    );
+    const targetDir = temporaryDirectory();
+    await prepare(fixturePath, targetDir);
+    await pack({ cwd: targetDir, targetDir });
+    const tarballPath = path.join(
+        targetDir,
+        "forsakringskassan-base-template-1.0.1.tgz",
+    );
+
+    /* update the application using the local tarball */
+    await update(appDir, tarballPath, userEnv);
+    expect(await readJsonFile("package.json")).toEqual(
+        expect.objectContaining({
+            devDependencies: {
+                "@forsakringskassan/base-template": expect.stringContaining(
+                    tarballPath.replaceAll("\\", "/"),
+                ),
+            },
+        }),
+    );
+    expect(await readFile("boilerplate.txt")).toMatchInlineSnapshot(
+        `boilerplate file at v1.0.0`,
+    );
+    expect(await readFile("managed.txt")).toMatchInlineSnapshot(
+        `managed file at v1.0.1`,
+    );
+});
+
+it("should crash if invalid tar path", async () => {
+    expect.assertions(1);
+
+    /* create the initial application using template at version 1.0.0 */
+    await create({
+        name: "mock-app",
+        templatePackage: "@forsakringskassan/base-template@1.0.0",
+        cwd,
+        env: userEnv,
     });
 
-    beforeEach(async () => {
-        await create({
-            name: "mock-app",
-            templatePackage,
-            cwd,
-            env: createEnv,
-        });
-    });
-
-    afterEach(async () => {
-        await fs.rm(appDir, { recursive: true, force: true });
-    });
-
-    afterAll(async () => {
-        await fs.rm(cwd, { recursive: true, force: true });
-        await stop();
-    });
-
-    it("should update existing project", async () => {
-        expect.hasAssertions();
-
-        expect(existsSync(appDir)).toBeTruthy();
-
-        let managedFile = await fs.readFile(
-            path.join(appDir, "managed.txt"),
-            "utf8",
-        );
-
-        expect(managedFile).toBe("Updated file from Base-template");
-
-        await update(appDir, "1.0.1", createEnv);
-
-        const boilerplateFile = await fs.readFile(
-            path.join(appDir, "boilerplate.txt"),
-            "utf8",
-        );
-
-        expect(boilerplateFile).toBe(
-            "Boilerplate file copied in create command",
-        );
-
-        managedFile = await fs.readFile(
-            path.join(appDir, "managed.txt"),
-            "utf8",
-        );
-
-        expect(managedFile).toContain(
-            "Updated file from Base-template - 1.0.1",
-        );
-    });
-
-    it("should update existing project from local tar", async () => {
-        expect.hasAssertions();
-
-        expect(existsSync(appDir)).toBeTruthy();
-
-        const templatePackage = path.join(
-            targetDir,
-            "forsakringskassan-base-template-1.0.1.tgz",
-        );
-
-        await update(appDir, templatePackage, createEnv);
-
-        const managedFile = await fs.readFile(
-            path.join(appDir, "managed.txt"),
-            "utf8",
-        );
-
-        const packageJson = await readJsonFile<PackageJson>(
-            path.join(appDir, "package.json"),
-        );
-
-        expect(
-            packageJson.devDependencies?.["@forsakringskassan/base-template"],
-        ).toContain("forsakringskassan-base-template-1.0.1.tgz");
-
-        expect(managedFile).toContain(
-            "Updated file from Base-template - 1.0.1",
-        );
-    });
-
-    it("should crash if invalid tar path", async () => {
-        expect.hasAssertions();
-
-        const templatePackage = path.join(
-            targetDir,
-            "forsakringskassan-base-template-4.0.4.tgz",
-        );
-
-        await expect(
-            update(appDir, templatePackage, createEnv),
-        ).rejects.toThrowError(`Tarball not found at path`);
-    });
+    /* try to update to a non-existing tarball */
+    const invalidTarPath = path.join(appDir, "base-template-4.0.4.tgz");
+    await expect(update(appDir, invalidTarPath, userEnv)).rejects.toThrowError(
+        `Tarball not found at path`,
+    );
 });

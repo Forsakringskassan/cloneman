@@ -1,1 +1,1 @@
-Boilerplate file copied from update command 1.0.1
+boilerplate file at v1.0.1

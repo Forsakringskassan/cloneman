@@ -1,1 +1,1 @@
-Boilerplate file copied in create command
+boilerplate file at v1.0.0

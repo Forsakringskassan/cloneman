@@ -1,6 +1,7 @@
-/* eslint-disable @typescript-eslint/prefer-nullish-coalescing, @typescript-eslint/prefer-promise-reject-errors, @typescript-eslint/restrict-template-expressions, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-explicit-any, @typescript-eslint/no-deprecated, @typescript-eslint/consistent-type-imports , @typescript-eslint/no-unsafe-argument, camelcase -- technical debt */
+/* eslint-disable @typescript-eslint/prefer-nullish-coalescing, @typescript-eslint/prefer-promise-reject-errors, @typescript-eslint/restrict-template-expressions, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-explicit-any, @typescript-eslint/no-deprecated , @typescript-eslint/no-unsafe-argument, camelcase -- technical debt */
 
 import fs from "node:fs/promises";
+import { type Server } from "node:http";
 import path from "node:path";
 import { startVerdaccio as startServer } from "verdaccio";
 import { temporaryDirectory } from "./temporary-directory";
@@ -33,7 +34,11 @@ const config = {
     log: { type: "stdout", format: "pretty", level: "error" },
 };
 
-export const authEnv: Record<string, string> = {
+const userEnv = {
+    npm_config_registry: "",
+};
+
+const authEnv = {
     npm_config_registry: "",
     NPM_USERNAME,
     NPM_PASSWORD,
@@ -41,14 +46,14 @@ export const authEnv: Record<string, string> = {
     NPM_TOKEN: "",
 };
 
-let server: import("node:http").Server | null = null;
+let server: Server | null = null;
 let registryHost: string = "";
 let registryUrl: string = "";
 
 /* eslint-disable-next-line sonarjs/pseudo-random -- for testing */
 const port = Math.ceil(Math.random() * 50000 + 5000);
 
-function startVerdaccio(): Promise<import("node:http").Server> {
+function startVerdaccio(): Promise<Server> {
     return new Promise((resolve, reject) => {
         try {
             startServer(
@@ -61,7 +66,8 @@ function startVerdaccio(): Promise<import("node:http").Server> {
                     webServer.listen(addr.port || addr.path, addr.host, () => {
                         registryHost = `${addr.host}:${addr.port}`;
                         registryUrl = `${addr.proto}://${registryHost}`;
-                        authEnv["npm_config_registry"] = registryUrl;
+                        userEnv.npm_config_registry = registryUrl;
+                        authEnv.npm_config_registry = registryUrl;
                         resolve(webServer);
                     });
                 },
@@ -125,14 +131,7 @@ async function getUserToken(
     return (await response.json()) as TokenResponse;
 }
 
-export async function writeNpmRc(
-    content: string,
-    targetDir: string,
-): Promise<void> {
-    await fs.writeFile(path.join(targetDir, ".npmrc"), content);
-}
-
-export async function start(targetDir: string): Promise<string> {
+export async function start(): Promise<typeof authEnv> {
     if (server) {
         throw new Error("server already started");
     }
@@ -141,11 +140,9 @@ export async function start(targetDir: string): Promise<string> {
 
     await registerUser(NPM_USERNAME, NPM_PASSWORD, NPM_EMAIL);
     const { token } = await getUserToken(NPM_USERNAME, NPM_PASSWORD);
-    authEnv["NPM_TOKEN"] = token;
+    authEnv.NPM_TOKEN = token;
 
-    const content = `//${getRegistryHost()}/:_authToken="${authEnv["NPM_TOKEN"]}"`;
-    await writeNpmRc(content, targetDir);
-    return content;
+    return authEnv;
 }
 
 export async function stop(): Promise<void> {
@@ -160,18 +157,24 @@ export async function stop(): Promise<void> {
                 }
             });
             server = null;
+        } else {
+            resolve();
         }
     });
 }
 
 export function getAuthToken(): string {
-    return authEnv["NPM_TOKEN"] ?? "";
+    return authEnv.NPM_TOKEN;
 }
 
 export function getRegistryHost(): string {
     return registryHost;
 }
 
-export function getRegistryUrl(): string {
-    return registryUrl;
+export function getUserEnv(): typeof userEnv {
+    return Object.freeze({ ...userEnv });
+}
+
+export function getAuthEnv(): typeof authEnv {
+    return Object.freeze({ ...authEnv });
 }

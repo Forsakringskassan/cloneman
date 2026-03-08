@@ -1,0 +1,10 @@
+{
+  "name": "@forsakringskassan/publish-template",
+  "version": "1.0.0",
+  "private": true,
+  "files": [],
+  "dependencies": {},
+  "devDependencies": {
+    "cloneman": "file:../.."
+  }
+}

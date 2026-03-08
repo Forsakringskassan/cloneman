@@ -1,35 +1,53 @@
+import fs from "node:fs/promises";
 import path from "node:path";
 import spawn from "nano-spawn";
-import { afterAll, beforeAll, expect, it } from "vitest";
+import { afterAll, beforeAll, expect, inject, it } from "vitest";
 import { prepare } from "./prepare";
 import { publish } from "./publish";
-import { authEnv, start, stop } from "./test-utils/npm-registry";
 import { temporaryDirectory } from "./test-utils/temporary-directory";
 
-const fixtureDir = path.resolve(import.meta.dirname, "../fixtures");
-const baseTemplate = path.join(fixtureDir, "base-template@1.0.0");
 const targetDir = temporaryDirectory();
+const authEnv = inject("authEnv");
+const npmrc = inject("npmrc");
+
+async function writeNpmRc(dst: string): Promise<void> {
+    const filePath = path.join(dst, ".npmrc");
+    await fs.writeFile(filePath, npmrc);
+}
 
 beforeAll(async () => {
-    const cwd = baseTemplate;
-    await prepare(cwd, targetDir);
-    await start(targetDir);
+    await fs.mkdir(targetDir, { recursive: true });
 });
 
 afterAll(async () => {
-    await stop();
+    await fs.rm(targetDir, { recursive: true, force: true });
 });
 
 it("should publish template", async () => {
-    expect.hasAssertions();
+    expect.assertions(1);
+
+    const fixtureDir = path.resolve(import.meta.dirname, "../fixtures");
+    const baseTemplate = path.join(fixtureDir, "publish-template");
+
+    await prepare(baseTemplate, targetDir);
+    await writeNpmRc(targetDir);
     await publish({ cwd: targetDir, env: authEnv });
 
     const result = await spawn(
         "npm",
-        ["info", "@forsakringskassan/base-template", "--json"],
+        ["info", "@forsakringskassan/publish-template", "--json"],
         { env: authEnv },
     );
     const output = JSON.parse(result.output);
-    expect(output.name).toBe("@forsakringskassan/base-template");
-    expect(output.versions).toContain("1.0.0");
+    expect(output).toEqual(
+        expect.objectContaining({
+            cloneman: {
+                boilerplateFiles: ["boilerplate.txt", "managed.txt"],
+                managedFiles: ["managed.txt"],
+            },
+            name: "@forsakringskassan/publish-template",
+            version: "1.0.0",
+            versions: ["1.0.0"],
+        }),
+    );
 });
