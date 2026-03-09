@@ -1,3 +1,4 @@
 {
-    "managedFiles": ["managed.txt"]
+    "managedFiles": ["managed.txt"],
+    "ignoredDependencies": ["@forsakringskassan/lib-used-by-templates"]
 }
