@@ -1,6 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { type NormalizedTemplateConfig } from "../config";
+import { writeJsonFile } from "../utils";
 import { type PackageJson } from "../utils/package-json";
 
 import { copyFiles } from "./utils/copy-files";
@@ -62,11 +63,15 @@ export async function buildTemplate(
         },
     );
 
-    await createMassagedTemplatePackageJson(
+    const massagedTemplatePackageJson = createMassagedTemplatePackageJson(
         clonemanPackageJson,
         pkg,
-        { dependencies: [] },
-        filesDir,
+        config.ignoredDependencies,
+    );
+
+    await writeJsonFile(
+        path.join(filesDir, "package.json"),
+        massagedTemplatePackageJson,
     );
 
     console.groupEnd();

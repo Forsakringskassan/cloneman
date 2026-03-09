@@ -1,43 +1,43 @@
 import path from "node:path";
 import { sortPackageJson } from "sort-package-json";
-import { writeJsonFile } from "../../utils";
 import { type PackageJson } from "../../utils/package-json";
 
-export async function createMassagedTemplatePackageJson(
+export function createMassagedTemplatePackageJson(
     template: PackageJson,
     pkg: PackageJson,
-    appConfig: { dependencies: string[] },
-    dstDir: string,
-): Promise<void> {
+    ignoredDepecencies: string[],
+): PackageJson {
     const massaged = {
         ...pkg,
         name: "${name}",
         description: "${description}",
         version: "${version}",
         cloneman: template.name,
-        dependencies: filterDependencies(pkg.dependencies ?? {}, appConfig),
+        dependencies: filterDependencies(pkg.dependencies, ignoredDepecencies),
         devDependencies: {
-            ...filterDependencies(pkg.devDependencies ?? {}, appConfig),
+            ...filterDependencies(pkg.devDependencies, ignoredDepecencies),
             [template.name]: template.version,
         },
     } satisfies PackageJson;
     delete massaged.devDependencies["cloneman"];
 
-    const distPackageJson = sortPackageJson(massaged);
+    return sortPackageJson(massaged);
+}
 
-    await writeJsonFile(path.join(dstDir, "package.json"), distPackageJson);
-
-    console.log("package.json generated");
+function isIgnored(key: string, ignored: string[]): boolean {
+    return ignored.some((pattern) => path.matchesGlob(key, pattern));
 }
 
 function filterDependencies(
-    dependencies: Record<string, string>,
-    appConfig: { dependencies: string[] },
+    dependencies: Record<string, string> | undefined,
+    ignored: string[],
 ): Record<string, string> {
-    const foo = Object.entries(dependencies).filter(([key, _value]) => {
-        // globbar senare
-        return !appConfig.dependencies.includes(key);
+    if (!dependencies) {
+        return {};
+    }
+    const deps = Object.entries(dependencies).filter(([key]) => {
+        return !isIgnored(key, ignored);
     });
 
-    return Object.fromEntries(foo);
+    return Object.fromEntries(deps);
 }

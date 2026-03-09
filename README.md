@@ -51,13 +51,19 @@ Contains a list of managed files that will be used when creating and updating an
 
 ```json
 {
-    "managedFiles": ["managed.txt"]
+    "managedFiles": ["managed.txt"],
+    "ignoredDependencies": []
 }
 ```
 
 #### managedFiles
 
 List of files owned by the template. These files will be overwritten when updating your application.
+
+### ignoredDependencies
+
+List of dependencies to exclude when creating a template.
+Supports exact package names or glob patterns, e.g. `@fkui/*` to remove all dependencies in the `@fkui` scope.
 
 ### build.mjs
 

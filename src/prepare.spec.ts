@@ -7,12 +7,13 @@ import { type PackageJson } from "./utils/package-json";
 
 const fixtureDir = path.resolve(import.meta.dirname, "../fixtures");
 const baseTemplate = path.join(fixtureDir, "base-template@1.0.0");
+const baseTemplateUpdated = path.join(fixtureDir, "base-template@1.0.1");
+
 const targetDir = path.resolve("temp/prepare-test");
 
 describe("prepare base template", () => {
     beforeAll(async () => {
-        const cwd = baseTemplate;
-        await prepare(cwd, targetDir);
+        await prepare(baseTemplate, targetDir);
     });
 
     it("prepare", async () => {
@@ -75,6 +76,34 @@ describe("prepare base template", () => {
             "name": "@forsakringskassan/base-template",
             "type": "module",
             "version": "1.0.0",
+          }
+        `);
+    });
+});
+
+describe("prepare base template 1.0.1", () => {
+    beforeAll(async () => {
+        await prepare(baseTemplateUpdated, targetDir);
+    });
+
+    it("should not contain ignored packages", async () => {
+        expect.hasAssertions();
+        const packageJson = await readJsonFile<PackageJson>(
+            path.join(targetDir, "files", "package.json"),
+        );
+
+        expect(packageJson).toMatchInlineSnapshot(`
+          {
+            "cloneman": "@forsakringskassan/base-template",
+            "dependencies": {},
+            "description": "\${description}",
+            "devDependencies": {
+              "@forsakringskassan/base-template": "1.0.1",
+            },
+            "files": [],
+            "name": "\${name}",
+            "private": true,
+            "version": "\${version}",
           }
         `);
     });
