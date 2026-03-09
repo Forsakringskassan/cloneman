@@ -63,6 +63,7 @@ it("should update existing project", async () => {
         expect.objectContaining({
             devDependencies: {
                 "@forsakringskassan/base-template": "1.0.1",
+                "@forsakringskassan/lib-used-by-templates": "1.0.0",
             },
         }),
     );
@@ -113,6 +114,7 @@ it("should update existing project from local tar", async () => {
                 "@forsakringskassan/base-template": expect.stringContaining(
                     tarballPath.replaceAll("\\", "/"),
                 ),
+                "@forsakringskassan/lib-used-by-templates": "1.0.0",
             },
         }),
     );
