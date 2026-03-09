@@ -26,6 +26,26 @@ afterAll(async () => {
 it("should publish template", async () => {
     expect.assertions(1);
 
+    await writeNpmRc(targetDir);
+
+    // Verify that the package is not already published before the test, to avoid false positives
+    try {
+        await spawn(
+            "npm",
+            [
+                "unpublish",
+                "@forsakringskassan/publish-template@1.0.0",
+                "--force",
+            ],
+            {
+                cwd: targetDir,
+                env: authEnv,
+            },
+        );
+    } catch {
+        // ignore error if package is not found
+    }
+
     const fixtureDir = path.resolve(import.meta.dirname, "../fixtures");
     const baseTemplate = path.join(fixtureDir, "publish-template");
 
