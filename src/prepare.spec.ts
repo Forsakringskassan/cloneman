@@ -42,6 +42,7 @@ describe("prepare base template", () => {
             "description": "\${description}",
             "devDependencies": {
               "@forsakringskassan/base-template": "1.0.0",
+              "@forsakringskassan/lib-used-by-templates": "1.0.0",
             },
             "files": [],
             "name": "\${name}",
