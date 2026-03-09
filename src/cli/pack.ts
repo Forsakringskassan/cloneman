@@ -11,7 +11,7 @@ async function packHandler(context: Context): Promise<void> {
 
     const targetDir = path.join(cwd, TEMPLATE_BUILD_PATH);
     await prepare(cwd, targetDir);
-    await pack({ cwd: targetDir, targetDir });
+    await pack({ cwd, targetDir });
 }
 
 /**
