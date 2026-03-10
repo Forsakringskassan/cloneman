@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { minimatch } from "minimatch";
 import spawn from "nano-spawn";
+import { isIgnored } from "./is-ignored";
 
 export async function copyFiles(
     dstDir: string,
@@ -35,8 +35,4 @@ export async function copyFiles(
     );
 
     return targetFiles;
-}
-
-function isIgnored(filePath: string, patterns: string[]): boolean {
-    return patterns.some((it) => minimatch(filePath, it));
 }

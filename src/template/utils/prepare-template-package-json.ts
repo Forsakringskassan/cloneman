@@ -1,6 +1,6 @@
-import path from "node:path";
 import { sortPackageJson } from "sort-package-json";
 import { type PackageJson } from "../../utils/package-json";
+import { isIgnored } from "./is-ignored";
 
 export function prepareTemplatePackageJson(
     template: PackageJson,
@@ -22,10 +22,6 @@ export function prepareTemplatePackageJson(
     delete massaged.devDependencies["cloneman"];
 
     return sortPackageJson(massaged);
-}
-
-function isIgnored(key: string, ignored: string[]): boolean {
-    return ignored.some((pattern) => path.matchesGlob(key, pattern));
 }
 
 function filterDependencies(
