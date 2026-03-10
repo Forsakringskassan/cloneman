@@ -1,3 +1,4 @@
 {
-    "managedFiles": ["managed.txt"]
+    "managedFiles": ["managed.txt"],
+    "ignoredFiles": ["CHANGELOG.md"]
 }

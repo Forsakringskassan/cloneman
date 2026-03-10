@@ -60,6 +60,11 @@ Contains a list of managed files that will be used when creating and updating an
 
 List of files owned by the template. These files will be overwritten when updating your application.
 
+#### ignoredFiles
+
+List of files to exclude when creating a template.
+Supports exact file names or glob patterns, e.g. `test/*` to remove all test files.
+
 ### ignoredDependencies
 
 List of dependencies to exclude when creating a template.
