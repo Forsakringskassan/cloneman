@@ -27,6 +27,7 @@ describe("prepare base template", () => {
             path.join("files", "boilerplate.txt"),
             path.join("files", "managed.txt"),
             path.join("files", "package.json"),
+            path.join("files", "renovate.json"),
         ]);
     });
 
@@ -65,9 +66,11 @@ describe("prepare base template", () => {
               "boilerplateFiles": [
                 "boilerplate.txt",
                 "managed.txt",
+                "renovate.json",
               ],
               "managedFiles": [
                 "managed.txt",
+                "renovate.json",
               ],
             },
             "exports": {
@@ -76,6 +79,24 @@ describe("prepare base template", () => {
             "name": "@forsakringskassan/base-template",
             "type": "module",
             "version": "1.0.0",
+          }
+        `);
+    });
+
+    it("should add packageRules to managed renovate.json", async () => {
+        expect.hasAssertions();
+        const renovateJson = await readJsonFile(
+            path.join(targetDir, "files", "renovate.json"),
+        );
+
+        expect(renovateJson).toMatchInlineSnapshot(`
+          {
+            "extends": [
+              "local>forsakringskassan/renovate-config",
+            ],
+            "ignoreDeps": [
+              "@forsakringskassan/lib-used-by-templates",
+            ],
           }
         `);
     });

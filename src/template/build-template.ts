@@ -1,12 +1,13 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { type NormalizedTemplateConfig } from "../config";
-import { writeJsonFile } from "../utils";
+import { readJsonFile, writeJsonFile } from "../utils";
 import { type PackageJson } from "../utils/package-json";
 
 import { copyFiles } from "./utils/copy-files";
 import { createclonemanPackageJson } from "./utils/create-cloneman-package-json";
 import { prepareTemplatePackageJson } from "./utils/prepare-template-package-json";
+import { updateRenovateWithIgnoredDeps } from "./utils/update-renovate-with-ignored-deps";
 
 /**
  * @public
@@ -74,6 +75,13 @@ export async function buildTemplate(
         massagedTemplatePackageJson,
     );
 
+    await updateRenovateConfigIfManaged(
+        massagedTemplatePackageJson,
+        clonemanPackageJson.name,
+        filesDir,
+        managedFiles,
+    );
+
     console.groupEnd();
 
     return files;
@@ -85,4 +93,27 @@ async function prepareFolders(
 ): Promise<void> {
     await fs.rm(targetDir, { recursive: true, force: true });
     await fs.mkdir(filesDir, { recursive: true });
+}
+
+async function updateRenovateConfigIfManaged(
+    packageJson: PackageJson,
+    templatePackageName: string,
+    filesDir: string,
+    managedFiles: string[],
+): Promise<void> {
+    if (!managedFiles.includes("renovate.json")) {
+        return;
+    }
+
+    const renovateFilePath = path.join(filesDir, "renovate.json");
+
+    const renovateConfig =
+        await readJsonFile<Record<string, unknown>>(renovateFilePath);
+
+    const newConfig = updateRenovateWithIgnoredDeps(
+        renovateConfig,
+        packageJson,
+        templatePackageName,
+    );
+    await writeJsonFile(renovateFilePath, newConfig);
 }
