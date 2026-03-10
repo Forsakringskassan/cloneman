@@ -1,1 +1,1 @@
-export { buildTemplate } from "./build-template";
+export { type BuildTemplateResult, buildTemplate } from "./build-template";

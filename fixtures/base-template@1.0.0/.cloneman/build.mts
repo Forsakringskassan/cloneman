@@ -14,4 +14,5 @@ const config = await readConfigFile(configFile);
 
 const targetDir = process.argv[2];
 
-await buildTemplate(pkg.name, pkg, targetDir, config);
+const result = await buildTemplate(pkg.name, pkg, targetDir, config);
+await result.renovateIgnoreDependencies();
