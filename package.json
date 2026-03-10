@@ -58,7 +58,7 @@
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "0.18.2",
-    "@forsakringskassan/commitlint-config": "3.3.5",
+    "@forsakringskassan/commitlint-config": "3.3.6",
     "@forsakringskassan/eslint-config": "13.5.2",
     "@forsakringskassan/eslint-config-cli": "13.5.0",
     "@forsakringskassan/eslint-config-typescript": "13.5.0",
