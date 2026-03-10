@@ -6,7 +6,7 @@ import { type PackageJson } from "../utils/package-json";
 
 import { copyFiles } from "./utils/copy-files";
 import { createclonemanPackageJson } from "./utils/create-cloneman-package-json";
-import { createMassagedTemplatePackageJson } from "./utils/create-massaged-template-package-json";
+import { prepareTemplatePackageJson } from "./utils/prepare-template-package-json";
 
 /**
  * @public
@@ -63,7 +63,7 @@ export async function buildTemplate(
         },
     );
 
-    const massagedTemplatePackageJson = createMassagedTemplatePackageJson(
+    const massagedTemplatePackageJson = prepareTemplatePackageJson(
         clonemanPackageJson,
         pkg,
         config.ignoredDependencies,

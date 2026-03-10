@@ -2,7 +2,7 @@ import path from "node:path";
 import { sortPackageJson } from "sort-package-json";
 import { type PackageJson } from "../../utils/package-json";
 
-export function createMassagedTemplatePackageJson(
+export function prepareTemplatePackageJson(
     template: PackageJson,
     pkg: PackageJson,
     ignoredDepecencies: string[],

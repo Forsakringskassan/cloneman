@@ -1,13 +1,13 @@
 import { describe, expect, it } from "vitest";
 import { type PackageJson } from "../../utils/package-json";
-import { createMassagedTemplatePackageJson } from "./create-massaged-template-package-json";
+import { prepareTemplatePackageJson } from "./prepare-template-package-json";
 
 const template: PackageJson = {
     name: "my-template",
     version: "1.0.0",
 };
 
-describe("createMassagedTemplatePackageJson", () => {
+describe("prepareTemplatePackageJson", () => {
     it("should replace name, description, and version with placeholders", () => {
         expect.hasAssertions();
 
@@ -16,7 +16,7 @@ describe("createMassagedTemplatePackageJson", () => {
             version: "2.0.0",
             description: "original description",
         };
-        const result = createMassagedTemplatePackageJson(template, pkg, []);
+        const result = prepareTemplatePackageJson(template, pkg, []);
         expect(result.name).toBe("${name}");
         expect(result.version).toBe("${version}");
         expect(result.description).toBe("${description}");
@@ -29,7 +29,7 @@ describe("createMassagedTemplatePackageJson", () => {
             name: "app",
             version: "1.0.0",
         };
-        const result = createMassagedTemplatePackageJson(template, pkg, []);
+        const result = prepareTemplatePackageJson(template, pkg, []);
         expect(result.cloneman).toBe("my-template");
     });
 
@@ -40,7 +40,7 @@ describe("createMassagedTemplatePackageJson", () => {
             name: "app",
             version: "1.0.0",
         };
-        const result = createMassagedTemplatePackageJson(template, pkg, []);
+        const result = prepareTemplatePackageJson(template, pkg, []);
         expect(result.devDependencies).toEqual(
             expect.objectContaining({
                 "my-template": "1.0.0",
@@ -59,7 +59,7 @@ describe("createMassagedTemplatePackageJson", () => {
                 "other-dep": "^2.0.0",
             },
         };
-        const result = createMassagedTemplatePackageJson(template, pkg, []);
+        const result = prepareTemplatePackageJson(template, pkg, []);
         expect(result.devDependencies).not.toHaveProperty("cloneman");
         expect(result.devDependencies).toHaveProperty("other-dep", "^2.0.0");
     });
@@ -75,9 +75,7 @@ describe("createMassagedTemplatePackageJson", () => {
                 "ignore-me": "^2.0.0",
             },
         };
-        const result = createMassagedTemplatePackageJson(template, pkg, [
-            "ignore-me",
-        ]);
+        const result = prepareTemplatePackageJson(template, pkg, ["ignore-me"]);
         expect(result.dependencies).toEqual({ "keep-me": "^1.0.0" });
     });
 
@@ -92,7 +90,7 @@ describe("createMassagedTemplatePackageJson", () => {
                 "ignore-dev": "^2.0.0",
             },
         };
-        const result = createMassagedTemplatePackageJson(template, pkg, [
+        const result = prepareTemplatePackageJson(template, pkg, [
             "ignore-dev",
         ]);
         expect(result.devDependencies).toHaveProperty("keep-dev", "^1.0.0");
@@ -106,7 +104,7 @@ describe("createMassagedTemplatePackageJson", () => {
             name: "app",
             version: "1.0.0",
         };
-        const result = createMassagedTemplatePackageJson(template, pkg, []);
+        const result = prepareTemplatePackageJson(template, pkg, []);
         expect(result.dependencies).toEqual({});
         expect(result.devDependencies).toEqual({
             "my-template": "1.0.0",
@@ -125,9 +123,7 @@ describe("createMassagedTemplatePackageJson", () => {
                 "other-dep": "^2.0.0",
             },
         };
-        const result = createMassagedTemplatePackageJson(template, pkg, [
-            "@scope/*",
-        ]);
+        const result = prepareTemplatePackageJson(template, pkg, ["@scope/*"]);
         expect(result.dependencies).toEqual({ "other-dep": "^2.0.0" });
     });
 
@@ -143,7 +139,7 @@ describe("createMassagedTemplatePackageJson", () => {
                 "keep-me": "^1.0.0",
             },
         };
-        const result = createMassagedTemplatePackageJson(template, pkg, [
+        const result = prepareTemplatePackageJson(template, pkg, [
             "@scope/*",
             "eslint-*",
         ]);
