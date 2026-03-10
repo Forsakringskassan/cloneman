@@ -74,6 +74,31 @@ Supports exact package names or glob patterns, e.g. `@fkui/*` to remove all depe
 
 Build script to prepare an application or library to be a cloneman template.
 
+Import and call `buildTemplate` in order to generate a Cloneman template. This function itself returns sub functions to OPT in more features.
+
+```js
+import path from "node:path";
+import { buildTemplate, readConfigFile, readPackageJson } from "cloneman";
+
+const configFile = path.resolve(import.meta.dirname, "cloneman.json");
+const templateRoot = path.resolve(import.meta.dirname, "..");
+
+const pkg = await readPackageJson(templateRoot);
+const config = await readConfigFile(configFile);
+
+const targetDir = process.argv[2];
+
+const template = await buildTemplate(pkg.name, pkg, targetDir, config);
+await template.renovateIgnoreDependencies();
+```
+
+#### renovateIgnoreDependencies
+
+Append template specific dependencies to the "ignoreDeps" array in the template's "renovate.json".
+
+This makes Renovate ignore dependencies that are managed by the template, while
+still allowing updates for dependencies that are not template managed.
+
 ## Available commands when working with templates
 
 Both commands requires to be called insisde a template folder.

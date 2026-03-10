@@ -5,7 +5,13 @@
 ```ts
 
 // @public (undocumented)
-export function buildTemplate(name: string, pkg: PackageJson, targetDir: string, config: NormalizedTemplateConfig): Promise<string[]>;
+export function buildTemplate(name: string, pkg: PackageJson, targetDir: string, config: NormalizedTemplateConfig): Promise<BuildTemplateResult>;
+
+// @public (undocumented)
+export interface BuildTemplateResult {
+    files: string[];
+    renovateIgnoreDependencies(): Promise<void>;
+}
 
 // @public
 export interface NormalizedTemplateConfig {
