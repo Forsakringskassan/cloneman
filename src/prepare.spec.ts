@@ -1,7 +1,9 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { beforeAll, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { prepare } from "./prepare";
+import { rmDir } from "./test-utils/rm-dir";
+import { temporaryDirectory } from "./test-utils/temporary-directory";
 import { readJsonFile } from "./utils";
 import { type PackageJson } from "./utils/package-json";
 
@@ -9,10 +11,18 @@ const fixtureDir = path.resolve(import.meta.dirname, "../fixtures");
 const baseTemplate = path.join(fixtureDir, "base-template@1.0.0");
 const baseTemplateUpdated = path.join(fixtureDir, "base-template@1.0.1");
 
-const targetDir = path.resolve("temp/prepare-test");
+let targetDir: string;
+
+beforeEach(() => {
+    targetDir = temporaryDirectory();
+});
+
+afterEach(async () => {
+    await rmDir(targetDir);
+});
 
 describe("prepare base template", () => {
-    beforeAll(async () => {
+    beforeEach(async () => {
         await prepare(baseTemplate, targetDir);
     });
 
@@ -91,12 +101,10 @@ describe("prepare base template", () => {
 });
 
 describe("prepare base template 1.0.1", () => {
-    beforeAll(async () => {
-        await prepare(baseTemplateUpdated, targetDir);
-    });
-
     it("should not contain ignored packages", async () => {
         expect.hasAssertions();
+
+        await prepare(baseTemplateUpdated, targetDir);
         const packageJson = await readJsonFile<PackageJson>(
             path.join(targetDir, "files", "package.json"),
         );
