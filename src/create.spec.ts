@@ -1,17 +1,10 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import {
-    afterAll,
-    afterEach,
-    beforeAll,
-    describe,
-    expect,
-    inject,
-    it,
-} from "vitest";
+import { afterEach, beforeEach, describe, expect, inject, it } from "vitest";
 import { create } from "./create";
 import { pack } from "./pack";
 import { prepare } from "./prepare";
+import { rmDir } from "./test-utils/rm-dir";
 import { temporaryDirectory } from "./test-utils/temporary-directory";
 
 expect.addSnapshotSerializer({
@@ -26,10 +19,10 @@ expect.addSnapshotSerializer({
 const fixtureDir = path.resolve(import.meta.dirname, "../fixtures");
 const baseTemplate = path.join(fixtureDir, "base-template@1.0.0");
 const targetDir = temporaryDirectory();
-
-const cwd = "temp/create-test";
-const appDir = path.join(cwd, "mock-app");
 const userEnv = inject("userEnv");
+
+let cwd: string;
+let appDir: string;
 
 async function readFile(filePath: string): Promise<string> {
     return fs.readFile(path.join(appDir, filePath), "utf8");
@@ -39,19 +32,16 @@ async function readJsonFile<T = unknown>(filePath: string): Promise<T> {
     return JSON.parse(await readFile(filePath)) as T;
 }
 
+beforeEach(() => {
+    cwd = temporaryDirectory();
+    appDir = path.join(cwd, "mock-app");
+});
+
+afterEach(async () => {
+    await rmDir(cwd);
+});
+
 describe("create from base template from npm registry", () => {
-    beforeAll(async () => {
-        await fs.mkdir(cwd, { recursive: true });
-    });
-
-    afterEach(async () => {
-        await fs.rm(appDir, { recursive: true, force: true });
-    });
-
-    afterAll(async () => {
-        await fs.rm(cwd, { recursive: true, force: true });
-    });
-
     it("should create new project", async () => {
         expect.assertions(3);
         await create({
@@ -124,14 +114,6 @@ describe("create from base template from npm registry", () => {
 });
 
 describe("create from local template package", () => {
-    afterEach(async () => {
-        await fs.rm(appDir, { recursive: true, force: true });
-    });
-
-    afterAll(async () => {
-        await fs.rm(cwd, { recursive: true, force: true });
-    });
-
     it("should create new project from local .tgz file", async () => {
         expect.assertions(3);
 
@@ -140,6 +122,8 @@ describe("create from local template package", () => {
             targetDir,
             "forsakringskassan-base-template-1.0.0.tgz",
         );
+        const relativeTarballPath = path.relative(appDir, tarballPath);
+
         await prepare(baseTemplate, targetDir);
         await pack({ cwd: targetDir, targetDir });
         await fs.mkdir(cwd, { recursive: true });
@@ -160,7 +144,7 @@ describe("create from local template package", () => {
             dependencies: {},
             devDependencies: {
                 "@forsakringskassan/base-template": expect.stringContaining(
-                    tarballPath.replaceAll("\\", "/"),
+                    relativeTarballPath.replaceAll("\\", "/"),
                 ),
                 "@forsakringskassan/lib-used-by-templates": "1.0.0",
             },

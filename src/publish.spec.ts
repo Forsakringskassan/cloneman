@@ -4,6 +4,7 @@ import spawn from "nano-spawn";
 import { afterAll, beforeAll, expect, inject, it } from "vitest";
 import { prepare } from "./prepare";
 import { publish } from "./publish";
+import { rmDir } from "./test-utils/rm-dir";
 import { temporaryDirectory } from "./test-utils/temporary-directory";
 
 const targetDir = temporaryDirectory();
@@ -20,7 +21,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-    await fs.rm(targetDir, { recursive: true, force: true });
+    await rmDir(targetDir);
 });
 
 it("should publish template", async () => {

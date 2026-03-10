@@ -1,9 +1,10 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { afterAll, afterEach, beforeAll, expect, inject, it } from "vitest";
+import { afterEach, beforeEach, expect, inject, it } from "vitest";
 import { create } from "./create";
 import { pack } from "./pack";
 import { prepare } from "./prepare";
+import { rmDir } from "./test-utils/rm-dir";
 import { temporaryDirectory } from "./test-utils/temporary-directory";
 import { update } from "./update";
 
@@ -16,8 +17,9 @@ expect.addSnapshotSerializer({
     },
 });
 
-const cwd = "temp/update-test";
-const appDir = path.join(cwd, "mock-app");
+let cwd: string;
+let appDir: string;
+
 const userEnv = inject("userEnv");
 
 function readFile(filePath: string): Promise<string> {
@@ -28,16 +30,13 @@ async function readJsonFile<T = unknown>(filePath: string): Promise<T> {
     return JSON.parse(await readFile(filePath)) as T;
 }
 
-beforeAll(async () => {
-    await fs.mkdir(cwd, { recursive: true });
+beforeEach(() => {
+    cwd = temporaryDirectory();
+    appDir = path.join(cwd, "mock-app");
 });
 
 afterEach(async () => {
-    await fs.rm(appDir, { recursive: true, force: true });
-});
-
-afterAll(async () => {
-    await fs.rm(cwd, { recursive: true, force: true });
+    await rmDir(cwd);
 });
 
 it("should update existing project", async () => {
@@ -105,6 +104,7 @@ it("should update existing project from local tar", async () => {
         targetDir,
         "forsakringskassan-base-template-1.0.1.tgz",
     );
+    const relativeTarballPath = path.relative(appDir, tarballPath);
 
     /* update the application using the local tarball */
     await update(appDir, tarballPath, userEnv);
@@ -112,7 +112,7 @@ it("should update existing project from local tar", async () => {
         expect.objectContaining({
             devDependencies: {
                 "@forsakringskassan/base-template": expect.stringContaining(
-                    tarballPath.replaceAll("\\", "/"),
+                    relativeTarballPath.replaceAll("\\", "/"),
                 ),
                 "@forsakringskassan/lib-used-by-templates": "1.0.0",
             },
