@@ -29,9 +29,11 @@ describe("prepare base template", () => {
                 path.join("files", "boilerplate.txt"),
                 path.join("files", "managed.txt"),
                 path.join("files", "package.json"),
+                path.join("files", "sub-folder"),
+                path.join("files", "sub-folder", "sub-file.txt"),
             ]),
         );
-        expect(files).toHaveLength(4);
+        expect(files).toHaveLength(6);
     });
 
     it("should create a massaged template package.json", async () => {
@@ -70,6 +72,7 @@ describe("prepare base template", () => {
                 ".gitignore",
                 "boilerplate.txt",
                 "managed.txt",
+                "sub-folder/sub-file.txt",
               ],
               "managedFiles": [
                 "managed.txt",

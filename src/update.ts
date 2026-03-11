@@ -60,9 +60,10 @@ export async function update(
     await Promise.all(
         managedFiles.map((filename) => {
             console.log(filename);
-            return fs.copyFile(
+            return fs.cp(
                 path.join(filesDir, getStoredFileName(filename)),
                 path.join(cwd, filename),
+                { recursive: true },
             );
         }),
     );
