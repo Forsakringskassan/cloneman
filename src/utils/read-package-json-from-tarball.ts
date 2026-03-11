@@ -1,4 +1,4 @@
-import { existsSync } from "node:fs";
+import { access } from "node:fs/promises";
 import { list } from "tar";
 import { type TemplatePackageJson } from "./package-json";
 
@@ -13,18 +13,17 @@ export async function readPackageJsonFromTarball(
 ): Promise<TemplatePackageJson> {
     const chunks: Buffer[] = [];
 
-    if (!existsSync(tarballPath)) {
+    try {
+        await access(tarballPath);
+    } catch {
         throw new Error(`Tarball not found at path "${tarballPath}"`);
     }
 
     await list({
         file: tarballPath,
+        filter: (entryPath) => entryPath === "package/package.json",
         onReadEntry(entry) {
-            if (entry.path === "package/package.json") {
-                entry.on("data", (chunk: Buffer) => chunks.push(chunk));
-            } else {
-                entry.resume();
-            }
+            entry.on("data", (chunk: Buffer) => chunks.push(chunk));
         },
     });
 
