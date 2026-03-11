@@ -1,32 +1,33 @@
-import { existsSync } from "node:fs";
-import { list } from "tar";
+import { t } from "tar";
 import { type TemplatePackageJson } from "./package-json";
 
 /**
  * Read `package.json` from a local `.tgz` tarball in memory.
- *
- * @internal
- * @param tarballPath - Path to the `.tgz` file.
  */
 export async function readPackageJsonFromTarball(
     tarballPath: string,
 ): Promise<TemplatePackageJson> {
+    const packageJsonPath = "package/package.json";
     const chunks: Buffer[] = [];
 
-    if (!existsSync(tarballPath)) {
-        throw new Error(`Tarball not found at path "${tarballPath}"`);
-    }
+    try {
+        await t(
+            {
+                file: tarballPath,
+                filter: (path) => path === packageJsonPath,
+                onentry: (entry) => {
+                    entry.on("data", (chunk: Buffer) => chunks.push(chunk));
+                },
+            },
+            [packageJsonPath],
+        );
+    } catch (error: unknown) {
+        if ((error as NodeJS.ErrnoException).code === "ENOENT") {
+            throw new Error(`Tarball not found at path "${tarballPath}"`);
+        }
 
-    await list({
-        file: tarballPath,
-        onReadEntry(entry) {
-            if (entry.path === "package/package.json") {
-                entry.on("data", (chunk: Buffer) => chunks.push(chunk));
-            } else {
-                entry.resume();
-            }
-        },
-    });
+        throw error;
+    }
 
     if (chunks.length === 0) {
         throw new Error(
