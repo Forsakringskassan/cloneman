@@ -19,7 +19,6 @@ export function prepareTemplatePackageJson(
             [template.name]: template.version,
         },
     } satisfies PackageJson;
-    delete massaged.devDependencies["cloneman"];
 
     return sortPackageJson(massaged);
 }
