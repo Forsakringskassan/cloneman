@@ -27,7 +27,7 @@ export async function update(
 
     if (!packageJson.cloneman) {
         throw new Error(
-            "Cannot update application: missing 'cloneman' field in package.json",
+            "Cannot update application: missing 'cloneman' field in package.json. Is this package a cloneman template?",
         );
     }
     const templatePackage = packageJson.cloneman as string;

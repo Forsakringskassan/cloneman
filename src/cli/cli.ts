@@ -18,6 +18,19 @@ export function createParser(context: Context): ReturnType<typeof yargs> {
         .command(publishCommand(context))
         .demandCommand(1, "You need to provide a command.")
         .strict()
+        .fail(function (msg, err) {
+            console.error("\nCloneman CLI failed:");
+
+            if (msg) {
+                console.error(msg);
+            }
+
+            if (err instanceof Error) {
+                console.error(err.message);
+            }
+
+            process.exit(1);
+        })
         .help();
 }
 
