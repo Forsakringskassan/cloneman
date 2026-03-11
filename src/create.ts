@@ -93,9 +93,10 @@ export async function create(options: {
     );
     await Promise.all(
         boilerplateFiles.map((filename) => {
-            return fs.copyFile(
+            return fs.cp(
                 path.join(filesDir, getStoredFileName(filename)),
                 path.join(appPath, filename),
+                { recursive: true },
             );
         }),
     );
