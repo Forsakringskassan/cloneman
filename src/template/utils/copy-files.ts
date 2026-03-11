@@ -1,6 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import spawn from "nano-spawn";
+import { getStoredFileName } from "./get-stored-filename";
 import { isIgnored } from "./is-ignored";
 
 export async function copyFiles(
@@ -23,7 +24,7 @@ export async function copyFiles(
             continue;
         }
         const { dir, base } = path.parse(filePath);
-        const fileName = base.startsWith(".") ? base.replace(".", "_") : base;
+        const fileName = getStoredFileName(base);
         const fileDir = path.join(dstDir, dir);
         await fs.mkdir(fileDir, { recursive: true });
         await fs.copyFile(filePath, path.join(dstDir, dir, fileName));

@@ -18,16 +18,20 @@ describe("prepare base template", () => {
 
     it("prepare", async () => {
         expect.hasAssertions();
-        const testPath = path.join(targetDir, "files/**.*");
+        const testPath = path.join(targetDir, "files/**/*");
         const files = await Array.fromAsync(fs.glob(testPath, {}), (file) => {
             return path.relative(targetDir, file);
         });
 
-        expect(files).toEqual([
-            path.join("files", "boilerplate.txt"),
-            path.join("files", "managed.txt"),
-            path.join("files", "package.json"),
-        ]);
+        expect(files).toEqual(
+            expect.arrayContaining([
+                path.join("files", "_gitignore"),
+                path.join("files", "boilerplate.txt"),
+                path.join("files", "managed.txt"),
+                path.join("files", "package.json"),
+            ]),
+        );
+        expect(files).toHaveLength(4);
     });
 
     it("should create a massaged template package.json", async () => {
@@ -63,11 +67,13 @@ describe("prepare base template", () => {
           {
             "cloneman": {
               "boilerplateFiles": [
+                ".gitignore",
                 "boilerplate.txt",
                 "managed.txt",
               ],
               "managedFiles": [
                 "managed.txt",
+                ".gitignore",
               ],
             },
             "exports": {
