@@ -124,7 +124,7 @@ it("should update existing project from local tar", async () => {
     expect(await readFile("managed.txt")).toMatchInlineSnapshot(
         `managed file at v1.0.1`,
     );
-});
+}, 15000); // Involves packing and file I/O which can be slow on Windows CI nodes.
 
 it("should crash if invalid tar path", async () => {
     expect.assertions(1);
