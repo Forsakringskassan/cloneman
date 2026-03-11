@@ -93,6 +93,14 @@ Publish a new template version to the npm registry. (i.e npm publish)
 
 Creates a local tar file of your template. (i.e npm pack)
 
+## Renovate in templates
+
+If `renovate.json` is included in `managedFiles`, cloneman updates it during
+template build and appends managed dependencies to `ignoreDeps`.
+
+This makes Renovate ignore dependencies that are managed by the template, while
+still allowing updates for dependencies that are not template managed.
+
 ## Development
 
 ```bash

@@ -1,4 +1,4 @@
 {
-    "managedFiles": ["managed.txt"],
-    "ignoredFiles": ["CHANGELOG.md"]
+    "ignoredFiles": ["CHANGELOG.md"],
+    "managedFiles": ["managed.txt", "renovate.json"]
 }
