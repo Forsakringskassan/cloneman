@@ -1,6 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import spawn from "nano-spawn";
+import { getStoredFileName } from "./template/utils/get-stored-filename";
 import {
     getTemplateInfo,
     isTarball,
@@ -60,7 +61,7 @@ export async function update(
         managedFiles.map((filename) => {
             console.log(filename);
             return fs.copyFile(
-                path.join(filesDir, filename),
+                path.join(filesDir, getStoredFileName(filename)),
                 path.join(cwd, filename),
             );
         }),

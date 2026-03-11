@@ -2,6 +2,7 @@ import { existsSync } from "node:fs";
 import fs from "node:fs/promises";
 import path from "node:path";
 import spawn from "nano-spawn";
+import { getStoredFileName } from "./template/utils/get-stored-filename";
 import { readJsonFile } from "./utils";
 import { getTemplateInfo } from "./utils/get-template-info";
 import { normalizeTemplatePackage } from "./utils/normalize-template-package";
@@ -91,11 +92,11 @@ export async function create(options: {
         "utf8",
     );
     await Promise.all(
-        boilerplateFiles.map((filename) =>
-            fs.copyFile(
-                path.join(filesDir, filename),
+        boilerplateFiles.map((filename) => {
+            return fs.copyFile(
+                path.join(filesDir, getStoredFileName(filename)),
                 path.join(appPath, filename),
-            ),
-        ),
+            );
+        }),
     );
 }

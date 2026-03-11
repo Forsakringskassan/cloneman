@@ -1,4 +1,4 @@
 {
-    "managedFiles": ["managed.txt"],
+    "managedFiles": ["managed.txt", ".gitignore"],
     "ignoredFiles": ["CHANGELOG.md"]
 }
