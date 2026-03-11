@@ -48,22 +48,6 @@ describe("prepareTemplatePackageJson", () => {
         );
     });
 
-    it("should remove cloneman from devDependencies", () => {
-        expect.hasAssertions();
-
-        const pkg: PackageJson = {
-            name: "app",
-            version: "1.0.0",
-            devDependencies: {
-                cloneman: "^1.0.0",
-                "other-dep": "^2.0.0",
-            },
-        };
-        const result = prepareTemplatePackageJson(template, pkg, []);
-        expect(result.devDependencies).not.toHaveProperty("cloneman");
-        expect(result.devDependencies).toHaveProperty("other-dep", "^2.0.0");
-    });
-
     it("should filter out ignored dependencies from dependencies", () => {
         expect.hasAssertions();
 

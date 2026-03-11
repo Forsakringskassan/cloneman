@@ -24,13 +24,19 @@ export async function buildTemplate(
     const filesDir = path.join(targetDir, "files");
     await prepareFolders(targetDir, filesDir);
 
-    const { managedFiles, ignoredFiles: templateIgnoredFiles } = config;
+    const {
+        managedFiles,
+        ignoredFiles: templateIgnoredFiles,
+        ignoredDependencies: templateIgnoredDependencies,
+    } = config;
 
     const ignoredFiles = [
         ...templateIgnoredFiles,
         "package.json",
         ".cloneman/**",
     ];
+
+    const ignoredDependencies = [...templateIgnoredDependencies, "cloneman"];
 
     const indexJs = `
         import fs from "node:fs/promises";
@@ -66,7 +72,7 @@ export async function buildTemplate(
     const massagedTemplatePackageJson = prepareTemplatePackageJson(
         clonemanPackageJson,
         pkg,
-        config.ignoredDependencies,
+        ignoredDependencies,
     );
 
     await writeJsonFile(
