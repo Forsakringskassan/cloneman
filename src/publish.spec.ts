@@ -1,11 +1,14 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import spawn from "nano-spawn";
-import { afterAll, beforeAll, expect, inject, it } from "vitest";
+import { afterAll, beforeAll, expect, inject, it, vi } from "vitest";
 import { prepare } from "./prepare";
 import { publish } from "./publish";
 import { rmDir } from "./test-utils/rm-dir";
 import { temporaryDirectory } from "./test-utils/temporary-directory";
+
+/* Increased timeout time since test involves a lot reading and writing to disc. */
+vi.setConfig({ testTimeout: 10000 });
 
 const targetDir = temporaryDirectory();
 const authEnv = inject("authEnv");
