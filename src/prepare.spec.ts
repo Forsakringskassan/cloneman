@@ -1,6 +1,6 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { prepare } from "./prepare";
 import { rmDir } from "./test-utils/rm-dir";
 import { temporaryDirectory } from "./test-utils/temporary-directory";
@@ -12,6 +12,9 @@ const baseTemplate = path.join(fixtureDir, "base-template@1.0.0");
 const baseTemplateUpdated = path.join(fixtureDir, "base-template@1.0.1");
 
 let targetDir: string;
+
+/* Increased timeout time since test involves a lot reading and writing to disc. */
+vi.setConfig({ testTimeout: 10000 });
 
 beforeEach(() => {
     targetDir = temporaryDirectory();
