@@ -9,7 +9,7 @@ import { runServer } from "verdaccio";
 import { temporaryDirectory } from "./temporary-directory";
 
 const NPM_USERNAME = "integration";
-const NPM_PASSWORD = "suchsecure"; // eslint-disable-line sonarjs/no-hardcoded-passwords -- for test cases only
+const NPM_PASSWORD = "suchsecure";
 const NPM_EMAIL = "integration@example.net";
 
 const storage = temporaryDirectory();
