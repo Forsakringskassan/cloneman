@@ -142,7 +142,7 @@ it("should crash if invalid tar path", async () => {
 
     /* try to update to a non-existing tarball */
     const invalidTarPath = path.join(appDir, "base-template-4.0.4.tgz");
-    await expect(update(appDir, invalidTarPath, userEnv)).rejects.toThrowError(
+    await expect(update(appDir, invalidTarPath, userEnv)).rejects.toThrow(
         `Tarball not found at path`,
     );
 });

@@ -92,7 +92,7 @@ describe("create from base template from npm registry", () => {
                 templatePackage: "@forsakringskassan/base-template@1.0.0",
                 cwd,
             }),
-        ).rejects.toThrowError("application dir already exists");
+        ).rejects.toThrow("application dir already exists");
     });
 
     it("should throw error if package do not exist", async () => {
@@ -104,7 +104,7 @@ describe("create from base template from npm registry", () => {
                 cwd,
                 env: userEnv,
             }),
-        ).rejects.toThrowError(
+        ).rejects.toThrow(
             `Failed to install template package: Command failed with exit code 1: npm install --save-dev --save-exact '@forsakringskassan/non-existing-package'`,
         );
     });
@@ -119,7 +119,7 @@ describe("create from base template from npm registry", () => {
                 cwd,
                 env: userEnv,
             }),
-        ).rejects.toThrowError(
+        ).rejects.toThrow(
             `Package @forsakringskassan/non-template-package is not a valid cloneman template package`,
         );
     });
