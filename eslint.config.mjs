@@ -41,4 +41,13 @@ export default [
             "import/no-unresolved": "off",
         },
     },
+
+    {
+        name: "local/dist",
+        files: ["fixtures/**/.cloneman/*.mts"],
+        rules: {
+            /* Building with Node requires file extension */
+            "import/extensions": "off",
+        },
+    },
 ];
