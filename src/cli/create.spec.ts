@@ -1,6 +1,5 @@
-import { Console } from "node:console";
-import { WritableStreamBuffer } from "stream-buffers";
 import { afterEach, beforeEach, expect, it, vi } from "vitest";
+import yoctoSpinner from "yocto-spinner";
 import { create } from "../create";
 import { createParser } from "./cli";
 
@@ -8,11 +7,16 @@ vi.mock(import("../create"), () => ({
     create: vi.fn(),
 }));
 
-let stream: WritableStreamBuffer;
+const mockSpinner = {
+    start: vi.fn().mockReturnThis(),
+    success: vi.fn(),
+} as unknown as ReturnType<typeof yoctoSpinner>;
+
+vi.mock(import("yocto-spinner"), () => ({
+    default: vi.fn(() => mockSpinner),
+}));
 
 beforeEach(() => {
-    stream = new WritableStreamBuffer();
-    globalThis.console = new Console(stream, stream);
     vi.mocked(create).mockResolvedValue(undefined);
 });
 
@@ -33,9 +37,10 @@ it("create app", async () => {
         name: appName,
         templatePackage: templateName,
         cwd: "./new-app",
+        spinner: mockSpinner,
     });
 
-    expect(stream.getContentsAsString("utf8")).toContain(
-        `Creating app ${appName} from template ${templateName}`,
-    );
+    expect(yoctoSpinner).toHaveBeenCalledWith({
+        text: `Creating application "${appName}" with template "${templateName}"...`,
+    });
 });

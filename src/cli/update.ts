@@ -1,4 +1,5 @@
 import { type CommandModule } from "yargs";
+import yoctoSpinner from "yocto-spinner";
 import { update } from "../update";
 import { type Context } from "./context";
 
@@ -14,8 +15,14 @@ async function updateHandler(
     const { cwd } = context;
 
     const version = target ?? "latest";
-    console.log(`Updating the application to version ${version}...`);
-    await update(cwd, version, {});
+
+    const spinner = yoctoSpinner({
+        text: `Updating template package to version ${version}...`,
+    }).start();
+
+    await update(cwd, version, {}, spinner);
+
+    spinner.success(`Template package updated to version ${version}`);
 }
 
 /**

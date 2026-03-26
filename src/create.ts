@@ -2,6 +2,7 @@ import { existsSync } from "node:fs";
 import fs from "node:fs/promises";
 import path from "node:path";
 import spawn from "nano-spawn";
+import { type default as yoctoSpinner } from "yocto-spinner";
 import { getStoredFileName } from "./template/utils/get-stored-filename";
 import { readJsonFile } from "./utils";
 import { getTemplateInfo } from "./utils/get-template-info";
@@ -16,7 +17,14 @@ export async function create(options: {
     templatePackage: string;
     cwd: string;
     env?: Record<string, string>;
+    spinner?: ReturnType<typeof yoctoSpinner>;
 }): Promise<void> {
+    function text(newText: string): void {
+        if (options.spinner) {
+            options.spinner.text = newText;
+        }
+    }
+
     const { name, templatePackage, cwd, env = {} } = options;
     const appPath = path.join(cwd, name);
     if (existsSync(appPath)) {
@@ -34,6 +42,8 @@ export async function create(options: {
 
     try {
         await spawn("npm", ["init", "--yes"], { cwd: appPath, env });
+
+        text("Installing template...");
         await spawn(
             "npm",
             [

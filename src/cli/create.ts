@@ -1,4 +1,5 @@
 import { type CommandModule } from "yargs";
+import yoctoSpinner from "yocto-spinner";
 import { create } from "../create";
 import { type Context } from "./context";
 
@@ -7,11 +8,19 @@ interface CreateArguments {
     template: string;
 }
 
-function createHandler(context: Context, argv: CreateArguments): Promise<void> {
+async function createHandler(
+    context: Context,
+    argv: CreateArguments,
+): Promise<void> {
     const { name, template } = argv;
     const { cwd } = context;
-    console.log(`Creating app ${name} from template ${template}`);
-    return create({ name, templatePackage: template, cwd });
+
+    const spinner = yoctoSpinner({
+        text: `Creating application "${name}" with template "${template}"...`,
+    }).start();
+
+    await create({ name, templatePackage: template, cwd, spinner });
+    spinner.success(`Application created successfully.`);
 }
 
 /**
