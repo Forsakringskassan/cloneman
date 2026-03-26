@@ -1,6 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import spawn from "nano-spawn";
+import type yoctoSpinner from "yocto-spinner";
 import { getStoredFileName } from "./template/utils/get-stored-filename";
 import {
     getTemplateInfo,
@@ -11,6 +12,7 @@ import {
 } from "./utils";
 
 import { type PackageJson } from "./utils/package-json";
+
 /**
  * @internal
  */
@@ -18,8 +20,13 @@ export async function update(
     cwd: string,
     versionOrTar: string,
     env: Record<string, string> = {},
+    spinner?: ReturnType<typeof yoctoSpinner>,
 ): Promise<void> {
-    console.log(`Updating template package to version ${versionOrTar}...`);
+    function text(newText: string): void {
+        if (spinner) {
+            spinner.text = newText;
+        }
+    }
 
     const packageJson = await readJsonFile<PackageJson>(
         path.join(cwd, "package.json"),
@@ -47,6 +54,7 @@ export async function update(
         template = tarPath;
     }
 
+    text("Installing dependencies...");
     await spawn("npm", ["install", "--save-dev", "--save-exact", template], {
         cwd,
         env,
