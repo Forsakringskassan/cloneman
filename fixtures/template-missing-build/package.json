@@ -1,0 +1,8 @@
+{
+  "name": "@forsakringskassan/template-missing-build-package",
+  "description": "Used in test to make sure that create command will fail",
+  "version": "1.0.0",
+  "private": false,
+  "files": [],
+  "dependencies": {}
+}

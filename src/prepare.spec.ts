@@ -139,3 +139,14 @@ describe("prepare non-template package", () => {
         );
     });
 });
+
+describe("prepare template-missing-build", () => {
+    it("should throw error if build file is missing", async () => {
+        expect.hasAssertions();
+        const cwd = path.join(fixtureDir, "template-missing-build");
+
+        await expect(prepare(cwd, targetDir)).rejects.toThrow(
+            `No build file found in ".cloneman". Tried: build.{js,mjs,ts,mts}`,
+        );
+    });
+});

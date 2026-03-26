@@ -41,7 +41,7 @@ A template is required to have:
 
 ```
 .cloneman
-├── build.mjs
+├── build.{js,mjs,ts,mts}
 └── cloneman.json
 ```
 
@@ -65,7 +65,7 @@ List of files owned by the template. These files will be overwritten when updati
 List of files to exclude when creating a template.
 Supports exact file names or glob patterns, e.g. `test/*` to remove all test files.
 
-### ignoredDependencies
+#### ignoredDependencies
 
 List of dependencies to exclude when creating a template.
 Supports exact package names or glob patterns, e.g. `@fkui/*` to remove all dependencies in the `@fkui` scope.
