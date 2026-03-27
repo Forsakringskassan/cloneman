@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## [1.2.0](https://github.com/Forsakringskassan/cloneman/compare/v1.1.1...v1.2.0) (2026-03-27)
+
+### Features
+
+* allow build.ts ([233814c](https://github.com/Forsakringskassan/cloneman/commit/233814cf43e2e96dd21873e6885916a6f6d1dc5a))
+* ignore template deps in renovate.json ([c604acd](https://github.com/Forsakringskassan/cloneman/commit/c604acde22601263561fdb01917a3973674192aa))
+
+### Bug Fixes
+
+* **deps:** update dependency tar to v7.5.12 ([619a393](https://github.com/Forsakringskassan/cloneman/commit/619a3931bbc8b8a73ce26aca044a39bb1143bd40))
+
 ## [1.1.1](https://github.com/Forsakringskassan/cloneman/compare/v1.1.0...v1.1.1) (2026-03-20)
 
 ### Bug Fixes

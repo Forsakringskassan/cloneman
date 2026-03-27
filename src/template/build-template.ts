@@ -11,7 +11,7 @@ import { updateRenovateWithIgnoredDeps } from "./utils/update-renovate-with-igno
 
 /**
  * @public
- * @since %version%
+ * @since v1.2.0
  */
 export interface BuildTemplateResult {
     /**
@@ -27,7 +27,7 @@ export interface BuildTemplateResult {
 
 /**
  * @public
- * @since %version%
+ * @since v1.2.0
  * Builds a cloneman template.
  */
 export async function buildTemplate(
