@@ -1,6 +1,5 @@
-import fs from "node:fs/promises";
-import path from "node:path";
 import spawn from "nano-spawn";
+import { findHooksFile } from "./utils/find-hooks-file";
 import { isTemplateFolder } from "./utils/is-template";
 
 /**
@@ -13,7 +12,7 @@ export async function prepare(cwd: string, targetDir: string): Promise<void> {
         );
     }
 
-    const buildFile = await findBuildFile(cwd);
+    const buildFile = await findHooksFile("build", cwd);
 
     if (buildFile === undefined) {
         throw new Error(
@@ -21,16 +20,9 @@ export async function prepare(cwd: string, targetDir: string): Promise<void> {
         );
     }
 
-    await spawn("node", [`.cloneman/${buildFile}`, targetDir], {
+    await spawn("node", [buildFile, targetDir], {
         cwd,
         stdout: "inherit",
         stderr: "inherit",
     });
-}
-
-async function findBuildFile(cwd: string): Promise<string | undefined> {
-    const [match] = await Array.fromAsync(
-        fs.glob("build.{js,mjs,ts,mts}", { cwd: path.join(cwd, ".cloneman") }),
-    );
-    return match;
 }

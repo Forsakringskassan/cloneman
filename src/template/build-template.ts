@@ -1,7 +1,9 @@
 import fs from "node:fs/promises";
+import { stripTypeScriptTypes } from "node:module";
 import path from "node:path";
 import { type NormalizedTemplateConfig } from "../config";
 import { readJsonFile, writeJsonFile } from "../utils";
+import { findHooksFile } from "../utils/find-hooks-file";
 import { type PackageJson } from "../utils/package-json";
 
 import { copyFiles } from "./utils/copy-files";
@@ -73,6 +75,18 @@ export async function buildTemplate(
     `;
 
     const files = await copyFiles(filesDir, ignoredFiles);
+
+    const installFile = await findHooksFile("install", process.cwd());
+
+    if (installFile) {
+        const installHookContent = await fs.readFile(installFile, "utf8");
+
+        await fs.mkdir(path.join(targetDir, ".cloneman"), { recursive: true });
+        await fs.writeFile(
+            path.join(targetDir, ".cloneman", "install.mjs"),
+            stripTypeScriptTypes(installHookContent),
+        );
+    }
 
     await fs.writeFile(path.join(targetDir, "index.js"), indexJs);
 
