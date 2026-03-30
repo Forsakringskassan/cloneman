@@ -1,18 +1,12 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import spawn from "nano-spawn";
 import type yoctoSpinner from "yocto-spinner";
 import { InvalidClonemanFieldError, MissingClonemanFieldError } from "./errors";
 import { getStoredFileName } from "./template/utils/get-stored-filename";
-import {
-    getTemplateInfo,
-    isTarball,
-    normalizeTemplatePackage,
-    readJsonFile,
-    readPackageJsonFromTarball,
-} from "./utils";
-
+import { isTarball, readJsonFile, writeJsonFile } from "./utils";
+import { fetchTarball } from "./utils/fetch-tarball";
 import { type PackageJson } from "./utils/package-json";
+import { parseTarball } from "./utils/parse-tarball";
 
 function isValidTemplateName(value: unknown): value is string {
     return typeof value === "string" && value.trim() !== "";
@@ -45,40 +39,57 @@ export async function update(
     }
     const templatePackage = cloneman;
 
-    let template = `${templatePackage}@${versionOrTar}`;
+    let tarballBuffer: Buffer;
+    let packageJsonVersion: string;
+
+    text("Retrieving template files...");
     if (isTarball(versionOrTar)) {
-        const tarPath = normalizeTemplatePackage(cwd, versionOrTar);
-
-        const templatePackageJson = await readPackageJsonFromTarball(tarPath);
-
-        if (templatePackageJson.name !== packageJson.cloneman) {
-            throw new Error(
-                `Cannot update application: template package in tarball (${templatePackageJson.name}) does not match current template package`,
-            );
+        const tarPath = path.isAbsolute(versionOrTar)
+            ? versionOrTar
+            : path.resolve(versionOrTar);
+        try {
+            tarballBuffer = await fs.readFile(tarPath);
+        } catch {
+            throw new Error(`Tarball not found at path "${tarPath}"`);
         }
-
-        template = tarPath;
+        /* Version is a relative path to the tarball, since it points to a local file. */
+        packageJsonVersion = path.relative(cwd, tarPath).replaceAll("\\", "/");
+    } else {
+        tarballBuffer = await fetchTarball(templatePackage, versionOrTar, env);
+        packageJsonVersion = versionOrTar;
     }
 
-    text("Installing dependencies...");
-    await spawn("npm", ["install", "--save-dev", "--save-exact", template], {
-        cwd,
-        env,
-    });
+    const { packageJson: templatePkgJson, files } =
+        await parseTarball(tarballBuffer);
 
-    const [filesDir, , managedFiles] = await getTemplateInfo(
-        templatePackage,
-        cwd,
-    );
+    if (templatePkgJson.name !== templatePackage) {
+        throw new Error(
+            `Cannot update application: template package in tarball (${templatePkgJson.name}) does not match current template package`,
+        );
+    }
+
+    const { managedFiles } = templatePkgJson.cloneman;
 
     await Promise.all(
-        managedFiles.map((filename) => {
-            console.log(filename);
-            return fs.cp(
-                path.join(filesDir, getStoredFileName(filename)),
-                path.join(cwd, filename),
-                { recursive: true },
-            );
+        managedFiles.map(async (filename) => {
+            const tarEntryPath = `package/files/${getStoredFileName(filename)}`;
+            const content = files.get(tarEntryPath);
+            if (content === undefined) {
+                throw new Error(
+                    `Managed file "${filename}" not found in tarball`,
+                );
+            }
+            const dest = path.join(cwd, filename);
+            await fs.mkdir(path.dirname(dest), { recursive: true });
+            await fs.writeFile(dest, content);
         }),
     );
+
+    await writeJsonFile(path.join(cwd, "package.json"), {
+        ...packageJson,
+        devDependencies: {
+            ...packageJson.devDependencies,
+            [templatePackage]: packageJsonVersion,
+        },
+    });
 }
