@@ -61,14 +61,12 @@ it("should update existing project", async () => {
 
     /* update the application to version 1.0.1 */
     await update(appDir, "1.0.1", userEnv);
-    expect(await readJsonFile("package.json")).toEqual(
-        expect.objectContaining({
-            devDependencies: {
-                "@forsakringskassan/base-template": "1.0.1",
-                "@forsakringskassan/lib-used-by-templates": "1.0.0",
-            },
-        }),
-    );
+    expect(await readJsonFile("package.json")).toMatchObject({
+        devDependencies: {
+            "@forsakringskassan/base-template": "1.0.1",
+            "@forsakringskassan/lib-used-by-templates": "1.0.0",
+        },
+    });
     expect(await readFile("boilerplate.txt")).toMatchInlineSnapshot(
         `boilerplate file at v1.0.0`,
     );
@@ -111,16 +109,14 @@ it("should update existing project from local tar", async () => {
 
     /* update the application using the local tarball */
     await update(appDir, tarballPath, userEnv);
-    expect(await readJsonFile("package.json")).toEqual(
-        expect.objectContaining({
-            devDependencies: {
-                "@forsakringskassan/base-template": expect.stringContaining(
-                    relativeTarballPath.replaceAll("\\", "/"),
-                ),
-                "@forsakringskassan/lib-used-by-templates": "1.0.0",
-            },
-        }),
-    );
+    expect(await readJsonFile("package.json")).toMatchObject({
+        devDependencies: {
+            "@forsakringskassan/base-template": expect.stringContaining(
+                relativeTarballPath.replaceAll("\\", "/"),
+            ),
+            "@forsakringskassan/lib-used-by-templates": "1.0.0",
+        },
+    });
     expect(await readFile("boilerplate.txt")).toMatchInlineSnapshot(
         `boilerplate file at v1.0.0`,
     );
