@@ -21,6 +21,13 @@ export interface NormalizedTemplateConfig {
 }
 
 // @public
+export function pack(options: {
+    cwd: string;
+    targetDir: string;
+    env?: Record<string, string>;
+}): Promise<void>;
+
+// @public
 export interface PackageJson {
     // (undocumented)
     cloneman?: unknown;
@@ -35,6 +42,12 @@ export interface PackageJson {
     // (undocumented)
     version: string;
 }
+
+// @public
+export function publish(options: {
+    cwd: string;
+    env?: Record<string, string>;
+}): Promise<void>;
 
 // @public
 export function readConfigFile(filePath: string): Promise<NormalizedTemplateConfig>;
