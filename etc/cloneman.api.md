@@ -47,6 +47,7 @@ export interface PackageJson {
 export function publish(options: {
     cwd: string;
     env?: Record<string, string>;
+    npmRcPath?: string;
 }): Promise<void>;
 
 // @public
