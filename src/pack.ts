@@ -12,8 +12,10 @@ function getPackOutput(stdout: string): string {
 }
 
 /**
- * @internal
  * Packs the prepared template into a tarball using `npm pack` and moves it to the specified target directory.
+ *
+ * @public
+ * @since %version%
  * @param options - The options for packing the template.
  *   - `cwd`: The current working directory where the tarball should be moved after packing.
  *   - `targetDir`: The directory where the `npm pack` command should be executed.
