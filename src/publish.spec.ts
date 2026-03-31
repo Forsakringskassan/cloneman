@@ -1,7 +1,17 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import spawn from "nano-spawn";
-import { afterAll, beforeAll, expect, inject, it, vi } from "vitest";
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    inject,
+    it,
+    vi,
+} from "vitest";
 import { prepare } from "./prepare";
 import { publish } from "./publish";
 import { rmDir } from "./test-utils/rm-dir";
@@ -74,4 +84,51 @@ it("should publish template", async () => {
             versions: ["1.0.0"],
         }),
     );
+});
+
+describe("publish options", () => {
+    let spawnSpy = vi.fn();
+    let localPublish: typeof publish;
+
+    beforeEach(async () => {
+        vi.resetModules();
+        spawnSpy = vi.fn();
+
+        vi.doMock(import("nano-spawn"), () => ({
+            default: spawnSpy,
+        }));
+
+        ({ publish: localPublish } = await import("./publish"));
+    });
+
+    afterEach(() => {
+        vi.doUnmock(import("nano-spawn"));
+    });
+
+    it("should call spawn with --userconfig when npmRcPath is provided", async () => {
+        expect.assertions(1);
+
+        const cwd = "/path/to/template";
+        const npmRcPath = "/custom/path/.npmrc";
+        await localPublish({ cwd, npmRcPath });
+
+        expect(spawnSpy).toHaveBeenCalledWith(
+            "npm",
+            ["publish", "--userconfig", npmRcPath],
+            expect.objectContaining({ cwd }),
+        );
+    });
+
+    it("should not call spawn with --userconfig when npmRcPath is not provided", async () => {
+        expect.assertions(1);
+
+        const cwd = "/path/to/template";
+        await localPublish({ cwd });
+
+        expect(spawnSpy).toHaveBeenCalledWith(
+            "npm",
+            ["publish"],
+            expect.objectContaining({ cwd }),
+        );
+    });
 });
