@@ -43,6 +43,9 @@ export interface PackageJson {
     version: string;
 }
 
+// @public (undocumented)
+export function prepare(cwd: string, targetDir: string): Promise<void>;
+
 // @public
 export function publish(options: {
     cwd: string;

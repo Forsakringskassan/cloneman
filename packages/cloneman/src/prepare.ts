@@ -4,7 +4,7 @@ import spawn from "nano-spawn";
 import { isTemplateFolder } from "./utils/is-template";
 
 /**
- * @internal
+ * @public
  */
 export async function prepare(cwd: string, targetDir: string): Promise<void> {
     if (!isTemplateFolder(cwd)) {

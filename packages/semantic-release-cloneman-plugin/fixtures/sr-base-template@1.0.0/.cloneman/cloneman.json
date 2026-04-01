@@ -1,0 +1,4 @@
+{
+    "managedFiles": ["managed.txt", ".gitignore", "renovate.json"],
+    "ignoredFiles": ["CHANGELOG.md", "release.config.js"]
+}
