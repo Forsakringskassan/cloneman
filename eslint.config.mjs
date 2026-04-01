@@ -21,13 +21,17 @@ export default [
     cliConfig(),
     typescriptConfig(),
     typeinfoConfig(import.meta.dirname, {
-        files: ["src/**/*.ts"],
+        files: ["packages/cloneman/src/**/*.ts"],
     }),
     vitestConfig(),
 
     {
         name: "Allow console statements in CLI",
-        files: ["src/**/*.ts", "bin/**/*.mjs"],
+        files: [
+            "src/test-utils/**/*.ts",
+            "packages/cloneman/src/**/*.ts",
+            "packages/cloneman/bin/**/*.mjs",
+        ],
         rules: {
             "no-console": "off",
         },
@@ -35,7 +39,7 @@ export default [
 
     {
         name: "local/dist",
-        files: ["fixtures/**/.cloneman/build.mjs"],
+        files: ["packages/cloneman/fixtures/**/.cloneman/build.mjs"],
         rules: {
             /* depends on dist folder being built */
             "import/no-unresolved": "off",
@@ -44,7 +48,7 @@ export default [
 
     {
         name: "local/dist",
-        files: ["fixtures/**/.cloneman/*.mts"],
+        files: ["packages/cloneman/fixtures/**/.cloneman/*.mts"],
         rules: {
             /* Building with Node requires file extension */
             "import/extensions": "off",

@@ -1,0 +1,70 @@
+{
+  "name": "cloneman",
+  "version": "1.2.0",
+  "description": "Application template and lifecycle management tool",
+  "keywords": [
+    "template",
+    "lifecycle"
+  ],
+  "homepage": "https://github.com/Forsakringskassan/cloneman#readme",
+  "bugs": {
+    "url": "https://github.com/Forsakringskassan/cloneman/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Forsakringskassan/cloneman.git"
+  },
+  "license": "MIT",
+  "author": "Försäkringskassan",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.mjs"
+    }
+  },
+  "main": "./dist/index.mjs",
+  "bin": {
+    "cloneman": "./bin/cloneman.mjs"
+  },
+  "files": [
+    "bin",
+    "dist"
+  ],
+  "scripts": {
+    "attw": "npx @arethetypeswrong/cli --profile esm-only --no-emoji --pack .",
+    "prebuild": "tsc",
+    "build": "node build.mjs",
+    "prepack": "release-prepack --bundle",
+    "postpack": "release-postpack",
+    "prepublishOnly": "release-prepublish --bundle",
+    "postpublish": "release-postpublish"
+  },
+  "dependencies": {
+    "nano-spawn": "2.0.0",
+    "sort-package-json": "3.6.1",
+    "tar": "7.5.13",
+    "yargs": "18.0.0",
+    "yocto-spinner": "1.1.0"
+  },
+  "devDependencies": {
+    "@arethetypeswrong/cli": "0.18.2",
+    "@microsoft/api-extractor": "7.57.7",
+    "@tsconfig/node22": "22.0.5",
+    "@tsconfig/recommended": "1.0.13",
+    "@tsconfig/strictest": "2.0.8",
+    "@types/stream-buffers": "3.0.8",
+    "@types/yargs": "17.0.35",
+    "esbuild": "0.27.4",
+    "is-ci": "4.1.0",
+    "npm-pkg-lint": "4.6.2",
+    "npm-run-all2": "8.0.4",
+    "stream-buffers": "3.0.3",
+    "typescript": "6.0.2",
+    "vitest": "4.1.2"
+  },
+  "engines": {
+    "node": ">= 22.20.0 || >= 24.8.0",
+    "npm": ">= 11.0.0"
+  }
+}

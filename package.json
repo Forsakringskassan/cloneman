@@ -1,7 +1,8 @@
 {
-  "name": "cloneman",
+  "name": "cloneman-monorepo",
   "version": "1.2.0",
-  "description": "Application template and lifecycle management tool",
+  "private": true,
+  "description": "Monorepo for the Cloneman application",
   "keywords": [
     "template",
     "lifecycle"
@@ -17,47 +18,30 @@
   "license": "MIT",
   "author": "Försäkringskassan",
   "type": "module",
-  "main": "./dist/index.mjs",
-  "bin": {
-    "cloneman": "./bin/cloneman.mjs"
-  },
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "default": "./dist/index.mjs"
-    }
-  },
-  "files": [
-    "bin",
-    "dist"
+  "files": [],
+  "workspaces": [
+    "packages/*"
   ],
   "scripts": {
-    "attw": "npx @arethetypeswrong/cli --profile esm-only --no-emoji --pack .",
-    "prebuild": "tsc",
-    "build": "node ./build.mjs",
+    "build": "lerna run build",
     "eslint": "eslint --cache .",
     "eslint:fix": "eslint --fix .",
     "lint": "run-s eslint prettier:check",
     "lint:fix": "run-s eslint:fix prettier:write",
-    "prepack": "release-prepack --bundle",
-    "postpack": "release-postpack",
-    "prepublishOnly": "release-prepublish --bundle",
-    "postpublish": "release-postpublish",
     "prettier:check": "prettier --check .",
     "prettier:write": "prettier --write .",
     "pretest": "npm run lint",
-    "version": "scripts/version",
-    "test": "vitest run"
+    "test": "vitest run",
+    "version": "scripts/version"
   },
   "commitlint": {
     "extends": "@forsakringskassan/commitlint-config/no-jira"
   },
   "prettier": "@forsakringskassan/prettier-config",
   "release": {
-    "extends": "@forsakringskassan/semantic-release-config"
+    "extends": "@forsakringskassan/semantic-release-monorepo-config"
   },
   "devDependencies": {
-    "@arethetypeswrong/cli": "0.18.2",
     "@forsakringskassan/commitlint-config": "3.3.8",
     "@forsakringskassan/eslint-config": "14.0.4",
     "@forsakringskassan/eslint-config-cli": "14.0.0",
@@ -71,13 +55,10 @@
     "@tsconfig/recommended": "1.0.13",
     "@tsconfig/strictest": "2.0.8",
     "@types/stream-buffers": "3.0.8",
-    "@types/yargs": "17.0.35",
     "@verdaccio/types": "10.8.0",
-    "esbuild": "0.27.4",
-    "is-ci": "4.1.0",
+    "lerna": "9.0.7",
+    "nano-spawn": "2.0.0",
     "npm-pkg-lint": "4.6.2",
-    "npm-run-all2": "8.0.4",
-    "stream-buffers": "3.0.3",
     "typescript": "6.0.2",
     "verdaccio": "6.3.2",
     "vitest": "4.1.2"
@@ -85,12 +66,5 @@
   "engines": {
     "node": ">= 22.20.0 || >= 24.8.0",
     "npm": ">= 11.0.0"
-  },
-  "dependencies": {
-    "nano-spawn": "2.0.0",
-    "sort-package-json": "3.6.1",
-    "tar": "7.5.13",
-    "yargs": "18.0.0",
-    "yocto-spinner": "1.1.0"
   }
 }

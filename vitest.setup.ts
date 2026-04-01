@@ -2,8 +2,8 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import spawn from "nano-spawn";
 import { type TestProject } from "vitest/node";
-import { prepare } from "./src/prepare";
-import { publish } from "./src/publish";
+import { prepare } from "./packages/cloneman/src/prepare";
+import { publish } from "./packages/cloneman/src/publish";
 import {
     getAuthEnv,
     getAuthToken,
@@ -19,7 +19,12 @@ async function publishFixture(
     authEnv: Record<string, string>,
 ): Promise<void> {
     console.log(`Publishing fixture ${fixture}...`);
-    const fixturePath = path.resolve(import.meta.dirname, "fixtures", fixture);
+    const fixturePath = path.resolve(
+        import.meta.dirname,
+        "packages/cloneman/fixtures",
+        fixture,
+    );
+
     const targetDir = temporaryDirectory();
     try {
         await prepare(fixturePath, targetDir);
@@ -35,7 +40,11 @@ async function publishPackage(
     authEnv: Record<string, string>,
 ): Promise<void> {
     console.log(`Publishing NPM package ${fixture}...`);
-    const fixturePath = path.resolve(import.meta.dirname, "fixtures", fixture);
+    const fixturePath = path.resolve(
+        import.meta.dirname,
+        "packages/cloneman/fixtures",
+        fixture,
+    );
     const targetDir = temporaryDirectory();
     try {
         await fs.cp(fixturePath, targetDir, { recursive: true });

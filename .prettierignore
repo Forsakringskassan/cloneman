@@ -3,6 +3,6 @@ package-lock.json
 
 coverage/
 dist/
-etc/*.api.md
+*.api.md
 node_modules/
 temp/

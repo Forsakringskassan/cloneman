@@ -47,4 +47,4 @@ jobs:
             - name: Build
               run: npm run build
             - name: Run attw
-              run: npm run attw
+              run: npm --workspace packages/cloneman run attw

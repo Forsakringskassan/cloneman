@@ -1,26 +1,14 @@
 {
-    "extends": [
-        "@tsconfig/recommended",
-        "@tsconfig/strictest",
-        "@tsconfig/node22"
-    ],
     "compilerOptions": {
-        "rootDir": "src",
-        "outDir": "dist",
-        "declarationDir": "temp/types",
-
-        "module": "esnext",
+        "target": "ESNext",
+        "module": "ESNext",
         "moduleResolution": "bundler",
-        "types": ["node"],
-        "resolveJsonModule": true,
-
-        "emitDeclarationOnly": true,
+        "outDir": "dist",
         "declaration": true,
-        "declarationMap": true,
-        "sourceMap": true,
-        "lib": ["esnext"],
-        "noUncheckedIndexedAccess": false,
-        "skipLibCheck": true
+        "strict": true,
+        "noEmit": true,
+        "skipLibCheck": true,
+        "rootDir": "src"
     },
     "include": ["src/**/*.ts"]
 }

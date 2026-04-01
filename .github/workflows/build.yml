@@ -25,4 +25,4 @@ jobs:
             - name: Test
               run: npm test --ignore-scripts
             - name: Selftest
-              run: node bin/cloneman.mjs --help
+              run: node packages/cloneman/bin/cloneman.mjs --help
