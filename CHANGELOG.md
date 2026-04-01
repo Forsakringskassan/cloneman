@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## [1.3.0](https://github.com/Forsakringskassan/cloneman/compare/v1.2.0...v1.3.0) (2026-04-01)
+
+### Features
+
+* export pack and publish function ([efb6573](https://github.com/Forsakringskassan/cloneman/commit/efb6573676ffdc06540fbd07d5b6d2293944eaa7))
+* improve loging during create and update ([3b0f7bb](https://github.com/Forsakringskassan/cloneman/commit/3b0f7bb0000bb025ee6ac59f71c13aa45a7011fc))
+* pass custom .npmrc config to publish ([c226be3](https://github.com/Forsakringskassan/cloneman/commit/c226be36581e2525866ed3b20c7d0709255299f1))
+
+### Bug Fixes
+
+* **deps:** update dependency tar to v7.5.13 ([8bc0194](https://github.com/Forsakringskassan/cloneman/commit/8bc0194d05a884d1bd0ffb1ba1479ae3970bd10d))
+
 ## [1.2.0](https://github.com/Forsakringskassan/cloneman/compare/v1.1.1...v1.2.0) (2026-03-27)
 
 ### Features

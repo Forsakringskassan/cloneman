@@ -4,7 +4,7 @@ import spawn from "nano-spawn";
  * Publishes the prepared template to the npm registry using `npm publish`.
  *
  * @public
- * @since %version%
+ * @since v1.3.0
  *
  * @param options - The options for publishing the template.
  *   - `cwd`: The directory containing the prepared template to publish.
