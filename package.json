@@ -87,7 +87,7 @@
     "npm": ">= 11.0.0"
   },
   "dependencies": {
-    "nano-spawn": "2.0.0",
+    "nano-spawn": "2.1.0",
     "sort-package-json": "3.6.1",
     "tar": "7.5.13",
     "yargs": "18.0.0",
