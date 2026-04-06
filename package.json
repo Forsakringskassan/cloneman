@@ -65,7 +65,7 @@
     "@forsakringskassan/eslint-config-typescript-typeinfo": "14.1.0",
     "@forsakringskassan/eslint-config-vitest": "14.1.1",
     "@forsakringskassan/prettier-config": "3.3.6",
-    "@html-validate/release-scripts": "7.1.15",
+    "@html-validate/release-scripts": "7.1.19",
     "@microsoft/api-extractor": "7.58.0",
     "@tsconfig/node22": "22.0.5",
     "@tsconfig/recommended": "1.0.13",
