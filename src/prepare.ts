@@ -8,7 +8,7 @@ import { isTemplateFolder } from "./utils/is-template";
  * This target directory could then by used for packing the template with `npm pack` or publish.
  *
  * @public
- * @since %version%
+ * @since v1.4.0
  * @param options - The options for packing the template.
  *   - `cwd`: The current working directory where the tarball should be moved after packing.
  *   - `targetDir`: The directory where the `npm pack` command should be executed.

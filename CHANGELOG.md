@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## [1.4.0](https://github.com/Forsakringskassan/cloneman/compare/v1.3.0...v1.4.0) (2026-04-08)
+
+### Features
+
+* export prepare function ([4a67c8c](https://github.com/Forsakringskassan/cloneman/commit/4a67c8cf26ce8c9a75cbe073c6aacf3b695acdfb))
+
+### Bug Fixes
+
+* **deps:** update dependency nano-spawn to v2.1.0 ([36d7343](https://github.com/Forsakringskassan/cloneman/commit/36d7343294d99bc8a99664d66c862d0aea983869))
+
 ## [1.3.0](https://github.com/Forsakringskassan/cloneman/compare/v1.2.0...v1.3.0) (2026-04-01)
 
 ### Features
