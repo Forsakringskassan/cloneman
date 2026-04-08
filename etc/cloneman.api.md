@@ -44,6 +44,9 @@ export interface PackageJson {
 }
 
 // @public
+export function prepare(cwd: string, targetDir: string): Promise<void>;
+
+// @public
 export function publish(options: {
     cwd: string;
     env?: Record<string, string>;
