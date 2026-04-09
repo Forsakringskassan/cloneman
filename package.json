@@ -79,7 +79,7 @@
     "npm-run-all2": "8.0.4",
     "stream-buffers": "3.0.3",
     "typescript": "6.0.2",
-    "verdaccio": "6.3.2",
+    "verdaccio": "6.4.0",
     "vitest": "4.1.2"
   },
   "engines": {
