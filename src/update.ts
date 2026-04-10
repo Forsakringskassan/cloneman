@@ -12,6 +12,7 @@ import {
 } from "./utils";
 
 import { type PackageJson } from "./utils/package-json";
+import { runTemplateInstall } from "./utils/run-template-install";
 
 /**
  * @internal
@@ -75,4 +76,16 @@ export async function update(
             );
         }),
     );
+
+    await runTemplateInstall({
+        installScriptPath: path.join(
+            cwd,
+            "node_modules",
+            templatePackage,
+            ".cloneman",
+            "install.mjs",
+        ),
+        cwd,
+        env,
+    });
 }

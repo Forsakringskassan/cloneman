@@ -55,7 +55,7 @@ afterEach(async () => {
 
 describe("create from base template from npm registry", () => {
     it("should create new project", async () => {
-        expect.assertions(3);
+        expect.assertions(4);
         await create({
             name: "mock-app",
             templatePackage: "@forsakringskassan/base-template@1.0.0",
@@ -80,6 +80,9 @@ describe("create from base template from npm registry", () => {
         );
         expect(await readFile("managed.txt")).toMatchInlineSnapshot(
             `managed file at v1.0.0`,
+        );
+        expect(await readFile("install.txt")).toMatchInlineSnapshot(
+            `install script at v1.0.0`,
         );
     });
 
@@ -127,7 +130,7 @@ describe("create from base template from npm registry", () => {
 
 describe("create from local template package", () => {
     it("should create new project from local .tgz file", async () => {
-        expect.assertions(3);
+        expect.assertions(4);
 
         /* create a local tarball for version 1.0.0 */
         const tarballPath = path.join(
@@ -167,6 +170,9 @@ describe("create from local template package", () => {
         );
         expect(await readFile("managed.txt")).toMatchInlineSnapshot(
             `managed file at v1.0.0`,
+        );
+        expect(await readFile("install.txt")).toMatchInlineSnapshot(
+            `install script at v1.0.0`,
         );
     });
 });

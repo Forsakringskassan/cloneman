@@ -45,6 +45,13 @@ A template is required to have:
 └── cloneman.json
 ```
 
+Optional files are:
+
+```
+.cloneman
+├── install.{js,mjs,ts,mts}
+```
+
 ### cloneman.json
 
 Contains a list of managed files that will be used when creating and updating an application.
@@ -91,6 +98,10 @@ const targetDir = process.argv[2];
 const template = await buildTemplate(pkg.name, pkg, targetDir, config);
 await template.renovateIgnoreDependencies();
 ```
+
+### install.mjs
+
+Optional hook that is called after `create` and `update` has been run.
 
 #### renovateIgnoreDependencies
 
