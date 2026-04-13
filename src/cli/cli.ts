@@ -1,5 +1,6 @@
 import yargs from "yargs";
 import { name } from "../../package.json";
+import { UserError } from "../errors";
 import { type Context } from "./context";
 import { createCommand } from "./create";
 import { packCommand } from "./pack";
@@ -28,5 +29,16 @@ export function createParser(context: Context): ReturnType<typeof yargs> {
 /* v8 ignore next -- @preserve createParser covers this */
 export async function cli(cwd: string, argv: string[]): Promise<void> {
     const context: Context = { cwd };
-    await createParser(context).parseAsync(argv);
+    await createParser(context)
+        .fail((msg, err) => {
+            if (err instanceof UserError) {
+                console.error(err.prettyMessage());
+            } else if (err instanceof Error) {
+                console.error(err);
+            } else {
+                console.error(msg);
+            }
+            process.exit(1);
+        })
+        .parseAsync(argv);
 }
