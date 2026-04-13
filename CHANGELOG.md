@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## [1.4.1](https://github.com/Forsakringskassan/cloneman/compare/v1.4.0...v1.4.1) (2026-04-13)
+
+### Bug Fixes
+
+* restore terminal output when exception is thrown ([1096eac](https://github.com/Forsakringskassan/cloneman/commit/1096eac692a57f94c1f96452155514a4e8d0b8d3))
+
 ## [1.4.0](https://github.com/Forsakringskassan/cloneman/compare/v1.3.0...v1.4.0) (2026-04-08)
 
 ### Features
