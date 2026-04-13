@@ -1,10 +1,5 @@
 import path from "node:path";
-/* In a real case scenario, the import here would be the package name, e.g: cloneman */
-import {
-    buildTemplate,
-    readConfigFile,
-    readPackageJson,
-} from "../../../dist/index.mjs";
+import { buildTemplate, readConfigFile, readPackageJson } from "cloneman";
 
 const configFile = path.resolve(import.meta.dirname, "cloneman.json");
 const templateRoot = path.resolve(import.meta.dirname, "..");

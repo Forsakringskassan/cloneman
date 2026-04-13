@@ -35,19 +35,13 @@ export default [
 
     {
         name: "local/dist",
-        files: ["fixtures/**/.cloneman/build.mjs"],
-        rules: {
-            /* depends on dist folder being built */
-            "import/no-unresolved": "off",
-        },
-    },
-
-    {
-        name: "local/dist",
-        files: ["fixtures/**/.cloneman/*.mts"],
+        files: ["fixtures/**/.cloneman/build.{mjs,mts}"],
         rules: {
             /* Building with Node requires file extension */
             "import/extensions": "off",
+
+            /* depends on dist folder being built */
+            "import/no-unresolved": "off",
         },
     },
 ];
