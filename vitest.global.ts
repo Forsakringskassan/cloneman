@@ -14,6 +14,22 @@ import {
 } from "./src/test-utils/npm-registry";
 import { temporaryDirectory } from "./src/test-utils/temporary-directory";
 
+async function createSymlink(src: string, dst: string): Promise<void> {
+    try {
+        await fs.symlink(
+            path.join(import.meta.dirname),
+            path.join(src, dst),
+            "junction",
+        );
+    } catch (err) {
+        if (err instanceof Error && "code" in err && err.code === "EEXIST") {
+            // ignore, symlink already exists
+        } else {
+            throw err;
+        }
+    }
+}
+
 async function publishFixture(
     fixture: string,
     authEnv: Record<string, string>,
@@ -22,6 +38,10 @@ async function publishFixture(
     const fixturePath = path.resolve(import.meta.dirname, "fixtures", fixture);
     const targetDir = temporaryDirectory();
     try {
+        await fs.mkdir(path.join(fixturePath, "node_modules"), {
+            recursive: true,
+        });
+        await createSymlink(fixturePath, "node_modules/cloneman");
         await prepare(fixturePath, targetDir);
         await writeNpmRc(targetDir);
         await publish({ cwd: targetDir, env: authEnv });
@@ -64,10 +84,10 @@ export async function setup(project: TestProject): Promise<void> {
 
     try {
         const authEnv = await start();
+        await publishPackage("lib-used-by-templates", authEnv);
         await publishFixture("base-template@1.0.0", authEnv);
         await publishFixture("base-template@1.0.1", authEnv);
         await publishPackage("non-template-package", authEnv);
-        await publishPackage("lib-used-by-templates", authEnv);
     } catch (error) {
         await stop();
         throw error;

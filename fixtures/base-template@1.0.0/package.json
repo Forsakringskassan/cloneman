@@ -6,6 +6,6 @@
   "dependencies": {},
   "devDependencies": {
     "@forsakringskassan/lib-used-by-templates": "1.0.0",
-    "cloneman": "file:../.."
+    "cloneman": "."
   }
 }
