@@ -2,6 +2,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import spawn from "nano-spawn";
 import type yoctoSpinner from "yocto-spinner";
+import { InvalidClonemanFieldError, MissingClonemanFieldError } from "./errors";
 import { getStoredFileName } from "./template/utils/get-stored-filename";
 import {
     getTemplateInfo,
@@ -12,6 +13,10 @@ import {
 } from "./utils";
 
 import { type PackageJson } from "./utils/package-json";
+
+function isValidTemplateName(value: unknown): value is string {
+    return typeof value === "string" && value.trim() !== "";
+}
 
 /**
  * @internal
@@ -32,12 +37,13 @@ export async function update(
         path.join(cwd, "package.json"),
     );
 
-    if (!packageJson.cloneman) {
-        throw new Error(
-            "Cannot update application: missing 'cloneman' field in package.json",
-        );
+    const { cloneman } = packageJson;
+    if (cloneman === undefined) {
+        throw new MissingClonemanFieldError();
+    } else if (!isValidTemplateName(cloneman)) {
+        throw new InvalidClonemanFieldError(cloneman);
     }
-    const templatePackage = packageJson.cloneman as string;
+    const templatePackage = cloneman;
 
     let template = `${templatePackage}@${versionOrTar}`;
     if (isTarball(versionOrTar)) {
