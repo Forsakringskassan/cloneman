@@ -19,7 +19,13 @@ async function createHandler(
         text: `Creating application "${name}" with template "${template}"...`,
     }).start();
 
-    await create({ name, templatePackage: template, cwd, spinner });
+    try {
+        await create({ name, templatePackage: template, cwd, spinner });
+    } catch (err) {
+        spinner.stop();
+        throw err;
+    }
+
     spinner.success(`Application created successfully.`);
 }
 

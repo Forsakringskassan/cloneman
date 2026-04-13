@@ -20,7 +20,12 @@ async function updateHandler(
         text: `Updating template package to version ${version}...`,
     }).start();
 
-    await update(cwd, version, {}, spinner);
+    try {
+        await update(cwd, version, {}, spinner);
+    } catch (err) {
+        spinner.stop();
+        throw err;
+    }
 
     spinner.success(`Template package updated to version ${version}`);
 }
