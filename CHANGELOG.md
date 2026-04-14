@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## [1.4.2](https://github.com/Forsakringskassan/cloneman/compare/v1.4.1...v1.4.2) (2026-04-14)
+
+### Bug Fixes
+
+* should copy a .npmrc from git history when creating a template ([cf00102](https://github.com/Forsakringskassan/cloneman/commit/cf00102d6829657ed6de8afcd3f2d9e611307643))
+
 ## [1.4.1](https://github.com/Forsakringskassan/cloneman/compare/v1.4.0...v1.4.1) (2026-04-13)
 
 ### Bug Fixes
