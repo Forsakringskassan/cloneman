@@ -7,9 +7,10 @@ vi.mock(import("../create"), () => ({
     create: vi.fn(),
 }));
 
+const mockSuccess = vi.fn();
 const mockSpinner = {
     start: vi.fn().mockReturnThis(),
-    success: vi.fn(),
+    success: mockSuccess,
 } as unknown as ReturnType<typeof yoctoSpinner>;
 
 vi.mock(import("yocto-spinner"), () => ({
@@ -18,6 +19,7 @@ vi.mock(import("yocto-spinner"), () => ({
 
 beforeEach(() => {
     vi.mocked(create).mockResolvedValue(undefined);
+    vi.spyOn(console, "log").mockImplementation(() => undefined);
 });
 
 afterEach(() => {
@@ -43,4 +45,13 @@ it("create app", async () => {
     expect(yoctoSpinner).toHaveBeenCalledWith({
         text: `Creating application "${appName}" with template "${templateName}"...`,
     });
+    expect(mockSuccess).toHaveBeenCalledWith(
+        `Application created successfully`,
+    );
+    expect(vi.mocked(console.log)).toHaveBeenCalledWith(`
+Now run:
+
+  cd ${appName}
+  npm install
+`);
 });

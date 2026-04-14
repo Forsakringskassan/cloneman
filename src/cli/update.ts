@@ -28,6 +28,12 @@ async function updateHandler(
     }
 
     spinner.success(`Template package updated to version ${version}`);
+
+    console.log(`
+Now run:
+
+  npm install
+    `);
 }
 
 /**
