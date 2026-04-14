@@ -26,9 +26,15 @@ async function createHandler(
         throw err;
     }
 
-    spinner.success(`Application created successfully.`);
-}
+    spinner.success(`Application created successfully`);
 
+    console.log(`
+Now run:
+
+  cd ${name}
+  npm install
+`);
+}
 /**
  * @internal
  */
