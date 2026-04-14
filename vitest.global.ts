@@ -12,7 +12,7 @@ import {
     start,
     stop,
 } from "./src/test-utils/npm-registry";
-import { temporaryDirectory } from "./src/test-utils/temporary-directory";
+import { withTemporaryDirectory } from "./src/test-utils/temporary-directory";
 
 async function createSymlink(src: string, dst: string): Promise<void> {
     try {
@@ -36,8 +36,7 @@ async function publishFixture(
 ): Promise<void> {
     console.log(`Publishing fixture ${fixture}...`);
     const fixturePath = path.resolve(import.meta.dirname, "fixtures", fixture);
-    const targetDir = temporaryDirectory();
-    try {
+    await withTemporaryDirectory(async (targetDir) => {
         await fs.mkdir(path.join(fixturePath, "node_modules"), {
             recursive: true,
         });
@@ -45,9 +44,7 @@ async function publishFixture(
         await prepare(fixturePath, targetDir);
         await writeNpmRc(targetDir);
         await publish({ cwd: targetDir, env: authEnv });
-    } finally {
-        await fs.rm(targetDir, { recursive: true, force: true });
-    }
+    });
 }
 
 async function publishPackage(
@@ -56,17 +53,14 @@ async function publishPackage(
 ): Promise<void> {
     console.log(`Publishing NPM package ${fixture}...`);
     const fixturePath = path.resolve(import.meta.dirname, "fixtures", fixture);
-    const targetDir = temporaryDirectory();
-    try {
+    await withTemporaryDirectory(async (targetDir) => {
         await fs.cp(fixturePath, targetDir, { recursive: true });
         await writeNpmRc(targetDir);
         await spawn("npm", ["publish"], {
             cwd: targetDir,
             env: authEnv,
         });
-    } finally {
-        await fs.rm(targetDir, { recursive: true, force: true });
-    }
+    });
 }
 
 function npmrc(): string {
