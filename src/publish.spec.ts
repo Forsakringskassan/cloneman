@@ -16,9 +16,11 @@ import { prepare } from "./prepare";
 import { publish } from "./publish";
 import { rmDir } from "./test-utils/rm-dir";
 import { temporaryDirectory } from "./test-utils/temporary-directory";
-
-/* Increased timeout time since test involves a lot reading and writing to disc. */
-vi.setConfig({ testTimeout: 10000 });
+/* 
+Increased timeout time since test involves a lot reading and writing to disc. 
+Npm publish also takes some time on Windows machines, which causes the test to fail with timeout error.
+*/
+vi.setConfig({ testTimeout: 30000 });
 
 const targetDir = temporaryDirectory();
 const authEnv = inject("authEnv");
