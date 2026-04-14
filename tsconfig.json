@@ -5,7 +5,7 @@
         "@tsconfig/node22"
     ],
     "compilerOptions": {
-        "rootDir": "src",
+        "rootDirs": ["fixtures", "src"],
         "outDir": "dist",
         "declarationDir": "temp/types",
 
@@ -20,7 +20,12 @@
         "sourceMap": true,
         "lib": ["esnext"],
         "noUncheckedIndexedAccess": false,
-        "skipLibCheck": true
+        "skipLibCheck": true,
+
+        "paths": {
+            "cloneman": ["./src/index.ts"]
+        }
     },
-    "include": ["src/**/*.ts"]
+    "include": ["fixtures/**/.cloneman/*.mts", "src/**/*.ts"],
+    "exclude": ["node_modules"]
 }
