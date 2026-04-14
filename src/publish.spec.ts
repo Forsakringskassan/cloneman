@@ -16,6 +16,8 @@ import { prepare } from "./prepare";
 import { publish } from "./publish";
 import { rmDir } from "./test-utils/rm-dir";
 import { temporaryDirectory } from "./test-utils/temporary-directory";
+import { info } from "./utils";
+
 /* 
 Increased timeout time since test involves a lot reading and writing to disc. 
 Npm publish also takes some time on Windows machines, which causes the test to fail with timeout error.
@@ -69,12 +71,9 @@ it("should publish template", async () => {
     await writeNpmRc(targetDir);
     await publish({ cwd: targetDir, env: authEnv });
 
-    const result = await spawn(
-        "npm",
-        ["info", "@forsakringskassan/publish-template", "--json"],
-        { env: authEnv },
-    );
-    const output = JSON.parse(result.output);
+    const output = await info("@forsakringskassan/publish-template", {
+        env: authEnv,
+    });
     expect(output).toEqual(
         expect.objectContaining({
             cloneman: {
