@@ -1,5 +1,6 @@
 import fs from "node:fs/promises";
 import path from "node:path";
+import spawn from "nano-spawn";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { prepare } from "./prepare";
 import { rmDir } from "./test-utils/rm-dir";
@@ -31,7 +32,7 @@ describe("prepare base template", () => {
         const { output } = await prepare(baseTemplate, targetDir);
         expect(output).toMatchInlineSnapshot(`
           "Assembling cloneman template "@forsakringskassan/base-template@1.0.0"
-            5 files copied (4 ignored)"
+            6 files copied (4 ignored)"
         `);
 
         const testPath = path.join(targetDir, "files/**/*");
@@ -48,9 +49,10 @@ describe("prepare base template", () => {
                 path.join("files", "sub-folder"),
                 path.join("files", "renovate.json"),
                 path.join("files", "sub-folder", "sub-file.txt"),
+                path.join("files", "_npmrc"),
             ]),
         );
-        expect(files).toHaveLength(7);
+        expect(files).toHaveLength(8);
     });
 
     it("should create a massaged template package.json", async () => {
@@ -59,7 +61,7 @@ describe("prepare base template", () => {
         const { output } = await prepare(baseTemplate, targetDir);
         expect(output).toMatchInlineSnapshot(`
           "Assembling cloneman template "@forsakringskassan/base-template@1.0.0"
-            5 files copied (4 ignored)"
+            6 files copied (4 ignored)"
         `);
 
         const packageJson = await readJsonFile<PackageJson>(
@@ -89,7 +91,7 @@ describe("prepare base template", () => {
         const { output } = await prepare(baseTemplate, targetDir);
         expect(output).toMatchInlineSnapshot(`
           "Assembling cloneman template "@forsakringskassan/base-template@1.0.0"
-            5 files copied (4 ignored)"
+            6 files copied (4 ignored)"
         `);
 
         const packageJson = await readJsonFile<PackageJson>(
@@ -101,6 +103,7 @@ describe("prepare base template", () => {
             "cloneman": {
               "boilerplateFiles": [
                 ".gitignore",
+                ".npmrc",
                 "boilerplate.txt",
                 "managed.txt",
                 "renovate.json",
@@ -128,7 +131,7 @@ describe("prepare base template", () => {
         const { output } = await prepare(baseTemplate, targetDir);
         expect(output).toMatchInlineSnapshot(`
           "Assembling cloneman template "@forsakringskassan/base-template@1.0.0"
-            5 files copied (4 ignored)"
+            6 files copied (4 ignored)"
         `);
 
         const renovateJson = await readJsonFile(
@@ -198,5 +201,67 @@ describe("prepare template-missing-build", () => {
         await expect(prepare(cwd, targetDir)).rejects.toThrow(
             `No build file found in ".cloneman". Tried: build.{js,mjs,ts,mts}`,
         );
+    });
+});
+
+describe("protected files", () => {
+    let baseTemplateTemporary: string;
+
+    beforeEach(async () => {
+        baseTemplateTemporary = temporaryDirectory();
+        await fs.cp(baseTemplate, baseTemplateTemporary, { recursive: true });
+
+        // Simulate a git repo
+        const git = (args: string[]): Promise<unknown> =>
+            spawn("git", ["-C", baseTemplateTemporary, ...args], {
+                env: {
+                    ...process.env,
+                    GIT_AUTHOR_NAME: "Test",
+                    GIT_AUTHOR_EMAIL: "test@example.com",
+                    GIT_COMMITTER_NAME: "Test",
+                    GIT_COMMITTER_EMAIL: "test@example.com",
+                },
+            });
+        await git(["init"]);
+        await git(["add", "."]);
+        await git(["commit", "-m", "init"]);
+
+        /* Non protected file */
+        await fs.appendFile(
+            path.join(baseTemplateTemporary, "boilerplate.txt"),
+            "\nThis line should be in the prepared template",
+        );
+
+        /* Protected file */
+        await fs.appendFile(
+            path.join(baseTemplateTemporary, ".npmrc"),
+            "\nregistry=https://registry.npmjs.org/",
+        );
+
+        await prepare(baseTemplateTemporary, targetDir);
+    });
+
+    afterEach(async () => {
+        await rmDir(baseTemplateTemporary);
+    });
+
+    it("should copy protected files from git history", async () => {
+        expect.hasAssertions();
+
+        const npmrc = await fs.readFile(
+            path.join(targetDir, "files", "_npmrc"),
+            "utf8",
+        );
+
+        const boilerplate = await fs.readFile(
+            path.join(targetDir, "files", "boilerplate.txt"),
+            "utf8",
+        );
+
+        expect(boilerplate).toContain(
+            "This line should be in the prepared template",
+        );
+
+        expect(npmrc).not.toContain("registry=https://registry.npmjs.org/");
     });
 });
