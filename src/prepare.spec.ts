@@ -25,12 +25,15 @@ afterEach(async () => {
 });
 
 describe("prepare base template", () => {
-    beforeEach(async () => {
-        await prepare(baseTemplate, targetDir);
-    });
-
     it("prepare", async () => {
-        expect.hasAssertions();
+        expect.assertions(3);
+
+        const { output } = await prepare(baseTemplate, targetDir);
+        expect(output).toMatchInlineSnapshot(`
+          "Assembling cloneman template "@forsakringskassan/base-template@1.0.0"
+            5 files copied (4 ignored)"
+        `);
+
         const testPath = path.join(targetDir, "files/**/*");
         const files = await Array.fromAsync(fs.glob(testPath, {}), (file) => {
             return path.relative(targetDir, file);
@@ -51,7 +54,14 @@ describe("prepare base template", () => {
     });
 
     it("should create a massaged template package.json", async () => {
-        expect.hasAssertions();
+        expect.assertions(2);
+
+        const { output } = await prepare(baseTemplate, targetDir);
+        expect(output).toMatchInlineSnapshot(`
+          "Assembling cloneman template "@forsakringskassan/base-template@1.0.0"
+            5 files copied (4 ignored)"
+        `);
+
         const packageJson = await readJsonFile<PackageJson>(
             path.join(targetDir, "files", "package.json"),
         );
@@ -74,7 +84,14 @@ describe("prepare base template", () => {
     });
 
     it("should create a new package.json for NPM package", async () => {
-        expect.hasAssertions();
+        expect.assertions(2);
+
+        const { output } = await prepare(baseTemplate, targetDir);
+        expect(output).toMatchInlineSnapshot(`
+          "Assembling cloneman template "@forsakringskassan/base-template@1.0.0"
+            5 files copied (4 ignored)"
+        `);
+
         const packageJson = await readJsonFile<PackageJson>(
             path.join(targetDir, "package.json"),
         );
@@ -106,7 +123,14 @@ describe("prepare base template", () => {
     });
 
     it("should add packageRules to managed renovate.json", async () => {
-        expect.hasAssertions();
+        expect.assertions(2);
+
+        const { output } = await prepare(baseTemplate, targetDir);
+        expect(output).toMatchInlineSnapshot(`
+          "Assembling cloneman template "@forsakringskassan/base-template@1.0.0"
+            5 files copied (4 ignored)"
+        `);
+
         const renovateJson = await readJsonFile(
             path.join(targetDir, "files", "renovate.json"),
         );
@@ -126,9 +150,14 @@ describe("prepare base template", () => {
 
 describe("prepare base template 1.0.1", () => {
     it("should not contain ignored packages", async () => {
-        expect.hasAssertions();
+        expect.assertions(2);
 
-        await prepare(baseTemplateUpdated, targetDir);
+        const { output } = await prepare(baseTemplateUpdated, targetDir);
+        expect(output).toMatchInlineSnapshot(`
+          "Assembling cloneman template "@forsakringskassan/base-template@1.0.1"
+            2 files copied (3 ignored)"
+        `);
+
         const packageJson = await readJsonFile<PackageJson>(
             path.join(targetDir, "files", "package.json"),
         );

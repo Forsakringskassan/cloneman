@@ -13,8 +13,10 @@ import { isTemplateFolder } from "./utils/is-template";
  *   - `cwd`: The current working directory where the tarball should be moved after packing.
  *   - `targetDir`: The directory where the `npm pack` command should be executed.
  */
-
-export async function prepare(cwd: string, targetDir: string): Promise<void> {
+export async function prepare(
+    cwd: string,
+    targetDir: string,
+): Promise<{ output: string }> {
     if (!isTemplateFolder(cwd)) {
         throw new Error(
             `Current directory is not a valid cloneman template (missing ".cloneman")`,
@@ -29,10 +31,10 @@ export async function prepare(cwd: string, targetDir: string): Promise<void> {
         );
     }
 
-    await spawn("node", [`.cloneman/${buildFile}`, targetDir], {
+    return await spawn("node", [`.cloneman/${buildFile}`, targetDir], {
         cwd,
-        stdout: "inherit",
-        stderr: "inherit",
+        stdout: "pipe",
+        stderr: "pipe",
     });
 }
 

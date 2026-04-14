@@ -24,7 +24,7 @@ beforeEach(() => {
     stream = new WritableStreamBuffer();
     globalThis.console = new Console(stream, stream);
     vi.mocked(publish).mockResolvedValue(undefined);
-    vi.mocked(prepare).mockResolvedValue(undefined);
+    vi.mocked(prepare).mockResolvedValue({ output: "" });
 });
 
 it("publish app", async () => {
