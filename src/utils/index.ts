@@ -7,3 +7,4 @@ export {
     normalizeTemplatePackage,
 } from "./normalize-template-package";
 export { getTemplateInfo } from "./get-template-info";
+export { info } from "./npm";
