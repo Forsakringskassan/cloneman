@@ -10,7 +10,8 @@ async function packHandler(context: Context): Promise<void> {
     console.log("Pack template");
 
     const targetDir = path.join(cwd, TEMPLATE_BUILD_PATH);
-    await prepare(cwd, targetDir);
+    const { output: prepareOutput } = await prepare(cwd, targetDir);
+    console.log(prepareOutput);
     await pack({ cwd, targetDir });
 }
 

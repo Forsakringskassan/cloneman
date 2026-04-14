@@ -22,7 +22,7 @@ let stream: WritableStreamBuffer;
 beforeEach(() => {
     stream = new WritableStreamBuffer();
     globalThis.console = new Console(stream, stream);
-    vi.mocked(prepare).mockResolvedValue(undefined);
+    vi.mocked(prepare).mockResolvedValue({ output: "" });
 });
 
 it("pack app", async () => {
@@ -33,6 +33,7 @@ it("pack app", async () => {
     await parser.parse(["pack"]);
     expect(stream.getContentsAsString("utf8")).toMatchInlineSnapshot(`
       "Pack template
+
       "
     `);
 });

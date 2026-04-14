@@ -44,7 +44,9 @@ export interface PackageJson {
 }
 
 // @public
-export function prepare(cwd: string, targetDir: string): Promise<void>;
+export function prepare(cwd: string, targetDir: string): Promise<{
+    output: string;
+}>;
 
 // @public
 export function publish(options: {
