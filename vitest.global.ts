@@ -70,7 +70,10 @@ async function publishPackage(
 }
 
 function npmrc(): string {
-    return `//${getRegistryHost()}/:_authToken="${getAuthToken()}"\n`;
+    return [
+        `registry=http://${getRegistryHost()}`,
+        `//${getRegistryHost()}/:_authToken=${getAuthToken()}`,
+    ].join("\n");
 }
 
 async function writeNpmRc(dst: string): Promise<void> {
