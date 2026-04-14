@@ -22,7 +22,7 @@ export interface BuildTemplateResult {
     /**
      * List of files included in the template
      */
-    files: string[];
+    readonly files: string[];
 }
 
 /**

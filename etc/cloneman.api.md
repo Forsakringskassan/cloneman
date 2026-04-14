@@ -9,7 +9,7 @@ export function buildTemplate(name: string, pkg: PackageJson, targetDir: string,
 
 // @public (undocumented)
 export interface BuildTemplateResult {
-    files: string[];
+    readonly files: string[];
     renovateIgnoreDependencies(): Promise<void>;
 }
 
