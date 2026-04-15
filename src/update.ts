@@ -55,8 +55,13 @@ export async function update(
         /* Version is a relative path to the tarball, since it points to a local file. */
         packageJsonVersion = path.relative(cwd, tarPath).replaceAll("\\", "/");
     } else {
-        tarballBuffer = await fetchTarball(templatePackage, versionOrTar, env);
-        packageJsonVersion = versionOrTar;
+        const { buffer, version: resolvedVersion } = await fetchTarball(
+            templatePackage,
+            versionOrTar,
+            env,
+        );
+        tarballBuffer = buffer;
+        packageJsonVersion = resolvedVersion;
     }
 
     const { packageJson: templatePkgJson, files } =
