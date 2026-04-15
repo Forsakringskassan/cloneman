@@ -38,11 +38,11 @@ const config: ConfigYaml = {
 };
 
 const userEnv = {
-    npm_config_registry: "",
+    NPM_CONFIG_REGISTRY: "",
 };
 
 const authEnv = {
-    npm_config_registry: "",
+    NPM_CONFIG_REGISTRY: "",
     NPM_USERNAME,
     NPM_PASSWORD,
     NPM_EMAIL,
@@ -61,8 +61,8 @@ function startVerdaccio(): Promise<Server> {
                 registryHost = `${addr.address}:${addr.port}`;
                 registryUrl = `http://${registryHost}`;
                 console.log({ registryHost, registryUrl });
-                userEnv.npm_config_registry = registryUrl;
-                authEnv.npm_config_registry = registryUrl;
+                userEnv.NPM_CONFIG_REGISTRY = registryUrl;
+                authEnv.NPM_CONFIG_REGISTRY = registryUrl;
                 resolve(server);
             });
         });
