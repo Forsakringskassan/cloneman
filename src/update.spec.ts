@@ -8,8 +8,8 @@ import { rmDir } from "./test-utils/rm-dir";
 import { temporaryDirectory } from "./test-utils/temporary-directory";
 import { update } from "./update";
 
-/* Increased timeout time since test involves a lot reading and writing to disc. */
-vi.setConfig({ testTimeout: 10000 });
+/* Increased timeout time since test involves a lot reading & writing to disc, and also fetching data from a local npm registry */
+vi.setConfig({ testTimeout: 30000 });
 
 expect.addSnapshotSerializer({
     test() {
