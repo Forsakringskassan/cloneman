@@ -68,7 +68,10 @@ export async function update(
         );
     }
 
-    const { managedFiles } = templatePkgJson.cloneman;
+    const { filesDir, managedFiles } = await getTemplateInfo(
+        templatePackage,
+        cwd,
+    );
 
     await Promise.all(
         managedFiles.map(async (filename) => {

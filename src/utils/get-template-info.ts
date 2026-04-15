@@ -1,42 +1,34 @@
-import spawn from "nano-spawn";
+import path from "node:path";
+import { buildResolver } from "esm-resolve";
 
 /**
- * @public
+ * @internal
  */
+export interface TemplateInfo {
+    readonly filesDir: string;
+    readonly boilerplateFiles: string[];
+    readonly managedFiles: string[];
+}
 
+interface TemplateInfoModule {
+    default: TemplateInfo;
+}
+
+/**
+ * @internal
+ */
 export async function getTemplateInfo(
     templatePackage: string,
     appPath: string,
-): Promise<
-    [filesDir: string, boilerplateFiles: string[], managedFiles: string[]]
-> {
-    let getInfo;
-    try {
-        getInfo = await spawn(
-            "node",
-            [
-                "--input-type=module",
-                "-e",
-                `console.log(JSON.stringify((await import('${templatePackage}')).default));`,
-            ],
-            {
-                cwd: appPath,
-            },
-        );
-    } catch {
+): Promise<TemplateInfo> {
+    const resolver = buildResolver(path.posix.join(appPath, "noop.js"));
+    const resolved = resolver(templatePackage);
+    if (!resolved) {
         throw new Error(
             `Package ${templatePackage} is not a valid cloneman template package`,
         );
     }
-
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- technical debt
-    const templateInfo = JSON.parse(getInfo.stdout);
-
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- technical debt
-    const filesDir: string = templateInfo.filesDir;
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- technical debt
-    const boilerplateFiles: string[] = templateInfo.boilerplateFiles;
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- technical debt
-    const managedFiles: string[] = templateInfo.managedFiles;
-    return [filesDir, boilerplateFiles, managedFiles];
+    const absolute = path.join(appPath, resolved);
+    const { default: info } = (await import(absolute)) as TemplateInfoModule;
+    return info;
 }
