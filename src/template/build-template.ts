@@ -23,7 +23,7 @@ export interface BuildTemplateResult {
      * - Arrays are always replaced.
      *
      * @public
-     * @since %version%
+     * @since v1.5.0
      * @param filePath - Path relative to the template root.
      * @param content - Content to add to the existing JSON.
      * @returns A promise resolved when the updated file has been written.

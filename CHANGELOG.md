@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## [1.5.0](https://github.com/Forsakringskassan/cloneman/compare/v1.4.2...v1.5.0) (2026-04-15)
+
+### Features
+
+* add `updateJson()` method to update json files in generated template ([7c3cc06](https://github.com/Forsakringskassan/cloneman/commit/7c3cc061acc542ed23232497fdb05ea453b054ac))
+
+### Bug Fixes
+
+* do not run npm install during update ([6efe660](https://github.com/Forsakringskassan/cloneman/commit/6efe660b0076bc3083d6bd0deb13a6ac2afeeeb3))
+
 ## [1.4.2](https://github.com/Forsakringskassan/cloneman/compare/v1.4.1...v1.4.2) (2026-04-14)
 
 ### Bug Fixes
