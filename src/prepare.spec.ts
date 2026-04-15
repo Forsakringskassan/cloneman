@@ -238,3 +238,21 @@ describe("protected files", () => {
         });
     });
 });
+
+describe("updateJson()", () => {
+    it("should update json files before publish", async () => {
+        expect.assertions(1);
+        await withFixture("update-json-template", async (fixture) => {
+            await prepare(fixture, targetDir);
+            const filePath = path.join(targetDir, "files", "foo.json");
+            const json = await readJsonFile(filePath);
+            expect(json).toEqual({
+                foo: "this value should be kept",
+                bar: "overwritten value",
+                nested: {
+                    spam: "ham",
+                },
+            });
+        });
+    });
+});

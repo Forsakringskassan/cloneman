@@ -1,0 +1,7 @@
+{
+    "foo": "this value should be kept",
+    "bar": "this value should be overwritten",
+    "nested": {
+        "baz": "this should be removed and replaced with a different key"
+    }
+}

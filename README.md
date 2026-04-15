@@ -99,6 +99,41 @@ Append template specific dependencies to the "ignoreDeps" array in the template'
 This makes Renovate ignore dependencies that are managed by the template, while
 still allowing updates for dependencies that are not template managed.
 
+#### updateJson
+
+Update the contents of a JSON file in the template.
+Multiple updates on the same file
+
+**Syntax**
+
+```js
+updateJson(filePath, content);
+```
+
+**Parameters**
+
+: `filePath: string`
+Path relative to the template root.
+
+: `content: unknown`
+Content to add to the existing JSON.
+
+**Return value**
+
+A promise resolved when the updated file has been written.
+
+**Examples**
+
+```ts
+const template = await buildTemplate(pkg.name, pkg, targetDir, config);
+
+await template.updateJson("package.json", {
+    release: {
+        extends: ["awesome-preset"],
+    },
+});
+```
+
 ## Available commands when working with templates
 
 Both commands requires to be called insisde a template folder.
