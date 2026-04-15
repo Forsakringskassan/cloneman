@@ -11,6 +11,7 @@ export function buildTemplate(name: string, pkg: PackageJson, targetDir: string,
 export interface BuildTemplateResult {
     readonly files: string[];
     renovateIgnoreDependencies(): Promise<void>;
+    updateJson(this: void, filePath: string, content: unknown): Promise<void>;
 }
 
 // @public

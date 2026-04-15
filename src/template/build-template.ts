@@ -4,6 +4,7 @@ import { type NormalizedTemplateConfig } from "../config";
 import { readJsonFile, writeJsonFile } from "../utils";
 import { type PackageJson } from "../utils/package-json";
 
+import { updateJson } from "./update-json";
 import { copyFiles } from "./utils/copy-files";
 import { createclonemanPackageJson } from "./utils/create-cloneman-package-json";
 import { prepareTemplatePackageJson } from "./utils/prepare-template-package-json";
@@ -14,6 +15,21 @@ import { updateRenovateWithIgnoredDeps } from "./utils/update-renovate-with-igno
  * @since v1.2.0
  */
 export interface BuildTemplateResult {
+    /**
+     * Updates the content of the JSON file at given path with given content.
+     *
+     * - Objects are updated recursively, keys set to `undefined` are removed
+     *   from the target object.
+     * - Arrays are always replaced.
+     *
+     * @public
+     * @since %version%
+     * @param filePath - Path relative to the template root.
+     * @param content - Content to add to the existing JSON.
+     * @returns A promise resolved when the updated file has been written.
+     */
+    updateJson(this: void, filePath: string, content: unknown): Promise<void>;
+
     /**
      * Append template specific dependencies to the "ignoreDeps" array in the template's "renovate.json".
      */
@@ -100,6 +116,7 @@ export async function buildTemplate(
     console.groupEnd();
 
     return {
+        updateJson: updateJson.bind(undefined, { filesDir }),
         renovateIgnoreDependencies() {
             return renovateIgnoreDependencies(
                 massagedTemplatePackageJson,
