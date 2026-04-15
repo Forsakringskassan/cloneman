@@ -1,15 +1,21 @@
 import spawn from "nano-spawn";
 
 /**
- * @public
+ * @internal
  */
+export interface TemplateInfo {
+    readonly filesDir: string;
+    readonly boilerplateFiles: string[];
+    readonly managedFiles: string[];
+}
 
+/**
+ * @internal
+ */
 export async function getTemplateInfo(
     templatePackage: string,
     appPath: string,
-): Promise<
-    [filesDir: string, boilerplateFiles: string[], managedFiles: string[]]
-> {
+): Promise<TemplateInfo> {
     let getInfo;
     try {
         getInfo = await spawn(
@@ -29,14 +35,12 @@ export async function getTemplateInfo(
         );
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- technical debt
-    const templateInfo = JSON.parse(getInfo.stdout);
+    const templateInfo = JSON.parse(getInfo.stdout) as {
+        filesDir: string;
+        boilerplateFiles: string[];
+        managedFiles: string[];
+    };
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- technical debt
-    const filesDir: string = templateInfo.filesDir;
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- technical debt
-    const boilerplateFiles: string[] = templateInfo.boilerplateFiles;
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- technical debt
-    const managedFiles: string[] = templateInfo.managedFiles;
-    return [filesDir, boilerplateFiles, managedFiles];
+    const { filesDir, boilerplateFiles, managedFiles } = templateInfo;
+    return { filesDir, boilerplateFiles, managedFiles };
 }
