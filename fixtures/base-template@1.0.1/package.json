@@ -3,6 +3,10 @@
   "version": "1.0.1",
   "private": true,
   "files": [],
+  "scripts": {
+    "a": "foo",
+    "b": "bar"
+  },
   "dependencies": {},
   "devDependencies": {
     "@forsakringskassan/lib-used-by-templates": "1.0.0",

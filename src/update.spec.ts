@@ -15,6 +15,7 @@ import { prepare } from "./prepare";
 import { rmDir } from "./test-utils/rm-dir";
 import { temporaryDirectory } from "./test-utils/temporary-directory";
 import { update } from "./update";
+import { writeJsonFile } from "./utils";
 import { type PackageJson } from "./utils/package-json";
 
 /* Increased timeout time since test involves a lot reading & writing to disc, and also fetching data from a local npm registry */
@@ -60,10 +61,15 @@ describe("update existing project with template from registry", () => {
             cwd,
             env: userEnv,
         });
+        const packageJson = await readJsonFile<PackageJson>("package.json");
+        packageJson.description = "description";
+        packageJson.version = "0.0.1";
+
+        await writeJsonFile(path.join(appDir, "package.json"), packageJson);
     });
 
     it("should update existing project", async () => {
-        expect.assertions(5);
+        expect.assertions(9);
 
         expect(await readFile("boilerplate.txt")).toMatchInlineSnapshot(
             `boilerplate file at v1.0.0`,
@@ -86,6 +92,13 @@ describe("update existing project with template from registry", () => {
         expect(await readFile("managed.txt")).toMatchInlineSnapshot(
             `managed file at v1.0.1`,
         );
+
+        const applicationPackageJson =
+            await readJsonFile<PackageJson>("package.json");
+        expect(applicationPackageJson.name).toBe("mock-app");
+        expect(applicationPackageJson.description).toBe("description");
+        expect(applicationPackageJson.version).toBe("0.0.1");
+        expect(applicationPackageJson.scripts).toEqual({ a: "foo", b: "bar" });
     });
 
     it("should set actual version to the resolved version if input version is 'latest'", async () => {
