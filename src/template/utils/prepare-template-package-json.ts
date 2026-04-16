@@ -1,4 +1,5 @@
 import { sortPackageJson } from "sort-package-json";
+import { type ClientMetadata } from "../../types";
 import { type PackageJson } from "../../utils/package-json";
 import { isIgnored } from "./is-ignored";
 
@@ -12,12 +13,16 @@ export function prepareTemplatePackageJson(
     pkg: PackageJson,
     ignoredDepecencies: string[],
 ): PackageJson {
+    const cloneman: ClientMetadata = {
+        template: template.name,
+        version: pkg.version,
+    };
     const massaged = {
         ...pkg,
         name: "${name}",
         description: "${description}",
         version: "${version}",
-        cloneman: template.name,
+        cloneman,
         dependencies: filterDependencies(pkg.dependencies, ignoredDepecencies),
         devDependencies: {
             ...filterDependencies(pkg.devDependencies, ignoredDepecencies),

@@ -9,7 +9,7 @@ it("should format pretty message", async () => {
     expect(error.prettyMessage()).toMatchInlineSnapshot(`
       <red>ERROR cloneman cannot update application: "package.json" has invalid "cloneman" field.</color>
 
-      The "cloneman" field is expected to be a non-empty string but was actually: [ 'foo', 'bar' ].
+      The "cloneman" field is expected to be an object with the template and version fields but was actually: [ 'foo', 'bar' ].
 
       Make sure this application uses cloneman to manage the template.
 
@@ -29,7 +29,7 @@ it("should handle empty string", async () => {
         await import("./invalid-cloneman-field-error");
     const error = new InvalidClonemanFieldError("");
     expect(error.prettyMessage()).toContain(
-        `The "cloneman" field is expected to be a non-empty string but was actually: ''.`,
+        `The "cloneman" field is expected to be an object with the template and version fields but was actually: ''.`,
     );
 });
 
@@ -39,6 +39,6 @@ it("should handle whitespace", async () => {
         await import("./invalid-cloneman-field-error");
     const error = new InvalidClonemanFieldError("    ");
     expect(error.prettyMessage()).toContain(
-        `The "cloneman" field is expected to be a non-empty string but was actually: '    '.`,
+        `The "cloneman" field is expected to be an object with the template and version fields but was actually: '    '.`,
     );
 });

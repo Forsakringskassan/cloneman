@@ -73,7 +73,10 @@ describe("create from base template from npm registry", () => {
                 "@forsakringskassan/base-template": "1.0.0",
                 "@forsakringskassan/lib-used-by-templates": "1.0.0",
             },
-            cloneman: "@forsakringskassan/base-template",
+            cloneman: {
+                template: "@forsakringskassan/base-template",
+                version: "1.0.0",
+            },
         });
         expect(await readFile("boilerplate.txt")).toMatchInlineSnapshot(
             `boilerplate file at v1.0.0`,
@@ -160,7 +163,10 @@ describe("create from local template package", () => {
                 ),
                 "@forsakringskassan/lib-used-by-templates": "1.0.0",
             },
-            cloneman: "@forsakringskassan/base-template",
+            cloneman: {
+                template: "@forsakringskassan/base-template",
+                version: "1.0.0",
+            },
         });
         expect(await readFile("boilerplate.txt")).toMatchInlineSnapshot(
             `boilerplate file at v1.0.0`,

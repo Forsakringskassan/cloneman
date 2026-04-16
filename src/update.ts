@@ -3,14 +3,16 @@ import path from "node:path";
 import type yoctoSpinner from "yocto-spinner";
 import { InvalidClonemanFieldError, MissingClonemanFieldError } from "./errors";
 import { getStoredFileName } from "./template/utils/get-stored-filename";
-import { info, isTarball, readJsonFile, writeJsonFile } from "./utils";
+import {
+    info,
+    isClientMetadata,
+    isTarball,
+    readJsonFile,
+    writeJsonFile,
+} from "./utils";
 import { fetchTarball } from "./utils/fetch-tarball";
 import { type PackageJson } from "./utils/package-json";
 import { parseTarball } from "./utils/parse-tarball";
-
-function isValidTemplateName(value: unknown): value is string {
-    return typeof value === "string" && value.trim() !== "";
-}
 
 /**
  * @internal
@@ -34,10 +36,9 @@ export async function update(
     const { cloneman } = packageJson;
     if (cloneman === undefined) {
         throw new MissingClonemanFieldError();
-    } else if (!isValidTemplateName(cloneman)) {
+    } else if (!isClientMetadata(cloneman)) {
         throw new InvalidClonemanFieldError(cloneman);
     }
-    const templatePackage = cloneman;
 
     let tarballBuffer: Buffer;
     /*
@@ -66,7 +67,7 @@ export async function update(
 
         if (versionOrTar === "latest") {
             packageJsonVersion = await info<string>(
-                `${templatePackage}@${versionOrTar}`,
+                `${cloneman.template}@${versionOrTar}`,
                 {
                     field: "version",
                     env,
@@ -75,7 +76,7 @@ export async function update(
         }
 
         tarballBuffer = await fetchTarball(
-            templatePackage,
+            cloneman.template,
             packageJsonVersion,
             env,
         );
@@ -84,7 +85,7 @@ export async function update(
     const { packageJson: templatePkgJson, files } =
         await parseTarball(tarballBuffer);
 
-    if (templatePkgJson.name !== templatePackage) {
+    if (templatePkgJson.name !== cloneman.template) {
         throw new Error(
             `Cannot update application: template package in tarball (${templatePkgJson.name}) does not match current template package`,
         );
@@ -111,7 +112,7 @@ export async function update(
         ...packageJson,
         devDependencies: {
             ...packageJson.devDependencies,
-            [templatePackage]: packageJsonVersion,
+            [cloneman.template]: packageJsonVersion,
         },
     });
 }

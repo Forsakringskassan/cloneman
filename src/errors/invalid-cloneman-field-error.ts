@@ -23,7 +23,7 @@ export class InvalidClonemanFieldError extends UserError {
                 `ERROR cloneman cannot update application: "package.json" has invalid "cloneman" field.`,
             ),
             ``,
-            `The "cloneman" field is expected to be a non-empty string but was actually: ${inspect(value)}.`,
+            `The "cloneman" field is expected to be an object with the template and version fields but was actually: ${inspect(value)}.`,
             ``,
             `Make sure this application uses cloneman to manage the template.`,
             ``,
