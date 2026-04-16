@@ -1,3 +1,4 @@
+export { isClientMetadata } from "./is-client-metadata";
 export { readJsonFile } from "./read-json-file";
 export { readPackageJson } from "./read-package-json";
 export { readPackageJsonFromTarball } from "./read-package-json-from-tarball";

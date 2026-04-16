@@ -68,7 +68,10 @@ describe("prepare base template", () => {
 
         expect(packageJson).toMatchInlineSnapshot(`
           {
-            "cloneman": "@forsakringskassan/base-template",
+            "cloneman": {
+              "template": "@forsakringskassan/base-template",
+              "version": "1.0.0",
+            },
             "dependencies": {},
             "description": "\${description}",
             "devDependencies": {
@@ -165,7 +168,10 @@ describe("prepare base template 1.0.1", () => {
 
         expect(packageJson).toMatchInlineSnapshot(`
           {
-            "cloneman": "@forsakringskassan/base-template",
+            "cloneman": {
+              "template": "@forsakringskassan/base-template",
+              "version": "1.0.1",
+            },
             "dependencies": {},
             "description": "\${description}",
             "devDependencies": {
