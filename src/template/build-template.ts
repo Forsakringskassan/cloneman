@@ -42,9 +42,11 @@ export interface BuildTemplateResult {
 }
 
 /**
+ * Builds a cloneman template.
+ *
  * @public
  * @since v1.2.0
- * Builds a cloneman template.
+ * @param pkg - The `package.json` content of the template (from the root of the template).
  */
 export async function buildTemplate(
     name: string,
