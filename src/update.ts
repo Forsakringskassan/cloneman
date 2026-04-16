@@ -3,7 +3,7 @@ import path from "node:path";
 import type yoctoSpinner from "yocto-spinner";
 import { InvalidClonemanFieldError, MissingClonemanFieldError } from "./errors";
 import { getStoredFileName } from "./template/utils/get-stored-filename";
-import { isTarball, readJsonFile, writeJsonFile } from "./utils";
+import { info, isTarball, readJsonFile, writeJsonFile } from "./utils";
 import { fetchTarball } from "./utils/fetch-tarball";
 import { type PackageJson } from "./utils/package-json";
 import { parseTarball } from "./utils/parse-tarball";
@@ -40,10 +40,17 @@ export async function update(
     const templatePackage = cloneman;
 
     let tarballBuffer: Buffer;
+    /*
+     * The actual version is determined during the process
+     * If the input is a tarball, the version is set to the relative path of the tarball, since it points to a local file.
+     * If the input is a version, the version is set to the input version, or the resolved version if the input is "latest".
+     */
     let packageJsonVersion: string;
 
     text("Retrieving template files...");
     if (isTarball(versionOrTar)) {
+        packageJsonVersion = versionOrTar;
+
         const tarPath = path.isAbsolute(versionOrTar)
             ? versionOrTar
             : path.resolve(versionOrTar);
@@ -55,8 +62,23 @@ export async function update(
         /* Version is a relative path to the tarball, since it points to a local file. */
         packageJsonVersion = path.relative(cwd, tarPath).replaceAll("\\", "/");
     } else {
-        tarballBuffer = await fetchTarball(templatePackage, versionOrTar, env);
         packageJsonVersion = versionOrTar;
+
+        if (versionOrTar === "latest") {
+            packageJsonVersion = await info<string>(
+                `${templatePackage}@${versionOrTar}`,
+                {
+                    field: "version",
+                    env,
+                },
+            );
+        }
+
+        tarballBuffer = await fetchTarball(
+            templatePackage,
+            packageJsonVersion,
+            env,
+        );
     }
 
     const { packageJson: templatePkgJson, files } =

@@ -1,12 +1,21 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { afterEach, beforeEach, expect, inject, it, vi } from "vitest";
+import {
+    afterEach,
+    beforeEach,
+    describe,
+    expect,
+    inject,
+    it,
+    vi,
+} from "vitest";
 import { create } from "./create";
 import { pack } from "./pack";
 import { prepare } from "./prepare";
 import { rmDir } from "./test-utils/rm-dir";
 import { temporaryDirectory } from "./test-utils/temporary-directory";
 import { update } from "./update";
+import { type PackageJson } from "./utils/package-json";
 
 /* Increased timeout time since test involves a lot reading & writing to disc, and also fetching data from a local npm registry */
 vi.setConfig({ testTimeout: 30000 });
@@ -42,37 +51,52 @@ afterEach(async () => {
     await rmDir(cwd);
 });
 
-it("should update existing project", async () => {
-    expect.assertions(5);
-
-    /* create the initial application using template at version 1.0.0 */
-    await create({
-        name: "mock-app",
-        templatePackage: "@forsakringskassan/base-template@1.0.0",
-        cwd,
-        env: userEnv,
+describe("update existing project with template from registry", () => {
+    beforeEach(async () => {
+        /* create the initial application using template at version 1.0.0 */
+        await create({
+            name: "mock-app",
+            templatePackage: "@forsakringskassan/base-template@1.0.0",
+            cwd,
+            env: userEnv,
+        });
     });
-    expect(await readFile("boilerplate.txt")).toMatchInlineSnapshot(
-        `boilerplate file at v1.0.0`,
-    );
-    expect(await readFile("managed.txt")).toMatchInlineSnapshot(
-        `managed file at v1.0.0`,
-    );
 
-    /* update the application to version 1.0.1 */
-    await update(appDir, "1.0.1", userEnv);
-    expect(await readJsonFile("package.json")).toMatchObject({
-        devDependencies: {
-            "@forsakringskassan/base-template": "1.0.1",
-            "@forsakringskassan/lib-used-by-templates": "1.0.0",
-        },
+    it("should update existing project", async () => {
+        expect.assertions(5);
+
+        expect(await readFile("boilerplate.txt")).toMatchInlineSnapshot(
+            `boilerplate file at v1.0.0`,
+        );
+        expect(await readFile("managed.txt")).toMatchInlineSnapshot(
+            `managed file at v1.0.0`,
+        );
+
+        /* update the application to version 1.0.1 */
+        await update(appDir, "1.0.1", userEnv);
+        expect(await readJsonFile("package.json")).toMatchObject({
+            devDependencies: {
+                "@forsakringskassan/base-template": "1.0.1",
+                "@forsakringskassan/lib-used-by-templates": "1.0.0",
+            },
+        });
+        expect(await readFile("boilerplate.txt")).toMatchInlineSnapshot(
+            `boilerplate file at v1.0.0`,
+        );
+        expect(await readFile("managed.txt")).toMatchInlineSnapshot(
+            `managed file at v1.0.1`,
+        );
     });
-    expect(await readFile("boilerplate.txt")).toMatchInlineSnapshot(
-        `boilerplate file at v1.0.0`,
-    );
-    expect(await readFile("managed.txt")).toMatchInlineSnapshot(
-        `managed file at v1.0.1`,
-    );
+
+    it("should set actual version to the resolved version if input version is 'latest'", async () => {
+        expect.assertions(1);
+
+        await update(appDir, "latest", userEnv);
+        const packageJson = await readJsonFile<PackageJson>("package.json");
+        expect(
+            packageJson.devDependencies?.["@forsakringskassan/base-template"],
+        ).toBe("1.0.1");
+    });
 });
 
 it("should update existing project from local tar", async () => {
