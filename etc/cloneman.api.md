@@ -4,7 +4,7 @@
 
 ```ts
 
-// @public (undocumented)
+// @public
 export function buildTemplate(name: string, pkg: PackageJson, targetDir: string, config: NormalizedTemplateConfig): Promise<BuildTemplateResult>;
 
 // @public (undocumented)

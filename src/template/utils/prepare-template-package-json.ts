@@ -2,6 +2,11 @@ import { sortPackageJson } from "sort-package-json";
 import { type PackageJson } from "../../utils/package-json";
 import { isIgnored } from "./is-ignored";
 
+/**
+ * @internal
+ * @param template - The generated `package.json`  for the template NPM package.
+ * @param pkg - The `package.json` content of the template (from the root of the template).
+ */
 export function prepareTemplatePackageJson(
     template: PackageJson,
     pkg: PackageJson,
