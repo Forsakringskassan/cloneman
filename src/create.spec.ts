@@ -68,6 +68,7 @@ describe("create from base template from npm registry", () => {
             private: true,
             description: "",
             files: [],
+            scripts: { a: "foo" },
             dependencies: {},
             devDependencies: {
                 "@forsakringskassan/base-template": "1.0.0",
@@ -156,6 +157,7 @@ describe("create from local template package", () => {
             private: true,
             description: "",
             files: [],
+            scripts: { a: "foo" },
             dependencies: {},
             devDependencies: {
                 "@forsakringskassan/base-template": expect.stringContaining(

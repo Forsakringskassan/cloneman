@@ -29,11 +29,11 @@ export async function update(
         }
     }
 
-    const packageJson = await readJsonFile<PackageJson>(
+    const applicationPackageJson = await readJsonFile<PackageJson>(
         path.join(cwd, "package.json"),
     );
 
-    const { cloneman } = packageJson;
+    const { cloneman, name, version, description } = applicationPackageJson;
     if (cloneman === undefined) {
         throw new MissingClonemanFieldError();
     } else if (!isClientMetadata(cloneman)) {
@@ -82,16 +82,16 @@ export async function update(
         );
     }
 
-    const { packageJson: templatePkgJson, files } =
+    const { tmplPackageJson, tarballPackageJson, files } =
         await parseTarball(tarballBuffer);
 
-    if (templatePkgJson.name !== cloneman.template) {
+    if (tarballPackageJson.name !== cloneman.template) {
         throw new Error(
-            `Cannot update application: template package in tarball (${templatePkgJson.name}) does not match current template package`,
+            `Cannot update application: template package in tarball (${tarballPackageJson.name}) does not match current template package`,
         );
     }
 
-    const { managedFiles } = templatePkgJson.cloneman;
+    const { managedFiles } = tarballPackageJson.cloneman;
 
     await Promise.all(
         managedFiles.map(async (filename) => {
@@ -109,9 +109,12 @@ export async function update(
     );
 
     await writeJsonFile(path.join(cwd, "package.json"), {
-        ...packageJson,
+        ...tmplPackageJson,
+        name,
+        version,
+        description,
         devDependencies: {
-            ...packageJson.devDependencies,
+            ...applicationPackageJson.devDependencies,
             [cloneman.template]: packageJsonVersion,
         },
     });

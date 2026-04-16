@@ -81,6 +81,9 @@ describe("prepare base template", () => {
             "files": [],
             "name": "\${name}",
             "private": true,
+            "scripts": {
+              "a": "foo",
+            },
             "version": "\${version}",
           }
         `);
@@ -180,6 +183,10 @@ describe("prepare base template 1.0.1", () => {
             "files": [],
             "name": "\${name}",
             "private": true,
+            "scripts": {
+              "a": "foo",
+              "b": "bar",
+            },
             "version": "\${version}",
           }
         `);

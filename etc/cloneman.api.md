@@ -41,6 +41,8 @@ export interface PackageJson {
     // (undocumented)
     name: string;
     // (undocumented)
+    scripts?: Record<string, string>;
+    // (undocumented)
     version: string;
 }
 
