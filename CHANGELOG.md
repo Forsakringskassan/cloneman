@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## [1.6.1](https://github.com/Forsakringskassan/cloneman/compare/v1.6.0...v1.6.1) (2026-04-17)
+
+### Bug Fixes
+
+* use package.json from template when updating application ([968cafb](https://github.com/Forsakringskassan/cloneman/commit/968cafb3bdc827447c630a26c447a1ca4b32710d))
+
 ## [1.6.0](https://github.com/Forsakringskassan/cloneman/compare/v1.5.0...v1.6.0) (2026-04-17)
 
 ### Features
