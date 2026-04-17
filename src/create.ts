@@ -7,7 +7,7 @@ import { getStoredFileName } from "./template/utils/get-stored-filename";
 import { readJsonFile } from "./utils";
 import { getTemplateInfo } from "./utils/get-template-info";
 import { normalizeTemplatePackage } from "./utils/normalize-template-package";
-import { type PackageJson } from "./utils/package-json";
+import { type ApplicationPackageJson } from "./utils/package-json";
 
 /**
  * @internal
@@ -57,16 +57,23 @@ export async function create(options: {
                 env,
             },
         );
-        const temporaryPackageJson = await readJsonFile<PackageJson>(
-            path.join(appPath, "package.json"),
-        );
+
+        /**
+         * Temporary package.json created by npm init and is only used during the installation process
+         * Will later be replaced with the actual template package.json
+         */
+        const tmpApplicationPackageJson =
+            await readJsonFile<ApplicationPackageJson>(
+                path.join(appPath, "package.json"),
+            );
 
         templatePackageName = Object.keys(
-            temporaryPackageJson.devDependencies ?? {},
+            tmpApplicationPackageJson.devDependencies ?? {},
         )[0];
 
         templatePackageVersion =
-            temporaryPackageJson.devDependencies?.[templatePackageName] ?? "";
+            tmpApplicationPackageJson.devDependencies?.[templatePackageName] ??
+            "";
 
         if (!templatePackageName) {
             throw new Error(
@@ -83,24 +90,25 @@ export async function create(options: {
         appPath,
     );
 
-    const templatePackageJson = await readJsonFile<PackageJson>(
+    const applicationPackageJson = await readJsonFile<ApplicationPackageJson>(
         path.join(filesDir, "package.json"),
     );
 
-    templatePackageJson.name = name;
-    templatePackageJson.version = "0.0.0";
-    templatePackageJson.description = "";
+    applicationPackageJson.name = name;
+    applicationPackageJson.version = "0.0.0";
+    applicationPackageJson.description = "";
 
-    templatePackageJson.devDependencies ??= {};
+    applicationPackageJson.devDependencies ??= {};
 
-    templatePackageJson.devDependencies[templatePackageName] =
+    applicationPackageJson.devDependencies[templatePackageName] =
         templatePackageVersion;
 
     await fs.writeFile(
         path.join(appPath, "package.json"),
-        JSON.stringify(templatePackageJson, null, 2),
+        JSON.stringify(applicationPackageJson, null, 2),
         "utf8",
     );
+    text("Copying template files...");
     await Promise.all(
         boilerplateFiles.map((filename) => {
             return fs.cp(
