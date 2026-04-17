@@ -34,9 +34,9 @@ export function prepareTemplatePackageJson(
 }
 
 function filterDependencies(
-    dependencies: Record<string, string> | undefined,
+    dependencies: Partial<Record<string, string>> | undefined,
     ignored: string[],
-): Record<string, string> {
+): Partial<Record<string, string>> {
     if (!dependencies) {
         return {};
     }

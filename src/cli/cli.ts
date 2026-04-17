@@ -6,6 +6,7 @@ import { createCommand } from "./create";
 import { packCommand } from "./pack";
 import { publishCommand } from "./publish";
 import { updateCommand } from "./update";
+import { verifyCommand } from "./verify";
 
 /**
  * @internal
@@ -17,6 +18,7 @@ export function createParser(context: Context): ReturnType<typeof yargs> {
         .command(updateCommand(context))
         .command(packCommand(context))
         .command(publishCommand(context))
+        .command(verifyCommand(context))
         .demandCommand(1, "You need to provide a command.")
         .strict()
         .help();

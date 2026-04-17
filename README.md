@@ -8,6 +8,7 @@ Available commands
 
 - Create
 - Update
+- verify
 
 ### Create a new application based on a template
 
@@ -28,10 +29,23 @@ To the latest version:
 You can also update to a specific version:
 `npx cloneman update 1.2.3`
 
-### Local tarball
+#### Local tarball
 
 As with the create command, you can also point to a local tarball:
 `npx cloneman update ../directory/template.tgz`
+
+### Verify
+
+Verifies the application has been updated with the template (NPM dependency).
+Typically used to fail the build when an external tool such as Dependabot or Renovate is used to update the NPM dependency.
+
+> `npx cloneman verify`
+
+Exits successfully if the application is up-to-date or with a non-zero status and a detailed instruction if the application needs to be updated.
+
+It is recommended to run this from the `prepare` script in the applications `package.json`:
+
+> `npm pkg set scripts.prepare="cloneman verify"`
 
 ## Creating and managing templates
 
