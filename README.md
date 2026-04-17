@@ -16,6 +16,9 @@ Available commands
 
 Keep in mind that `template-package-name` needs to be published to the npm registry.
 
+The latest version of the template is installed by default. To install a specific version, specify it using the `@version` suffix:
+`npx cloneman create my-new-application template-package-name@1.2.3`
+
 You can also refer to a local template file:
 `npx cloneman create my-new-application ../directory/template.tgz`
 
