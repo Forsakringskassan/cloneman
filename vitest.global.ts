@@ -81,7 +81,6 @@ export async function setup(project: TestProject): Promise<void> {
 
     try {
         const authEnv = await start();
-        await publishPackage("lib-used-by-templates", authEnv);
         await publishFixture("base-template@1.0.0", authEnv);
         await publishFixture("base-template@1.0.1", authEnv);
         await publishPackage("non-template-package", authEnv);
