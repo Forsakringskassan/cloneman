@@ -72,7 +72,10 @@ describe("prepare base template", () => {
               "template": "@forsakringskassan/base-template",
               "version": "1.0.0",
             },
-            "dependencies": {},
+            "dependencies": {
+              "@forsakringskassan/api-lib-a": "1.0.0",
+              "@forsakringskassan/api-lib-b": "1.0.0",
+            },
             "description": "\${description}",
             "devDependencies": {
               "@forsakringskassan/base-template": "1.0.0",
@@ -118,6 +121,7 @@ describe("prepare base template", () => {
                 ".gitignore",
                 "renovate.json",
               ],
+              "uninstallDependencies": [],
             },
             "exports": {
               ".": "./index.js",
@@ -148,6 +152,8 @@ describe("prepare base template", () => {
               "local>forsakringskassan/renovate-config",
             ],
             "ignoreDeps": [
+              "@forsakringskassan/api-lib-a",
+              "@forsakringskassan/api-lib-b",
               "@forsakringskassan/lib-used-by-templates",
             ],
           }
@@ -175,7 +181,10 @@ describe("prepare base template 1.0.1", () => {
               "template": "@forsakringskassan/base-template",
               "version": "1.0.1",
             },
-            "dependencies": {},
+            "dependencies": {
+              "@forsakringskassan/api-lib-a": "1.1.0",
+              "@forsakringskassan/api-lib-b": "1.1.0",
+            },
             "description": "\${description}",
             "devDependencies": {
               "@forsakringskassan/base-template": "1.0.1",

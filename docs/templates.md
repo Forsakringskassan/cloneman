@@ -35,6 +35,13 @@ Supports exact file names or glob patterns, e.g. `test/*` to remove all test fil
 List of dependencies to exclude when creating a template.
 Supports exact package names or glob patterns, e.g. `@fkui/*` to remove all dependencies in the `@fkui` scope.
 
+### uninstallDependencies
+
+List of dependencies to remove from the application during an update.
+Useful when a template is migrating between tools, e.g. from Jest to Vitest, to ensure obsolete packages are uninstalled from the application.
+
+Supports exact package names or glob patterns, e.g. `@fkui/*` to remove all dependencies in the `@fkui` scope.
+
 ## build.mjs
 
 Build script to prepare an application or library to be a cloneman template.

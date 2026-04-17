@@ -11,6 +11,8 @@ export interface TemplateConfig {
     ignoredFiles?: string[];
     /** list of dependencies (from package.json) to ignore */
     ignoredDependencies?: string[];
+    /** List of dependencies that will be removed from application during update */
+    uninstallDependencies?: string[];
 }
 
 /**
@@ -26,4 +28,6 @@ export interface NormalizedTemplateConfig {
     ignoredFiles: string[];
     /** list of dependencies (from package.json) to ignore */
     ignoredDependencies: string[];
+    /** List of dependencies that will be removed from application during update */
+    uninstallDependencies: string[];
 }

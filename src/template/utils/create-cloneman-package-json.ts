@@ -1,5 +1,5 @@
 import { writeJsonFile } from "../../utils";
-import { type PackageJson } from "../../utils/package-json";
+import { type TemplatePackageJson } from "../../utils/package-json";
 
 export async function createclonemanPackageJson(
     dst: string,
@@ -8,9 +8,16 @@ export async function createclonemanPackageJson(
         version: string;
         boilerplateFiles: string[];
         managedFiles: string[];
+        uninstallDependencies: string[];
     },
-): Promise<PackageJson> {
-    const { name, version, boilerplateFiles, managedFiles } = options;
+): Promise<TemplatePackageJson> {
+    const {
+        name,
+        version,
+        boilerplateFiles,
+        managedFiles,
+        uninstallDependencies,
+    } = options;
     const pkg = {
         name,
         type: "module",
@@ -21,6 +28,7 @@ export async function createclonemanPackageJson(
         cloneman: {
             boilerplateFiles,
             managedFiles,
+            uninstallDependencies,
         },
     };
 

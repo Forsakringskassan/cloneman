@@ -83,6 +83,8 @@ export async function setup(project: TestProject): Promise<void> {
         const authEnv = await start();
         await publishFixture("base-template@1.0.0", authEnv);
         await publishFixture("base-template@1.0.1", authEnv);
+        await publishFixture("base-template@1.0.2", authEnv);
+
         await publishPackage("non-template-package", authEnv);
     } catch (error) {
         await stop();

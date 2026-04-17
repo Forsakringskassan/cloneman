@@ -1,14 +1,15 @@
 {
   "name": "@forsakringskassan/base-template",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "private": true,
   "files": [],
   "scripts": {
-    "a": "foo"
+    "a": "foo",
+    "b": "bar"
   },
   "dependencies": {
-    "@forsakringskassan/api-lib-a": "1.0.0",
-    "@forsakringskassan/api-lib-b": "1.0.0"
+    "@forsakringskassan/api-lib-a": "1.1.0",
+    "@forsakringskassan/api-lib-b": "1.1.0"
   },
   "devDependencies": {
     "@forsakringskassan/lib-used-by-templates": "1.0.0",

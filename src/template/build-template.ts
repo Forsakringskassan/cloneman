@@ -74,6 +74,7 @@ export async function buildTemplate(
         managedFiles,
         ignoredFiles: templateIgnoredFiles,
         ignoredDependencies: templateIgnoredDependencies,
+        uninstallDependencies,
     } = config;
 
     const ignoredFiles = [
@@ -111,6 +112,7 @@ export async function buildTemplate(
             name,
             version: pkg.version,
             boilerplateFiles: files,
+            uninstallDependencies,
             managedFiles,
         },
     );

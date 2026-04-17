@@ -1,0 +1,5 @@
+{
+    "managedFiles": ["managed.txt"],
+    "ignoredDependencies": ["@forsakringskassan/lib-used-by-templates"],
+    "uninstallDependencies": ["@forsakringskassan/old-lib"]
+}

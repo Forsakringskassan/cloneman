@@ -15,5 +15,6 @@ export function normalizeTemplateConfig(
         managedFiles: config.managedFiles ?? [],
         ignoredFiles: config.ignoredFiles ?? [],
         ignoredDependencies: config.ignoredDependencies ?? [],
+        uninstallDependencies: config.uninstallDependencies ?? [],
     };
 }

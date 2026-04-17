@@ -24,6 +24,7 @@ export interface TemplatePackageJson extends PackageJson {
     cloneman: {
         boilerplateFiles: string[];
         managedFiles: string[];
+        uninstallDependencies: string[];
     };
 }
 
