@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## [1.6.0](https://github.com/Forsakringskassan/cloneman/compare/v1.5.0...v1.6.0) (2026-04-17)
+
+### Features
+
+* print next steps after create and update command ([ad5989c](https://github.com/Forsakringskassan/cloneman/commit/ad5989cdc0ff917fdd3433eb07a0002ae41a0851))
+
+### Bug Fixes
+
+* should set actual version when updating to latest ([b2e62bb](https://github.com/Forsakringskassan/cloneman/commit/b2e62bb21124bdd9d120da4dfef026a965fc761c))
+* store additional metadata in users `package.json` ([ad54946](https://github.com/Forsakringskassan/cloneman/commit/ad549460b4da39d06791e80b3f13863261c737ed))
+
 ## [1.5.0](https://github.com/Forsakringskassan/cloneman/compare/v1.4.2...v1.5.0) (2026-04-15)
 
 ### Features
