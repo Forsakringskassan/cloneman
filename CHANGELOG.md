@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## [1.7.0](https://github.com/Forsakringskassan/cloneman/compare/v1.6.1...v1.7.0) (2026-04-17)
+
+### Features
+
+* new `verify` command to ensure the application is up-to-date with template files ([40ecd67](https://github.com/Forsakringskassan/cloneman/commit/40ecd67a2da9773b5dc21f96ee190de25812b756))
+
 ## [1.6.1](https://github.com/Forsakringskassan/cloneman/compare/v1.6.0...v1.6.1) (2026-04-17)
 
 ### Bug Fixes
