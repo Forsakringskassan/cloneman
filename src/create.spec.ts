@@ -69,7 +69,10 @@ describe("create from base template from npm registry", () => {
             description: "",
             files: [],
             scripts: { a: "foo" },
-            dependencies: {},
+            dependencies: {
+                "@forsakringskassan/api-lib-a": "1.0.0",
+                "@forsakringskassan/api-lib-b": "1.0.0",
+            },
             devDependencies: {
                 "@forsakringskassan/base-template": "1.0.0",
                 "@forsakringskassan/lib-used-by-templates": "1.0.0",
@@ -158,7 +161,10 @@ describe("create from local template package", () => {
             description: "",
             files: [],
             scripts: { a: "foo" },
-            dependencies: {},
+            dependencies: {
+                "@forsakringskassan/api-lib-a": "1.0.0",
+                "@forsakringskassan/api-lib-b": "1.0.0",
+            },
             devDependencies: {
                 "@forsakringskassan/base-template": expect.stringContaining(
                     relativeTarballPath.replaceAll("\\", "/"),

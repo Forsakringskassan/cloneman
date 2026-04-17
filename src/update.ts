@@ -11,6 +11,7 @@ import {
     writeJsonFile,
 } from "./utils";
 import { fetchTarball } from "./utils/fetch-tarball";
+import { filterDependencies } from "./utils/filter-dependencies";
 import { type PackageJson } from "./utils/package-json";
 import { parseTarball } from "./utils/parse-tarball";
 
@@ -91,7 +92,7 @@ export async function update(
         );
     }
 
-    const { managedFiles } = tarballPackageJson.cloneman;
+    const { managedFiles, uninstallDependencies } = tarballPackageJson.cloneman;
 
     await Promise.all(
         managedFiles.map(async (filename) => {
@@ -108,13 +109,26 @@ export async function update(
         }),
     );
 
+    const dependencies = filterDependencies({
+        appDependencies: applicationPackageJson.dependencies,
+        templateDependencies: tmplPackageJson.dependencies,
+        uninstallDependencies,
+    });
+
+    const devDependencies = filterDependencies({
+        appDependencies: applicationPackageJson.devDependencies,
+        templateDependencies: tmplPackageJson.devDependencies,
+        uninstallDependencies,
+    });
+
     await writeJsonFile(path.join(cwd, "package.json"), {
         ...tmplPackageJson,
         name,
         version,
         description,
+        dependencies,
         devDependencies: {
-            ...applicationPackageJson.devDependencies,
+            ...devDependencies,
             [cloneman.template]: packageJsonVersion,
         },
     });

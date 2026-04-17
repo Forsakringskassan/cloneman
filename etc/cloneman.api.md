@@ -20,6 +20,7 @@ export interface NormalizedTemplateConfig {
     ignoredDependencies: string[];
     ignoredFiles: string[];
     managedFiles: string[];
+    uninstallDependencies: string[];
 }
 
 // @public
@@ -73,6 +74,7 @@ export interface TemplateConfig {
     ignoredDependencies?: string[];
     ignoredFiles?: string[];
     managedFiles?: string[];
+    uninstallDependencies?: string[];
 }
 
 // (No @packageDocumentation comment for this package)

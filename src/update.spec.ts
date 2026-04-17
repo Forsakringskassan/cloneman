@@ -16,7 +16,7 @@ import { rmDir } from "./test-utils/rm-dir";
 import { temporaryDirectory } from "./test-utils/temporary-directory";
 import { update } from "./update";
 import { writeJsonFile } from "./utils";
-import { type PackageJson } from "./utils/package-json";
+import { type ApplicationPackageJson } from "./utils/package-json";
 
 /* Increased timeout time since test involves a lot reading & writing to disc, and also fetching data from a local npm registry */
 vi.setConfig({ testTimeout: 30000 });
@@ -61,7 +61,8 @@ describe("update existing project with template from registry", () => {
             cwd,
             env: userEnv,
         });
-        const packageJson = await readJsonFile<PackageJson>("package.json");
+        const packageJson =
+            await readJsonFile<ApplicationPackageJson>("package.json");
         packageJson.description = "description";
         packageJson.version = "0.0.1";
 
@@ -94,7 +95,7 @@ describe("update existing project with template from registry", () => {
         );
 
         const applicationPackageJson =
-            await readJsonFile<PackageJson>("package.json");
+            await readJsonFile<ApplicationPackageJson>("package.json");
         expect(applicationPackageJson.name).toBe("mock-app");
         expect(applicationPackageJson.description).toBe("description");
         expect(applicationPackageJson.version).toBe("0.0.1");
@@ -105,10 +106,60 @@ describe("update existing project with template from registry", () => {
         expect.assertions(1);
 
         await update(appDir, "latest", userEnv);
-        const packageJson = await readJsonFile<PackageJson>("package.json");
+        const packageJson =
+            await readJsonFile<ApplicationPackageJson>("package.json");
         expect(
             packageJson.devDependencies?.["@forsakringskassan/base-template"],
-        ).toBe("1.0.1");
+        ).toBe("1.0.2");
+    });
+
+    it("should keep dependencies that are not in the template", async () => {
+        expect.assertions(1);
+
+        const packageJson =
+            await readJsonFile<ApplicationPackageJson>("package.json");
+        packageJson.dependencies = {
+            "@forsakringskassan/lib-used-by-app": "1.2.3",
+        };
+        await writeJsonFile(path.join(appDir, "package.json"), packageJson);
+
+        await update(appDir, "1.0.1", userEnv);
+        const updatedPackageJson =
+            await readJsonFile<ApplicationPackageJson>("package.json");
+        expect(updatedPackageJson.dependencies).toEqual({
+            "@forsakringskassan/lib-used-by-app": "1.2.3",
+            "@forsakringskassan/api-lib-a": "1.1.0",
+            "@forsakringskassan/api-lib-b": "1.1.0",
+        });
+    });
+
+    it("should remove packages listed in uninstallDependencies from both dependencies and devDependencies", async () => {
+        expect.assertions(2);
+
+        const applicationJson =
+            await readJsonFile<ApplicationPackageJson>("package.json");
+        applicationJson.dependencies = {
+            "@forsakringskassan/old-lib": "2.0.0",
+            "@forsakringskassan/lib-used-by-app": "1.2.3",
+        };
+        applicationJson.devDependencies = {
+            ...applicationJson.devDependencies,
+            "@forsakringskassan/old-lib": "2.0.0",
+        };
+        await writeJsonFile(path.join(appDir, "package.json"), applicationJson);
+
+        await update(appDir, "1.0.2", userEnv);
+
+        const updatedPackageJson =
+            await readJsonFile<ApplicationPackageJson>("package.json");
+        expect(updatedPackageJson.dependencies).toEqual({
+            "@forsakringskassan/lib-used-by-app": "1.2.3",
+            "@forsakringskassan/api-lib-a": "1.1.0",
+            "@forsakringskassan/api-lib-b": "1.1.0",
+        });
+        expect(updatedPackageJson.devDependencies).not.toHaveProperty(
+            "@forsakringskassan/old-lib",
+        );
     });
 });
 
