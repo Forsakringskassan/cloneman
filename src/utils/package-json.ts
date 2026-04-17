@@ -1,5 +1,6 @@
 /**
  * Typings for https://docs.npmjs.com/cli/v11/configuring-npm/package-json
+ *
  * @public
  */
 export interface PackageJson {
@@ -7,8 +8,8 @@ export interface PackageJson {
     version: string;
     scripts?: Record<string, string>;
     description?: string;
-    dependencies?: Record<string, string>;
-    devDependencies?: Record<string, string>;
+    dependencies?: Partial<Record<string, string>>;
+    devDependencies?: Partial<Record<string, string>>;
     cloneman?: unknown;
 }
 
@@ -16,6 +17,7 @@ export interface PackageJson {
  * Typings for the `package.json` file in the template package.
  *
  * This extends the standard `PackageJson` with additional fields used by cloneman.
+ *
  * @public
  */
 export interface TemplatePackageJson extends PackageJson {
@@ -23,4 +25,13 @@ export interface TemplatePackageJson extends PackageJson {
         boilerplateFiles: string[];
         managedFiles: string[];
     };
+}
+
+/**
+ * Typings for the `package.json` file in the application being managed by cloneman.
+ *
+ * @internal
+ */
+export interface ApplicationPackageJson extends PackageJson {
+    cloneman: unknown;
 }

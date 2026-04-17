@@ -33,11 +33,11 @@ export interface PackageJson {
     // (undocumented)
     cloneman?: unknown;
     // (undocumented)
-    dependencies?: Record<string, string>;
+    dependencies?: Partial<Record<string, string>>;
     // (undocumented)
     description?: string;
     // (undocumented)
-    devDependencies?: Record<string, string>;
+    devDependencies?: Partial<Record<string, string>>;
     // (undocumented)
     name: string;
     // (undocumented)
