@@ -1,8 +1,8 @@
 {
   "name": "@forsakringskassan/non-template-package",
-  "description": "Used in test to make sure that create command will fail",
   "version": "1.0.0",
   "private": false,
+  "description": "Used in test to make sure that create command will fail",
   "files": [],
   "dependencies": {}
 }
