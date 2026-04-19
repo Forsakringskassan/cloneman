@@ -1,6 +1,7 @@
 import yargs from "yargs";
 import { name } from "../../package.json";
 import { UserError } from "../errors";
+import { buildCommand } from "./build";
 import { type Context } from "./context";
 import { createCommand } from "./create";
 import { packCommand } from "./pack";
@@ -14,10 +15,11 @@ import { verifyCommand } from "./verify";
 export function createParser(context: Context): ReturnType<typeof yargs> {
     return yargs()
         .scriptName(name)
+        .command(buildCommand(context))
         .command(createCommand(context))
-        .command(updateCommand(context))
         .command(packCommand(context))
         .command(publishCommand(context))
+        .command(updateCommand(context))
         .command(verifyCommand(context))
         .demandCommand(1, "You need to provide a command.")
         .strict()

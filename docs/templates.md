@@ -103,20 +103,29 @@ await template.updateJson("package.json", {
 
 Both commands requires to be called insisde a template folder.
 
-- Publish
-- Pack
+- `build`
+- `pack`
+- `publish`
 
-## Publish
+## Build
 
-`npx cloneman publish`
+> `npx cloneman build -o temp/template`
 
-Publish a new template version to the npm registry. (i.e npm publish)
+Build template to a temporary directory.
+
+Typical usage is to test or debug a template before publishing, or for usage in a CI pipeline to ensure the template builds properly.
 
 ## Pack
 
-`npx cloneman pack`
+> `npx cloneman pack`
 
-Creates a local tar file of your template. (i.e npm pack)
+Similar to the build command, but also creates a local tar file of your template. (i.e npm pack)
+
+## Publish
+
+> `npx cloneman publish`
+
+Publish a new template version to the npm registry. (i.e npm publish)
 
 ## Development
 

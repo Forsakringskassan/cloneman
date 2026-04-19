@@ -22,9 +22,6 @@ export function packCommand(context: Context): CommandModule {
     return {
         command: "pack",
         describe: `Pack template (similar to "npm pack"). You need to be in the template folder to run this command.`,
-        builder(yargs) {
-            return yargs;
-        },
         async handler() {
             await packHandler(context);
         },
