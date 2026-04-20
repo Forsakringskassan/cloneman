@@ -1,4 +1,4 @@
-import fs from "node:fs/promises";
+import fs, { readFile } from "node:fs/promises";
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { prepare } from "./prepare";
@@ -266,6 +266,26 @@ describe("updateJson()", () => {
                     spam: "ham",
                 },
             });
+        });
+    });
+});
+
+describe("writeFile()", () => {
+    it("should write files to the template's file directory", async () => {
+        expect.assertions(2);
+        await withFixture("write-file-template", async (fixture) => {
+            await prepare(fixture, targetDir);
+            const ovewrittenFile = await readFile(
+                path.join(targetDir, "files", "foo.txt"),
+                "utf8",
+            );
+            expect(ovewrittenFile).toBe("Overwritten file");
+
+            const newFile = await readFile(
+                path.join(targetDir, "files", "new-file.txt"),
+                "utf8",
+            );
+            expect(newFile).toBe("new file");
         });
     });
 });
