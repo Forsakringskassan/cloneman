@@ -88,7 +88,7 @@
     "npm-run-all2": "8.0.4",
     "pretty-ansi": "4.0.0",
     "stream-buffers": "3.0.3",
-    "typescript": "6.0.2",
+    "typescript": "6.0.3",
     "verdaccio": "6.5.1",
     "vitest": "4.1.4"
   },
