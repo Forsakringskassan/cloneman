@@ -9,6 +9,7 @@ import { copyFiles } from "./utils/copy-files";
 import { createclonemanPackageJson } from "./utils/create-cloneman-package-json";
 import { prepareTemplatePackageJson } from "./utils/prepare-template-package-json";
 import { updateRenovateWithIgnoredDeps } from "./utils/update-renovate-with-ignored-deps";
+import { writeFile } from "./write-file";
 
 /**
  * @public
@@ -39,6 +40,16 @@ export interface BuildTemplateResult {
      * List of files included in the template
      */
     readonly files: string[];
+    /**
+     * Writes a file to the template's file directory.
+     *
+     * @public
+     * @since %version%
+     * @param filePath - Path relative to the template root.
+     * @param content - Content to write to the file.
+     * @returns A promise resolved when the file has been written.
+     */
+    writeFile(filePath: string, content: string): Promise<void>;
 }
 
 /**
@@ -127,6 +138,7 @@ export async function buildTemplate(
                 managedFiles,
             );
         },
+        writeFile: writeFile.bind(undefined, { filesDir }),
         files,
     };
 }

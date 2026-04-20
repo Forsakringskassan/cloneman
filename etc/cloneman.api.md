@@ -12,6 +12,7 @@ export interface BuildTemplateResult {
     readonly files: string[];
     renovateIgnoreDependencies(): Promise<void>;
     updateJson(this: void, filePath: string, content: unknown): Promise<void>;
+    writeFile(filePath: string, content: string): Promise<void>;
 }
 
 // @public

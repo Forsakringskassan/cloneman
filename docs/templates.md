@@ -99,6 +99,18 @@ await template.updateJson("package.json", {
 });
 ```
 
+### writeFile
+
+Create or modify files in a template
+
+**Example**
+
+```ts
+const template = await buildTemplate(pkg.name, pkg, targetDir, config);
+
+await template.writeFile("foo.txt", "New file");
+```
+
 # Available commands when working with templates
 
 Both commands requires to be called insisde a template folder.
@@ -133,4 +145,8 @@ Publish a new template version to the npm registry. (i.e npm publish)
 npm install
 npm run build
 npm test
+```
+
+```
+
 ```
