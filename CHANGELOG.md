@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## [1.8.0](https://github.com/Forsakringskassan/cloneman/compare/v1.7.0...v1.8.0) (2026-04-20)
+
+### Features
+
+* new `build` command ([35c0d48](https://github.com/Forsakringskassan/cloneman/commit/35c0d489192eadcbbad5afce3851380869b9d49f))
+* uninstall dependencies ([e49d7a7](https://github.com/Forsakringskassan/cloneman/commit/e49d7a7b30156cf8f35d16a2fb36fbf0674331a1))
+* writeFile() before publishing template ([b82083d](https://github.com/Forsakringskassan/cloneman/commit/b82083dcecb12cac18af70a86b55304957462bee))
+
 ## [1.7.0](https://github.com/Forsakringskassan/cloneman/compare/v1.6.1...v1.7.0) (2026-04-17)
 
 ### Features

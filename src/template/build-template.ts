@@ -44,7 +44,7 @@ export interface BuildTemplateResult {
      * Writes a file to the template's file directory.
      *
      * @public
-     * @since %version%
+     * @since v1.8.0
      * @param filePath - Path relative to the template root.
      * @param content - Content to write to the file.
      * @returns A promise resolved when the file has been written.
