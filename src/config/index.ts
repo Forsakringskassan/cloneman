@@ -1,3 +1,4 @@
+export { normalizeTemplateConfig } from "./normalize-template-config";
 export {
     type NormalizedTemplateConfig,
     type TemplateConfig,
