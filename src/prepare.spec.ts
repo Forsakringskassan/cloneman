@@ -30,7 +30,7 @@ describe("prepare base template", () => {
         const { output } = await prepare(baseTemplate, targetDir);
         expect(output).toMatchInlineSnapshot(`
           "Assembling cloneman template "@forsakringskassan/base-template@1.0.0"
-            6 files copied (4 ignored)"
+            6 files copied (3 ignored)"
         `);
 
         const testPath = path.join(targetDir, "files/**/*");
@@ -59,7 +59,7 @@ describe("prepare base template", () => {
         const { output } = await prepare(baseTemplate, targetDir);
         expect(output).toMatchInlineSnapshot(`
           "Assembling cloneman template "@forsakringskassan/base-template@1.0.0"
-            6 files copied (4 ignored)"
+            6 files copied (3 ignored)"
         `);
 
         const packageJson = await readJsonFile<PackageJson>(
@@ -98,7 +98,7 @@ describe("prepare base template", () => {
         const { output } = await prepare(baseTemplate, targetDir);
         expect(output).toMatchInlineSnapshot(`
           "Assembling cloneman template "@forsakringskassan/base-template@1.0.0"
-            6 files copied (4 ignored)"
+            6 files copied (3 ignored)"
         `);
 
         const packageJson = await readJsonFile<PackageJson>(
@@ -139,7 +139,7 @@ describe("prepare base template", () => {
         const { output } = await prepare(baseTemplate, targetDir);
         expect(output).toMatchInlineSnapshot(`
           "Assembling cloneman template "@forsakringskassan/base-template@1.0.0"
-            6 files copied (4 ignored)"
+            6 files copied (3 ignored)"
         `);
 
         const renovateJson = await readJsonFile(
@@ -168,7 +168,7 @@ describe("prepare base template 1.0.1", () => {
         const { output } = await prepare(baseTemplateUpdated, targetDir);
         expect(output).toMatchInlineSnapshot(`
           "Assembling cloneman template "@forsakringskassan/base-template@1.0.1"
-            2 files copied (3 ignored)"
+            2 files copied (2 ignored)"
         `);
 
         const packageJson = await readJsonFile<PackageJson>(
