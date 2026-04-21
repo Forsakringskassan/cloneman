@@ -1,6 +1,7 @@
 import {
     type NormalizedTemplateConfig,
     type TemplateConfig,
+    normalizedConfig,
 } from "./template-config";
 
 /**
@@ -12,6 +13,7 @@ export function normalizeTemplateConfig(
     config: TemplateConfig,
 ): NormalizedTemplateConfig {
     return {
+        [normalizedConfig]: true,
         managedFiles: config.managedFiles ?? [],
         ignoredFiles: config.ignoredFiles ?? [],
         ignoredDependencies: config.ignoredDependencies ?? [],

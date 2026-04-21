@@ -17,6 +17,7 @@ export interface BuildTemplateResult {
 
 // @public
 export interface NormalizedTemplateConfig {
+    [normalizedConfig]: true;
     ignoredDependencies: string[];
     ignoredFiles: string[];
     managedFiles: string[];

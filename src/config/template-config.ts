@@ -22,6 +22,8 @@ export interface TemplateConfig {
  * @since v1.0.0
  */
 export interface NormalizedTemplateConfig {
+    /** branding */
+    [normalizedConfig]: true;
     /** list of files managed by this template */
     managedFiles: string[];
     /** list of files ignored by this template */
@@ -31,3 +33,8 @@ export interface NormalizedTemplateConfig {
     /** List of dependencies that will be removed from application during update */
     uninstallDependencies: string[];
 }
+
+/**
+ * @public
+ */
+export const normalizedConfig = Symbol("normalized-config");
