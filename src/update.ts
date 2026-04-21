@@ -92,7 +92,8 @@ export async function update(
         );
     }
 
-    const { managedFiles, uninstallDependencies } = tarballPackageJson.cloneman;
+    const { managedFiles, uninstallDependencies, ignoredDependencies } =
+        tarballPackageJson.cloneman;
 
     await Promise.all(
         managedFiles.map(async (filename) => {
@@ -113,12 +114,14 @@ export async function update(
         appDependencies: applicationPackageJson.dependencies,
         templateDependencies: tmplPackageJson.dependencies,
         uninstallDependencies,
+        ignoredDependencies,
     });
 
     const devDependencies = filterDependencies({
         appDependencies: applicationPackageJson.devDependencies,
         templateDependencies: tmplPackageJson.devDependencies,
         uninstallDependencies,
+        ignoredDependencies,
     });
 
     await writeJsonFile(path.join(cwd, "package.json"), {

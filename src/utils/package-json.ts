@@ -1,4 +1,14 @@
 /**
+ * Typings for the `package.json` exports field
+ *
+ * @public
+ */
+export interface ExportsCondition {
+    [key: string]: string | ExportsCondition;
+}
+export type ExportsField = string | ExportsCondition;
+
+/**
  * Typings for https://docs.npmjs.com/cli/v11/configuring-npm/package-json
  *
  * @public
@@ -6,6 +16,8 @@
 export interface PackageJson {
     name: string;
     version: string;
+    type?: "module" | "commonjs";
+    exports?: ExportsField;
     scripts?: Record<string, string>;
     description?: string;
     dependencies?: Partial<Record<string, string>>;
@@ -25,6 +37,7 @@ export interface TemplatePackageJson extends PackageJson {
         boilerplateFiles: string[];
         managedFiles: string[];
         uninstallDependencies: string[];
+        ignoredDependencies: string[];
     };
 }
 

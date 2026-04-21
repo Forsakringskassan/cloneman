@@ -116,6 +116,7 @@ describe("prepare base template", () => {
                 "renovate.json",
                 "sub-folder/sub-file.txt",
               ],
+              "ignoredDependencies": [],
               "managedFiles": [
                 "managed.txt",
                 ".gitignore",
@@ -188,6 +189,7 @@ describe("prepare base template 1.0.1", () => {
             "description": "\${description}",
             "devDependencies": {
               "@forsakringskassan/base-template": "1.0.1",
+              "@forsakringskassan/lib-used-by-templates": "1.0.0",
             },
             "files": [],
             "name": "\${name}",

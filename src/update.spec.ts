@@ -133,6 +133,28 @@ describe("update existing project with template from registry", () => {
         });
     });
 
+    it("should not update a dependency that the template has added in ignoredDependencies", async () => {
+        expect.assertions(1);
+
+        const packageJson =
+            await readJsonFile<ApplicationPackageJson>("package.json");
+        packageJson.dependencies = {
+            ...packageJson.dependencies,
+            "@forsakringskassan/lib-used-by-templates": "1.2.3",
+        };
+        await writeJsonFile(path.join(appDir, "package.json"), packageJson);
+
+        await update(appDir, "1.0.1", userEnv);
+
+        const updatedPackageJson =
+            await readJsonFile<ApplicationPackageJson>("package.json");
+        expect(updatedPackageJson.dependencies).toEqual({
+            "@forsakringskassan/lib-used-by-templates": "1.2.3",
+            "@forsakringskassan/api-lib-a": "1.1.0",
+            "@forsakringskassan/api-lib-b": "1.1.0",
+        });
+    });
+
     it("should remove packages listed in uninstallDependencies from both dependencies and devDependencies", async () => {
         expect.assertions(2);
 
