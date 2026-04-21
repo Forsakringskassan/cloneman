@@ -5,7 +5,7 @@
 ```ts
 
 // @public
-export function buildTemplate(name: string, pkg: PackageJson, targetDir: string, config: NormalizedTemplateConfig): Promise<BuildTemplateResult>;
+export function buildTemplate(name: string, pkg: PackageJson, targetDir: string, config: TemplateConfig | NormalizedTemplateConfig): Promise<BuildTemplateResult>;
 
 // @public (undocumented)
 export interface BuildTemplateResult {

@@ -1,6 +1,10 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { type NormalizedTemplateConfig } from "../config";
+import {
+    type NormalizedTemplateConfig,
+    type TemplateConfig,
+    normalizeTemplateConfig,
+} from "../config";
 import { readJsonFile, writeJsonFile } from "../utils";
 import { type PackageJson } from "../utils/package-json";
 
@@ -63,7 +67,7 @@ export async function buildTemplate(
     name: string,
     pkg: PackageJson,
     targetDir: string,
-    config: NormalizedTemplateConfig,
+    config: TemplateConfig | NormalizedTemplateConfig,
 ): Promise<BuildTemplateResult> {
     console.group(`Assembling cloneman template "${name}@${pkg.version}"`);
 
@@ -75,7 +79,7 @@ export async function buildTemplate(
         ignoredFiles: templateIgnoredFiles,
         ignoredDependencies: templateIgnoredDependencies,
         uninstallDependencies,
-    } = config;
+    } = normalizeTemplateConfig(config);
 
     const ignoredFiles = [
         ...templateIgnoredFiles,
