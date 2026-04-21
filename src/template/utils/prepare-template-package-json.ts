@@ -11,21 +11,22 @@ import { isIgnored } from "./is-ignored";
 export function prepareTemplatePackageJson(
     template: PackageJson,
     pkg: PackageJson,
-    ignoredDepecencies: string[],
 ): PackageJson {
     const cloneman: ClientMetadata = {
         template: template.name,
         version: pkg.version,
     };
+
     const massaged = {
         ...pkg,
         name: "${name}",
         description: "${description}",
         version: "${version}",
         cloneman,
-        dependencies: filterDependencies(pkg.dependencies, ignoredDepecencies),
+        dependencies: filterDependencies(pkg.dependencies),
+
         devDependencies: {
-            ...filterDependencies(pkg.devDependencies, ignoredDepecencies),
+            ...filterDependencies(pkg.devDependencies),
             [template.name]: template.version,
         },
     } satisfies PackageJson;
@@ -35,13 +36,14 @@ export function prepareTemplatePackageJson(
 
 function filterDependencies(
     dependencies: Partial<Record<string, string>> | undefined,
-    ignored: string[],
 ): Partial<Record<string, string>> {
+    const depsToRemove = ["cloneman"];
+
     if (!dependencies) {
         return {};
     }
     const deps = Object.entries(dependencies).filter(([key]) => {
-        return !isIgnored(key, ignored);
+        return !isIgnored(key, depsToRemove);
     });
 
     return Object.fromEntries(deps);

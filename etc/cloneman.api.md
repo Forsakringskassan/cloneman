@@ -41,10 +41,16 @@ export interface PackageJson {
     description?: string;
     // (undocumented)
     devDependencies?: Partial<Record<string, string>>;
+    // Warning: (ae-forgotten-export) The symbol "ExportsField" needs to be exported by the entry point index.d.ts
+    //
+    // (undocumented)
+    exports?: ExportsField;
     // (undocumented)
     name: string;
     // (undocumented)
     scripts?: Record<string, string>;
+    // (undocumented)
+    type?: "module" | "commonjs";
     // (undocumented)
     version: string;
 }

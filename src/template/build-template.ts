@@ -87,8 +87,6 @@ export async function buildTemplate(
         ".cloneman/**",
     ];
 
-    const ignoredDependencies = [...templateIgnoredDependencies, "cloneman"];
-
     const indexJs = `
         import fs from "node:fs/promises";
         import path from "node:path";
@@ -117,6 +115,7 @@ export async function buildTemplate(
             version: pkg.version,
             boilerplateFiles: files,
             uninstallDependencies,
+            ignoredDependencies: templateIgnoredDependencies,
             managedFiles,
         },
     );
@@ -124,7 +123,6 @@ export async function buildTemplate(
     const massagedTemplatePackageJson = prepareTemplatePackageJson(
         clonemanPackageJson,
         pkg,
-        ignoredDependencies,
     );
 
     await writeJsonFile(

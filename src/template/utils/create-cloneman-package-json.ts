@@ -9,6 +9,7 @@ export async function createclonemanPackageJson(
         boilerplateFiles: string[];
         managedFiles: string[];
         uninstallDependencies: string[];
+        ignoredDependencies: string[];
     },
 ): Promise<TemplatePackageJson> {
     const {
@@ -16,9 +17,10 @@ export async function createclonemanPackageJson(
         version,
         boilerplateFiles,
         managedFiles,
+        ignoredDependencies,
         uninstallDependencies,
     } = options;
-    const pkg = {
+    const pkg: TemplatePackageJson = {
         name,
         type: "module",
         version,
@@ -29,6 +31,7 @@ export async function createclonemanPackageJson(
             boilerplateFiles,
             managedFiles,
             uninstallDependencies,
+            ignoredDependencies,
         },
     };
 

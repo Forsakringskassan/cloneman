@@ -79,6 +79,7 @@ it("should publish template", async () => {
             cloneman: {
                 boilerplateFiles: ["boilerplate.txt", "managed.txt"],
                 managedFiles: ["managed.txt"],
+                ignoredDependencies: [],
                 uninstallDependencies: [],
             },
             name: "@forsakringskassan/publish-template",

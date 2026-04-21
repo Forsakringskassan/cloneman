@@ -16,6 +16,7 @@ describe("filterDependencies", () => {
             appDependencies,
             templateDependencies,
             uninstallDependencies: undefined,
+            ignoredDependencies: undefined,
         });
 
         expect(result).toEqual({
@@ -40,6 +41,7 @@ describe("filterDependencies", () => {
             appDependencies,
             templateDependencies,
             uninstallDependencies,
+            ignoredDependencies: undefined,
         });
 
         expect(result).toEqual({
@@ -61,10 +63,62 @@ describe("filterDependencies", () => {
             appDependencies,
             templateDependencies: { vitest: "3.0.0" },
             uninstallDependencies: ["@jest/*", "jest-*"],
+            ignoredDependencies: undefined,
         });
 
         expect(result).toEqual({
             vitest: "3.0.0",
+        });
+    });
+
+    it("should not update a dependency that matches an ignored pattern", () => {
+        expect.assertions(1);
+        const appDependencies = {
+            lodash: "4.17.20",
+            "@scope/owned": "1.0.0",
+        };
+        const templateDependencies = {
+            lodash: "5.0.0",
+            "@scope/owned": "2.0.0",
+        };
+
+        const result = filterDependencies({
+            appDependencies,
+            templateDependencies,
+            uninstallDependencies: undefined,
+            ignoredDependencies: ["lodash"],
+        });
+
+        expect(result).toEqual({
+            lodash: "4.17.20",
+            "@scope/owned": "2.0.0",
+        });
+    });
+
+    it("should not update dependencies matching a glob pattern in ignoredDependencies", () => {
+        expect.assertions(1);
+        const appDependencies = {
+            "@scope/foo": "1.0.0",
+            "@scope/bar": "1.0.0",
+            other: "1.0.0",
+        };
+        const templateDependencies = {
+            "@scope/foo": "2.0.0",
+            "@scope/bar": "2.0.0",
+            other: "2.0.0",
+        };
+
+        const result = filterDependencies({
+            appDependencies,
+            templateDependencies,
+            uninstallDependencies: undefined,
+            ignoredDependencies: ["@scope/*"],
+        });
+
+        expect(result).toEqual({
+            "@scope/foo": "1.0.0",
+            "@scope/bar": "1.0.0",
+            other: "2.0.0",
         });
     });
 });
