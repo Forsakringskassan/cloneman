@@ -1,9 +1,10 @@
-import { buildTemplate } from "cloneman";
+import { type BuildContext } from "cloneman";
 import pkg from "../package.json" with { type: "json" };
 
-const targetDir = process.argv[2];
-const template = await buildTemplate(pkg.name, pkg, targetDir, {
-    managedFiles: ["managed.txt", ".gitignore", "renovate.json"],
-    ignoredFiles: ["CHANGELOG.md"],
-});
-await template.renovateIgnoreDependencies();
+export default async ({ buildTemplate }: BuildContext): Promise<void> => {
+    const template = await buildTemplate(pkg.name, pkg, {
+        managedFiles: ["managed.txt", ".gitignore", "renovate.json"],
+        ignoredFiles: ["CHANGELOG.md"],
+    });
+    await template.renovateIgnoreDependencies();
+};

@@ -7,10 +7,12 @@ import { isIgnored } from "./is-ignored";
 const protectedFiles = ["**/.npmrc"];
 
 export async function copyFiles(
+    logger: Console,
+    templateDir: string,
     dstDir: string,
     ignoredPatterns: string[],
 ): Promise<string[]> {
-    const { output } = await spawn("git", ["ls-files"]);
+    const { output } = await spawn("git", ["ls-files"], { cwd: templateDir });
     const filePaths = output.split("\n");
 
     const ignoredFiles = filePaths.filter((it) =>
@@ -35,18 +37,20 @@ export async function copyFiles(
                 path.matchesGlob(filePath, pattern),
             )
         ) {
-            const { output } = await spawn("git", [
-                "show",
-                `HEAD:./${filePath}`,
-            ]);
+            const { output } = await spawn(
+                "git",
+                ["show", `HEAD:./${filePath}`],
+                { cwd: templateDir },
+            );
             await fs.writeFile(dst, output);
             continue;
         }
-        await fs.copyFile(filePath, dst);
+        const src = path.join(templateDir, filePath);
+        await fs.copyFile(src, dst);
     }
 
     const s = targetFiles.length === 1 ? "" : "s";
-    console.log(
+    logger.log(
         `${targetFiles.length} file${s} copied (${ignoredFiles.length} ignored)`,
     );
 

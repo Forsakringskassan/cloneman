@@ -14,40 +14,82 @@ A template is required to have:
 ## Building
 
 The build script prepares an application or library to be a cloneman template.
+It should export a named function `build` or a default exported function, taking the build context as the only parameter.
 
-Import and call `buildTemplate()` in order to generate a Cloneman template:
+With TypeScript (`.cloneman/build.mts`):
 
 ```ts
-import { buildTemplate } from "cloneman";
+import { type BuildContext } from "cloneman";
 import pkg from "../package.json" with { type: "json" };
 
-const targetDir = process.argv[2];
-await buildTemplate(pkg.name, pkg, targetDir, {
-    /* configuration */
-});
+export async function build(context: BuildContext): Promise<void> {
+    const { buildTemplate } = context;
+
+    await buildTemplate(pkg.name, pkg, {
+        /* configuration */
+    });
+}
 ```
 
-If further processing is needed the function returns a context object:
+or with JavaScript (`.cloneman/build.mjs`):
+
+```js
+import pkg from "../package.json" with { type: "json" };
+
+/**
+ * @param {import("cloneman").BuildContext} context
+ */
+export default async (context) => {
+    const { buildTemplate } = context;
+
+    await buildTemplate(pkg.name, pkg, {
+        /* configuration */
+    });
+};
+```
+
+The build context contains:
+
+- `buildTemplate()` - the primary function to build the cloneman template.
+- `logger` - a `Console` object to log additional information to the user.
+- `targetDir` - the output directory where files will be written.
+- `templateDir` - the template directory, typically the root directory of the template repository.
+
+If further processing is needed the `buildTemplate` function returns a template object:
 
 ```ts
-const template = await buildTemplate(pkg.name, pkg, targetDir, {
-    /* configuration */
-});
+import { type BuildContext, readConfigFile } from "cloneman";
+import pkg from "../package.json" with { type: "json" };
 
-/* add a new file */
-template.writeFile("awesome.txt", "everything is awesome!");
+export async function build(context: BuildContext): Promise<void> {
+    const { buildTemplate } = context;
+
+    const template = await buildTemplate(pkg.name, pkg, {
+        /* configuration */
+    });
+
+    /* add a new file */
+    await template.writeFile("awesome.txt", "everything is awesome!");
+}
 ```
 
-See (list of available functions)[#function-reference] for details.
+See [list of available functions](#function-reference) for details.
 
 The configuration can optionally be stored in a separate JSON file:
 
 ```ts
 import path from "node:path";
-import { readConfigFile } from "cloneman";
+import { type BuildContext, readConfigFile } from "cloneman";
+import pkg from "../package.json" with { type: "json" };
 
-const configFile = path.resolve(import.meta.dirname, "cloneman.json");
-const config = await readConfigFile(configFile);
+export async function build(context: BuildContext): Promise<void> {
+    const { buildTemplate } = context;
+
+    const configFile = path.resolve(import.meta.dirname, "cloneman.json");
+    const config = await readConfigFile(configFile);
+
+    await buildTemplate(pkg.name, pkg, config);
+}
 ```
 
 ## Configuration
@@ -123,7 +165,7 @@ A promise resolved when the `renovate.json` file has been written.
 **Example:**
 
 ```js
-const template = await buildTemplate(pkg.name, pkg, targetDir, config);
+const template = await buildTemplate(pkg.name, pkg, config);
 await template.renovateIgnoreDependencies();
 ```
 
@@ -153,7 +195,7 @@ A promise resolved when the updated file has been written.
 **Example**
 
 ```ts
-const template = await buildTemplate(pkg.name, pkg, targetDir, config);
+const template = await buildTemplate(pkg.name, pkg, config);
 
 await template.updateJson("package.json", {
     release: {
@@ -169,7 +211,7 @@ Create or modify files in a template
 **Example**
 
 ```ts
-const template = await buildTemplate(pkg.name, pkg, targetDir, config);
+const template = await buildTemplate(pkg.name, pkg, config);
 
 await template.writeFile("foo.txt", "New file");
 ```

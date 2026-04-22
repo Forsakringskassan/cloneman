@@ -4,8 +4,15 @@
 
 ```ts
 
+import { Console as Console_2 } from 'node:console';
+
 // @public
-export function buildTemplate(name: string, pkg: PackageJson, targetDir: string, config: TemplateConfig | NormalizedTemplateConfig): Promise<BuildTemplateResult>;
+export interface BuildContext {
+    buildTemplate(this: void, name: string, pkg: PackageJson, config?: TemplateConfig | NormalizedTemplateConfig): Promise<BuildTemplateResult>;
+    readonly logger: Console_2;
+    readonly targetDir: string;
+    readonly templateDir: string;
+}
 
 // @public (undocumented)
 export interface BuildTemplateResult {
@@ -56,7 +63,7 @@ export interface PackageJson {
 }
 
 // @public
-export function prepare(cwd: string, targetDir: string): Promise<{
+export function prepare(templateDir: string, targetDir: string): Promise<{
     output: string;
 }>;
 

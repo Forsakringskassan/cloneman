@@ -59,17 +59,19 @@ export interface BuildTemplateResult {
 /**
  * Builds a cloneman template.
  *
- * @public
- * @since v1.2.0
- * @param pkg - The `package.json` content of the template (from the root of the template).
+ * @internal
  */
-export async function buildTemplate(
-    name: string,
-    pkg: PackageJson,
-    targetDir: string,
-    config: TemplateConfig | NormalizedTemplateConfig,
-): Promise<BuildTemplateResult> {
-    console.group(`Assembling cloneman template "${name}@${pkg.version}"`);
+export async function buildTemplate(options: {
+    logger: Console;
+    name: string;
+    pkg: PackageJson;
+    templateDir: string;
+    targetDir: string;
+    config: TemplateConfig | NormalizedTemplateConfig;
+}): Promise<BuildTemplateResult> {
+    const { logger, name, pkg, templateDir, targetDir, config } = options;
+
+    logger.group(`Assembling cloneman template "${name}@${pkg.version}"`);
 
     const filesDir = path.join(targetDir, "files");
     await prepareFolders(targetDir, filesDir);
@@ -104,7 +106,7 @@ export async function buildTemplate(
         export default options;
     `;
 
-    const files = await copyFiles(filesDir, ignoredFiles);
+    const files = await copyFiles(logger, templateDir, filesDir, ignoredFiles);
 
     await fs.writeFile(path.join(targetDir, "index.js"), indexJs);
 
@@ -130,7 +132,7 @@ export async function buildTemplate(
         massagedTemplatePackageJson,
     );
 
-    console.groupEnd();
+    logger.groupEnd();
 
     return {
         updateJson: updateJson.bind(undefined, { filesDir }),

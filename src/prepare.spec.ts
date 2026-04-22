@@ -30,7 +30,8 @@ describe("prepare base template", () => {
         const { output } = await prepare(baseTemplate, targetDir);
         expect(output).toMatchInlineSnapshot(`
           "Assembling cloneman template "@forsakringskassan/base-template@1.0.0"
-            6 files copied (3 ignored)"
+            6 files copied (3 ignored)
+          "
         `);
 
         const testPath = path.join(targetDir, "files/**/*");
@@ -59,7 +60,8 @@ describe("prepare base template", () => {
         const { output } = await prepare(baseTemplate, targetDir);
         expect(output).toMatchInlineSnapshot(`
           "Assembling cloneman template "@forsakringskassan/base-template@1.0.0"
-            6 files copied (3 ignored)"
+            6 files copied (3 ignored)
+          "
         `);
 
         const packageJson = await readJsonFile<PackageJson>(
@@ -98,7 +100,8 @@ describe("prepare base template", () => {
         const { output } = await prepare(baseTemplate, targetDir);
         expect(output).toMatchInlineSnapshot(`
           "Assembling cloneman template "@forsakringskassan/base-template@1.0.0"
-            6 files copied (3 ignored)"
+            6 files copied (3 ignored)
+          "
         `);
 
         const packageJson = await readJsonFile<PackageJson>(
@@ -140,7 +143,8 @@ describe("prepare base template", () => {
         const { output } = await prepare(baseTemplate, targetDir);
         expect(output).toMatchInlineSnapshot(`
           "Assembling cloneman template "@forsakringskassan/base-template@1.0.0"
-            6 files copied (3 ignored)"
+            6 files copied (3 ignored)
+          "
         `);
 
         const renovateJson = await readJsonFile(
@@ -169,7 +173,8 @@ describe("prepare base template 1.0.1", () => {
         const { output } = await prepare(baseTemplateUpdated, targetDir);
         expect(output).toMatchInlineSnapshot(`
           "Assembling cloneman template "@forsakringskassan/base-template@1.0.1"
-            2 files copied (2 ignored)"
+            2 files copied (2 ignored)
+          "
         `);
 
         const packageJson = await readJsonFile<PackageJson>(
@@ -210,7 +215,7 @@ describe("prepare non-template package", () => {
         const cwd = path.join(fixtureDir, "non-template-package");
 
         await expect(prepare(cwd, targetDir)).rejects.toThrow(
-            `Current directory is not a valid cloneman template (missing ".cloneman")`,
+            /"[^"]*" is not a valid cloneman template \(missing ".cloneman"\)/,
         );
     });
 });
@@ -297,6 +302,28 @@ describe("writeFile()", () => {
                 "utf8",
             );
             expect(newFile).toBe("new file");
+        });
+    });
+});
+
+describe("build script", () => {
+    it("should handle build script with default export", async () => {
+        expect.assertions(1);
+        await withFixture("with-default-build-script", async (fixture) => {
+            await prepare(fixture, targetDir);
+            const filePath = path.join(targetDir, "files", "foo.txt");
+            const content = await fs.readFile(filePath, "utf8");
+            expect(content).toBe("generated file");
+        });
+    });
+
+    it("should handle build script with named export", async () => {
+        expect.assertions(1);
+        await withFixture("with-named-build-script", async (fixture) => {
+            await prepare(fixture, targetDir);
+            const filePath = path.join(targetDir, "files", "foo.txt");
+            const content = await fs.readFile(filePath, "utf8");
+            expect(content).toBe("generated file");
         });
     });
 });
