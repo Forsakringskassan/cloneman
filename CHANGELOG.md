@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## [1.9.0](https://github.com/Forsakringskassan/cloneman/compare/v1.8.0...v1.9.0) (2026-04-23)
+
+### Features
+
+* `buildTemplate()` accepts non-normalized config as well ([1e74b1e](https://github.com/Forsakringskassan/cloneman/commit/1e74b1e4445a5e9b1baa1e430ec9af48bfe8a37e))
+* build script should export function ([3e2804d](https://github.com/Forsakringskassan/cloneman/commit/3e2804da64df00435def122bfba658033fad6565))
+
+### Bug Fixes
+
+* prepare should not remove ignored dependencies ([0bf9938](https://github.com/Forsakringskassan/cloneman/commit/0bf99387b69457fdc32ee881c6e665723887fa84))
+
 ## [1.8.0](https://github.com/Forsakringskassan/cloneman/compare/v1.7.0...v1.8.0) (2026-04-20)
 
 ### Features

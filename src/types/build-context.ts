@@ -7,7 +7,7 @@ import { type PackageJson } from "../utils/package-json";
  * The `context` parameter for the build scripts in `.cloneman/build.mts`.
  *
  * @public
- * @since %version%
+ * @since v1.9.0
  */
 export interface BuildContext {
     /**
