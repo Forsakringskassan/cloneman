@@ -10,7 +10,7 @@ import { type PackageJson, type TemplatePackageJson } from "./package-json";
 export function isTemplatePackageJson(
     templatePkg: PackageJson | TemplatePackageJson,
 ): templatePkg is TemplatePackageJson {
-    return (templatePkg as PackageJson).cloneman !== undefined;
+    return templatePkg.cloneman !== undefined;
 }
 
 /**
