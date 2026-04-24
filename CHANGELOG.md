@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## [1.9.1](https://github.com/Forsakringskassan/cloneman/compare/v1.9.0...v1.9.1) (2026-04-24)
+
+### Bug Fixes
+
+* remove `pkg` parameter to `buildTemplate()` ([639883d](https://github.com/Forsakringskassan/cloneman/commit/639883d10b6fa10eb642fefba53f0fdbd5107e27))
+
 ## [1.9.0](https://github.com/Forsakringskassan/cloneman/compare/v1.8.0...v1.9.0) (2026-04-23)
 
 ### Features
