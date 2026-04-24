@@ -1,7 +1,6 @@
 import { type Console } from "node:console";
 import { type NormalizedTemplateConfig, type TemplateConfig } from "../config";
 import { type BuildTemplateResult } from "../template";
-import { type PackageJson } from "../utils/package-json";
 
 /**
  * The `context` parameter for the build scripts in `.cloneman/build.mts`.
@@ -14,13 +13,11 @@ export interface BuildContext {
      * Builds a cloneman template.
      *
      * @param name - The name to publish this package as.
-     * @param pkg - The `package.json` content of the template (from the root of the template).
      * @param config - Template configuration.
      */
     buildTemplate(
         this: void,
         name: string,
-        pkg: PackageJson,
         config?: TemplateConfig | NormalizedTemplateConfig,
     ): Promise<BuildTemplateResult>;
 

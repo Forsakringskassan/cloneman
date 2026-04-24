@@ -25,7 +25,7 @@ import pkg from "../package.json" with { type: "json" };
 export async function build(context: BuildContext): Promise<void> {
     const { buildTemplate } = context;
 
-    await buildTemplate(pkg.name, pkg, {
+    await buildTemplate(pkg.name, {
         /* configuration */
     });
 }
@@ -42,7 +42,7 @@ import pkg from "../package.json" with { type: "json" };
 export default async (context) => {
     const { buildTemplate } = context;
 
-    await buildTemplate(pkg.name, pkg, {
+    await buildTemplate(pkg.name, {
         /* configuration */
     });
 };
@@ -64,7 +64,7 @@ import pkg from "../package.json" with { type: "json" };
 export async function build(context: BuildContext): Promise<void> {
     const { buildTemplate } = context;
 
-    const template = await buildTemplate(pkg.name, pkg, {
+    const template = await buildTemplate(pkg.name, {
         /* configuration */
     });
 
@@ -88,7 +88,7 @@ export async function build(context: BuildContext): Promise<void> {
     const configFile = path.resolve(import.meta.dirname, "cloneman.json");
     const config = await readConfigFile(configFile);
 
-    await buildTemplate(pkg.name, pkg, config);
+    await buildTemplate(pkg.name, config);
 }
 ```
 
@@ -165,7 +165,7 @@ A promise resolved when the `renovate.json` file has been written.
 **Example:**
 
 ```js
-const template = await buildTemplate(pkg.name, pkg, config);
+const template = await buildTemplate(pkg.name, config);
 await template.renovateIgnoreDependencies();
 ```
 
@@ -195,7 +195,7 @@ A promise resolved when the updated file has been written.
 **Example**
 
 ```ts
-const template = await buildTemplate(pkg.name, pkg, config);
+const template = await buildTemplate(pkg.name, config);
 
 await template.updateJson("package.json", {
     release: {
@@ -211,7 +211,7 @@ Create or modify files in a template
 **Example**
 
 ```ts
-const template = await buildTemplate(pkg.name, pkg, config);
+const template = await buildTemplate(pkg.name, config);
 
 await template.writeFile("foo.txt", "New file");
 ```

@@ -64,12 +64,13 @@ export interface BuildTemplateResult {
 export async function buildTemplate(options: {
     logger: Console;
     name: string;
-    pkg: PackageJson;
     templateDir: string;
     targetDir: string;
     config: TemplateConfig | NormalizedTemplateConfig;
 }): Promise<BuildTemplateResult> {
-    const { logger, name, pkg, templateDir, targetDir, config } = options;
+    const { logger, name, templateDir, targetDir, config } = options;
+    const pkgJsonPath = path.join(templateDir, "package.json");
+    const pkg = await readJsonFile<PackageJson>(pkgJsonPath);
 
     logger.group(`Assembling cloneman template "${name}@${pkg.version}"`);
 

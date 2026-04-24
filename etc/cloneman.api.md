@@ -8,7 +8,7 @@ import { Console as Console_2 } from 'node:console';
 
 // @public
 export interface BuildContext {
-    buildTemplate(this: void, name: string, pkg: PackageJson, config?: TemplateConfig | NormalizedTemplateConfig): Promise<BuildTemplateResult>;
+    buildTemplate(this: void, name: string, config?: TemplateConfig | NormalizedTemplateConfig): Promise<BuildTemplateResult>;
     readonly logger: Console_2;
     readonly targetDir: string;
     readonly templateDir: string;
