@@ -81,11 +81,10 @@ export async function prepare(
             });
         }
         await build({
-            buildTemplate(name, pkg, config) {
+            buildTemplate(name, config) {
                 return buildTemplate({
                     logger,
                     name,
-                    pkg,
                     templateDir,
                     targetDir,
                     config: config ?? {},

@@ -5,7 +5,7 @@ import pkg from "../package.json" with { type: "json" };
  */
 export default async (context) => {
     const { buildTemplate } = context;
-    const template = await buildTemplate(pkg.name, pkg, {
+    const template = await buildTemplate(pkg.name, {
         managedFiles: ["managed.txt"],
         ignoredDependencies: ["@forsakringskassan/lib-used-by-templates"],
     });
