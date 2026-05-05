@@ -55,7 +55,7 @@ afterEach(async () => {
 
 describe("create from base template from npm registry", () => {
     it("should create new project", async () => {
-        expect.assertions(3);
+        expect.assertions(4);
         await create({
             name: "mock-app",
             templatePackage: "@forsakringskassan/base-template@1.0.0",
@@ -82,12 +82,31 @@ describe("create from base template from npm registry", () => {
                 version: "1.0.0",
             },
         });
+
         expect(await readFile("boilerplate.txt")).toMatchInlineSnapshot(
             `boilerplate file at v1.0.0`,
         );
         expect(await readFile("managed.txt")).toMatchInlineSnapshot(
             `managed file at v1.0.0`,
         );
+
+        const files = await fs.readdir(appDir);
+
+        expect(files).toEqual(
+            expect.arrayContaining([
+                ".gitignore",
+                ".npmrc",
+                "boilerplate.txt",
+                "managed.txt",
+                "node_modules",
+                "package-lock.json",
+                "package.json",
+                "renovate.json",
+                "sub-folder",
+            ]),
+        );
+
+        console.log(files);
     });
 
     it("should throw error if directory already exists", async () => {
