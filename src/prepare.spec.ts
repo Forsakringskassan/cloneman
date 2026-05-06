@@ -82,6 +82,7 @@ describe("prepare base template", () => {
             "devDependencies": {
               "@forsakringskassan/base-template": "1.0.0",
               "@forsakringskassan/lib-used-by-templates": "1.0.0",
+              "cloneman": ".",
             },
             "files": [],
             "name": "\${name}",
@@ -160,6 +161,7 @@ describe("prepare base template", () => {
               "@forsakringskassan/api-lib-a",
               "@forsakringskassan/api-lib-b",
               "@forsakringskassan/lib-used-by-templates",
+              "cloneman",
             ],
           }
         `);
@@ -195,6 +197,7 @@ describe("prepare base template 1.0.1", () => {
             "devDependencies": {
               "@forsakringskassan/base-template": "1.0.1",
               "@forsakringskassan/lib-used-by-templates": "1.0.0",
+              "cloneman": ".",
             },
             "files": [],
             "name": "\${name}",
