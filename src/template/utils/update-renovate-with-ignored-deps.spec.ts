@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { type TemplateConfig } from "../../config";
 import { type PackageJson } from "../../utils/package-json";
 import {
     type RenovateJson,
@@ -21,11 +22,13 @@ describe("updateRenovateWithIgnoredDeps", () => {
                 "my-template": "1.0.0",
             },
         };
+        const templateConfig: TemplateConfig = {};
 
         const result = updateRenovateWithIgnoredDeps(
             renovateConfig,
             pkg,
             "my-template",
+            templateConfig,
         );
 
         expect(result).toEqual({
@@ -44,11 +47,13 @@ describe("updateRenovateWithIgnoredDeps", () => {
                 "awesome-dependency": "^1.0.0",
             },
         };
+        const templateConfig: TemplateConfig = {};
 
         const result = updateRenovateWithIgnoredDeps(
             renovateConfig,
             pkg,
             "my-template",
+            templateConfig,
         );
 
         expect(result).toEqual({
@@ -67,11 +72,13 @@ describe("updateRenovateWithIgnoredDeps", () => {
                 "awesome-dev-dependency": "^1.0.0",
             },
         };
+        const templateConfig: TemplateConfig = {};
 
         const result = updateRenovateWithIgnoredDeps(
             renovateConfig,
             pkg,
             "my-template",
+            templateConfig,
         );
 
         expect(result).toEqual({
@@ -90,15 +97,45 @@ describe("updateRenovateWithIgnoredDeps", () => {
                 "awesome-peer-dependency": "^1.0.0",
             },
         };
+        const templateConfig: TemplateConfig = {};
 
         const result = updateRenovateWithIgnoredDeps(
             renovateConfig,
             pkg,
             "my-template",
+            templateConfig,
         );
 
         expect(result).toEqual({
             ignoreDeps: ["awesome-peer-dependency"],
+        });
+    });
+
+    it("should exclude dependencies configured to be ignored", () => {
+        expect.hasAssertions();
+
+        const renovateConfig: RenovateJson = {};
+        const pkg: PackageJson = {
+            name: "${name}",
+            version: "1.0.0",
+            dependencies: {
+                "awesome-dependency": "^1.0.0",
+                "ignored-dependency": "^1.0.0",
+            },
+        };
+        const templateConfig: TemplateConfig = {
+            ignoredDependencies: ["ignored-dependency"],
+        };
+
+        const result = updateRenovateWithIgnoredDeps(
+            renovateConfig,
+            pkg,
+            "my-template",
+            templateConfig,
+        );
+
+        expect(result).toEqual({
+            ignoreDeps: ["awesome-dependency"],
         });
     });
 
@@ -115,11 +152,13 @@ describe("updateRenovateWithIgnoredDeps", () => {
                 "new-dep": "^1.0.0",
             },
         };
+        const templateConfig: TemplateConfig = {};
 
         const result = updateRenovateWithIgnoredDeps(
             renovateConfig,
             pkg,
             "my-template",
+            templateConfig,
         );
 
         expect(result).toEqual({
@@ -135,11 +174,13 @@ describe("updateRenovateWithIgnoredDeps", () => {
             name: "${name}",
             version: "1.0.0",
         };
+        const templateConfig: TemplateConfig = {};
 
         const result = updateRenovateWithIgnoredDeps(
             renovateConfig,
             pkg,
             "my-template",
+            templateConfig,
         );
 
         expect(result).toEqual({

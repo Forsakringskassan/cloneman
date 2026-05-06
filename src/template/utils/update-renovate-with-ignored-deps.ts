@@ -1,3 +1,4 @@
+import { type TemplateConfig } from "../../config";
 import { type PackageJson } from "../../utils/package-json";
 
 /**
@@ -11,7 +12,22 @@ export function updateRenovateWithIgnoredDeps(
     renovateConfig: RenovateJson,
     pkg: PackageJson,
     templatePackageName: string,
+    templateConfig: TemplateConfig,
 ): RenovateJson {
+    const { ignoredDependencies = [] } = templateConfig;
+
+    const isManagedByTemplate = (it: string): boolean => {
+        /* the template itself is never managed */
+        if (it === templatePackageName) {
+            return false;
+        }
+        /* explicitly configured to not be managed */
+        if (ignoredDependencies.includes(it)) {
+            return false;
+        }
+        return true;
+    };
+
     /* the dependencies specified in the template renovate.json */
     const original = renovateConfig.ignoreDeps ?? [];
 
@@ -26,9 +42,7 @@ export function updateRenovateWithIgnoredDeps(
         ...Object.keys(devDependencies),
         ...Object.keys(peerDependencies),
     ];
-    const filtered = all.filter(
-        (dependencyName) => dependencyName !== templatePackageName,
-    );
+    const filtered = all.filter(isManagedByTemplate);
 
     /* merge and sort the combined lists */
     const updated = Array.from(new Set([...original, ...filtered])).toSorted(

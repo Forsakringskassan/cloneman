@@ -77,12 +77,13 @@ export async function buildTemplate(options: {
     const filesDir = path.join(targetDir, "files");
     await prepareFolders(targetDir, filesDir);
 
+    const templateConfig = normalizeTemplateConfig(config);
     const {
         managedFiles,
         ignoredFiles: templateIgnoredFiles,
         ignoredDependencies: templateIgnoredDependencies,
         uninstallDependencies,
-    } = normalizeTemplateConfig(config);
+    } = templateConfig;
 
     const ignoredFiles = [
         ...templateIgnoredFiles,
@@ -141,6 +142,7 @@ export async function buildTemplate(options: {
             return renovateIgnoreDependencies(
                 massagedTemplatePackageJson,
                 clonemanPackageJson.name,
+                templateConfig,
                 filesDir,
                 managedFiles,
             );
@@ -161,6 +163,7 @@ async function prepareFolders(
 async function renovateIgnoreDependencies(
     packageJson: PackageJson,
     templatePackageName: string,
+    templateConfig: TemplateConfig,
     filesDir: string,
     managedFiles: string[],
 ): Promise<void> {
@@ -177,6 +180,7 @@ async function renovateIgnoreDependencies(
         renovateConfig,
         packageJson,
         templatePackageName,
+        templateConfig,
     );
     await writeJsonFile(renovateFilePath, newConfig);
 }

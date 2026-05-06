@@ -55,6 +55,8 @@ export interface PackageJson {
     // (undocumented)
     name: string;
     // (undocumented)
+    peerDependencies?: Partial<Record<string, string>>;
+    // (undocumented)
     scripts?: Record<string, string>;
     // (undocumented)
     type?: "module" | "commonjs";
