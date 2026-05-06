@@ -1,3 +1,4 @@
+import path from "node:path";
 import { type TemplateConfig } from "../../config";
 import { type PackageJson } from "../../utils/package-json";
 
@@ -14,7 +15,7 @@ export function updateRenovateWithIgnoredDeps(
     templatePackageName: string,
     templateConfig: TemplateConfig,
 ): RenovateJson {
-    const { ignoredDependencies = [] } = templateConfig;
+    const { ignoredDependencies: ignored = [] } = templateConfig;
 
     const isManagedByTemplate = (it: string): boolean => {
         /* the template itself is never managed */
@@ -22,7 +23,7 @@ export function updateRenovateWithIgnoredDeps(
             return false;
         }
         /* explicitly configured to not be managed */
-        if (ignoredDependencies.includes(it)) {
+        if (ignored.some((pattern) => path.matchesGlob(it, pattern))) {
             return false;
         }
         return true;

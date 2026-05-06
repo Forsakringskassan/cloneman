@@ -139,6 +139,35 @@ describe("updateRenovateWithIgnoredDeps", () => {
         });
     });
 
+    it("should exclude patterns configured to be ignored", () => {
+        expect.hasAssertions();
+
+        const renovateConfig: RenovateJson = {};
+        const pkg: PackageJson = {
+            name: "${name}",
+            version: "1.0.0",
+            dependencies: {
+                "awesome-dependency": "^1.0.0",
+                "@example/foo": "^1.0.0",
+                "@example/bar": "^1.0.0",
+            },
+        };
+        const templateConfig: TemplateConfig = {
+            ignoredDependencies: ["@example/*"],
+        };
+
+        const result = updateRenovateWithIgnoredDeps(
+            renovateConfig,
+            pkg,
+            "my-template",
+            templateConfig,
+        );
+
+        expect(result).toEqual({
+            ignoreDeps: ["awesome-dependency"],
+        });
+    });
+
     it("should keep existing ignoreDeps and append new ones", () => {
         expect.hasAssertions();
 
