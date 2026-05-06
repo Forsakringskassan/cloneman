@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## [1.9.3](https://github.com/Forsakringskassan/cloneman/compare/v1.9.2...v1.9.3) (2026-05-06)
+
+### Bug Fixes
+
+* handle globs when ignoring dependencies in `renovate.json` ([eb056ce](https://github.com/Forsakringskassan/cloneman/commit/eb056ce8263794e2cdc8f39e45fcab79ddb02f28))
+* keep cloneman as a dependency in the template package.json ([a18dda1](https://github.com/Forsakringskassan/cloneman/commit/a18dda1d0630a1d436f255db77f6aa05e873c02c))
+
 ## [1.9.2](https://github.com/Forsakringskassan/cloneman/compare/v1.9.1...v1.9.2) (2026-05-06)
 
 ### Bug Fixes
