@@ -50,21 +50,4 @@ describe("prepareTemplatePackageJson", () => {
             }),
         );
     });
-
-    it("should remove cloneman from dependencies and devDependencies", () => {
-        expect.assertions(4);
-
-        const pkg: PackageJson = {
-            name: "app",
-            version: "1.0.0",
-            dependencies: { cloneman: "1.0.0", "other-dep": "2.0.0" },
-            devDependencies: { cloneman: "1.0.0", "other-dev-dep": "3.0.0" },
-        };
-        const result = prepareTemplatePackageJson(template, pkg);
-        expect(result.dependencies).not.toHaveProperty("cloneman");
-        expect(result.dependencies).toHaveProperty("other-dep");
-
-        expect(result.devDependencies).not.toHaveProperty("cloneman");
-        expect(result.devDependencies).toHaveProperty("other-dev-dep");
-    });
 });

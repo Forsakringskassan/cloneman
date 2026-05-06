@@ -76,6 +76,7 @@ describe("create from base template from npm registry", () => {
             devDependencies: {
                 "@forsakringskassan/base-template": "1.0.0",
                 "@forsakringskassan/lib-used-by-templates": "1.0.0",
+                cloneman: ".",
             },
             cloneman: {
                 template: "@forsakringskassan/base-template",
@@ -170,6 +171,7 @@ describe("create from local template package", () => {
                     relativeTarballPath.replaceAll("\\", "/"),
                 ),
                 "@forsakringskassan/lib-used-by-templates": "1.0.0",
+                cloneman: ".",
             },
             cloneman: {
                 template: "@forsakringskassan/base-template",

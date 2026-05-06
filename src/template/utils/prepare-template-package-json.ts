@@ -1,7 +1,6 @@
 import { sortPackageJson } from "sort-package-json";
 import { type ClientMetadata } from "../../types";
 import { type PackageJson } from "../../utils/package-json";
-import { isIgnored } from "./is-ignored";
 
 /**
  * @internal
@@ -37,14 +36,10 @@ export function prepareTemplatePackageJson(
 function filterDependencies(
     dependencies: Partial<Record<string, string>> | undefined,
 ): Partial<Record<string, string>> {
-    const depsToRemove = ["cloneman"];
-
     if (!dependencies) {
         return {};
     }
-    const deps = Object.entries(dependencies).filter(([key]) => {
-        return !isIgnored(key, depsToRemove);
-    });
+    const deps = Object.entries(dependencies);
 
     return Object.fromEntries(deps);
 }
