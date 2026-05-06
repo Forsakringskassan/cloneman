@@ -26,7 +26,7 @@ describe("updateRenovateWithIgnoredDeps", () => {
         );
 
         expect(result).toEqual({
-            ignoreDeps: ["@aws-sdk/client-s3", "@aws-sdk/client-dynamodb"],
+            ignoreDeps: ["@aws-sdk/client-dynamodb", "@aws-sdk/client-s3"],
         });
     });
 
