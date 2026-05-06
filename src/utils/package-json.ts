@@ -22,6 +22,7 @@ export interface PackageJson {
     description?: string;
     dependencies?: Partial<Record<string, string>>;
     devDependencies?: Partial<Record<string, string>>;
+    peerDependencies?: Partial<Record<string, string>>;
     cloneman?: unknown;
 }
 

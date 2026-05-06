@@ -1,6 +1,9 @@
 import { type PackageJson } from "../../utils/package-json";
 
-interface RenovateJson {
+/**
+ * @internal
+ */
+export interface RenovateJson {
     ignoreDeps?: string[];
 }
 
@@ -13,8 +16,16 @@ export function updateRenovateWithIgnoredDeps(
     const original = renovateConfig.ignoreDeps ?? [];
 
     /* the dependencies managed by the template */
-    const { dependencies = {}, devDependencies = {} } = pkg;
-    const all = [...Object.keys(dependencies), ...Object.keys(devDependencies)];
+    const {
+        dependencies = {},
+        devDependencies = {},
+        peerDependencies = {},
+    } = pkg;
+    const all = [
+        ...Object.keys(dependencies),
+        ...Object.keys(devDependencies),
+        ...Object.keys(peerDependencies),
+    ];
     const filtered = all.filter(
         (dependencyName) => dependencyName !== templatePackageName,
     );
