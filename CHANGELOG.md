@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## [1.9.2](https://github.com/Forsakringskassan/cloneman/compare/v1.9.1...v1.9.2) (2026-05-06)
+
+### Bug Fixes
+
+* do not ignore unmanaged dependencies in `renovate.json` ([08c7fdd](https://github.com/Forsakringskassan/cloneman/commit/08c7fdd25e0244e56798a7765a756c2e369264fa))
+* include managed `peerDependencies` in `ignoreDeps` in `renovate.json` ([d638104](https://github.com/Forsakringskassan/cloneman/commit/d6381041a22f0aaea87ec44bab2508d85ff142cc))
+* sort `ignoreDeps` results in `renovate.json` ([acb5e9b](https://github.com/Forsakringskassan/cloneman/commit/acb5e9bc5452276abd6dba53de70c82c11ae6985))
+
 ## [1.9.1](https://github.com/Forsakringskassan/cloneman/compare/v1.9.0...v1.9.1) (2026-04-24)
 
 ### Bug Fixes
