@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## [1.9.4](https://github.com/Forsakringskassan/cloneman/compare/v1.9.3...v1.9.4) (2026-05-07)
+
+### Bug Fixes
+
+* **deps:** update dependency yocto-spinner to v1.2.0 ([1c510b7](https://github.com/Forsakringskassan/cloneman/commit/1c510b7bb6ab6cc1401be97a3ad3a2bb62363d81))
+* should sort dependencies during update ([bfae225](https://github.com/Forsakringskassan/cloneman/commit/bfae225d157773d65678c0684de7a539ad820100))
+
 ## [1.9.3](https://github.com/Forsakringskassan/cloneman/compare/v1.9.2...v1.9.3) (2026-05-06)
 
 ### Bug Fixes
