@@ -51,5 +51,10 @@ export function filterDependencies(options: {
 
     const filtered = Object.fromEntries(entries);
 
-    return { ...filtered, ...filteredTemplateDependencies };
+    const merged = { ...filtered, ...filteredTemplateDependencies };
+    const sortedEntries = Object.entries(merged).toSorted(([a], [b]) => {
+        const scope = Number(b.startsWith("@")) - Number(a.startsWith("@"));
+        return scope !== 0 ? scope : a.localeCompare(b);
+    });
+    return Object.fromEntries(sortedEntries);
 }
