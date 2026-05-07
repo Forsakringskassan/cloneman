@@ -121,4 +121,32 @@ describe("filterDependencies", () => {
             other: "2.0.0",
         });
     });
+
+    it("should return dependencies sorted alphabetically with scoped packages first", () => {
+        expect.assertions(1);
+        const appDependencies = {
+            zebra: "1.0.0",
+            "@scope/foo": "1.0.0",
+            alpha: "1.0.0",
+        };
+        const templateDependencies = {
+            "@a/first": "2.0.0",
+            "@scope/bar": "2.0.0",
+        };
+
+        const result = filterDependencies({
+            appDependencies,
+            templateDependencies,
+            uninstallDependencies: undefined,
+            ignoredDependencies: undefined,
+        });
+
+        expect(Object.keys(result)).toEqual([
+            "@a/first",
+            "@scope/bar",
+            "@scope/foo",
+            "alpha",
+            "zebra",
+        ]);
+    });
 });
