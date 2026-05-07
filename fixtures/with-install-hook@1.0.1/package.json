@@ -1,0 +1,17 @@
+{
+  "name": "@forsakringskassan/base-template",
+  "version": "1.0.0",
+  "private": true,
+  "files": [],
+  "scripts": {
+    "a": "foo"
+  },
+  "dependencies": {
+    "@forsakringskassan/api-lib-a": "1.0.0",
+    "@forsakringskassan/api-lib-b": "1.0.0"
+  },
+  "devDependencies": {
+    "@forsakringskassan/lib-used-by-templates": "1.0.0",
+    "cloneman": "."
+  }
+}

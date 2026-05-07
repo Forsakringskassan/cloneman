@@ -14,6 +14,7 @@ import { fetchTarball } from "./utils/fetch-tarball";
 import { filterDependencies } from "./utils/filter-dependencies";
 import { type PackageJson } from "./utils/package-json";
 import { parseTarball } from "./utils/parse-tarball";
+import { runTemplateInstall } from "./utils/run-template-install";
 
 /**
  * @internal
@@ -134,5 +135,17 @@ export async function update(
             ...devDependencies,
             [cloneman.template]: packageJsonVersion,
         },
+    });
+
+    await runTemplateInstall({
+        installScriptPath: path.join(
+            cwd,
+            "node_modules",
+            templatePackage,
+            ".cloneman",
+            "install.mjs",
+        ),
+        cwd,
+        env,
     });
 }
