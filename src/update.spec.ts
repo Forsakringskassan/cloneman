@@ -186,7 +186,7 @@ describe("update existing project with template from registry", () => {
 });
 
 it("should update existing project from local tar", async () => {
-    expect.assertions(5);
+    expect.assertions(7);
 
     /* create the initial application using template at version 1.0.0 */
     await create({
@@ -200,6 +200,9 @@ it("should update existing project from local tar", async () => {
     );
     expect(await readFile("managed.txt")).toMatchInlineSnapshot(
         `managed file at v1.0.0`,
+    );
+    expect(await readFile("install.txt")).toMatchInlineSnapshot(
+        `install script at v1.0.0`,
     );
 
     /* create a local tarball for version 1.0.1 */
@@ -233,6 +236,9 @@ it("should update existing project from local tar", async () => {
     expect(await readFile("managed.txt")).toMatchInlineSnapshot(
         `managed file at v1.0.1`,
     );
+    expect(await readFile("install.txt")).toMatchInlineSnapshot(
+        `install script at v1.0.1`,
+    );
 });
 
 it("should crash if invalid tar path", async () => {
@@ -252,3 +258,5 @@ it("should crash if invalid tar path", async () => {
         `Tarball not found at path`,
     );
 });
+
+it.todo("should run install hook if present");

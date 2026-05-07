@@ -7,6 +7,8 @@ import { pathToFileURL } from "node:url";
 import { BuildNoExportedFnError } from "./errors";
 import { buildTemplate } from "./template";
 import { type BuildContext } from "./types";
+import spawn from "nano-spawn";
+import { findHooksFile } from "./utils/find-hooks-file";
 import { isTemplateFolder } from "./utils/is-template";
 
 type BuildFunction = (
@@ -62,7 +64,7 @@ export async function prepare(
         );
     }
 
-    const buildFile = await findBuildFile(templateDir);
+    const buildFile = await findHooksFile("build", cwd);
 
     if (buildFile === undefined) {
         throw new Error(

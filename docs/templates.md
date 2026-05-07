@@ -216,6 +216,17 @@ const template = await buildTemplate(pkg.name, config);
 await template.writeFile("foo.txt", "New file");
 ```
 
+## Hooks
+
+### Install hook
+
+The install hook run when the client creates or updates the application in the context of their repository.
+
+```
+.cloneman
+├── install.{js,mjs,ts,mts}
+```
+
 ## Available commands when working with templates
 
 Both commands requires to be called insisde a template folder.

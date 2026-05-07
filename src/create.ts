@@ -8,6 +8,7 @@ import { readJsonFile } from "./utils";
 import { getTemplateInfo } from "./utils/get-template-info";
 import { normalizeTemplatePackage } from "./utils/normalize-template-package";
 import { type ApplicationPackageJson } from "./utils/package-json";
+import { runTemplateInstall } from "./utils/run-template-install";
 
 /**
  * @internal
@@ -118,4 +119,16 @@ export async function create(options: {
             );
         }),
     );
+
+    await runTemplateInstall({
+        installScriptPath: path.join(
+            appPath,
+            "node_modules",
+            templatePackageName,
+            ".cloneman",
+            "install.mjs",
+        ),
+        cwd: appPath,
+        env,
+    });
 }
