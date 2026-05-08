@@ -103,6 +103,11 @@ Template configuration.
 }
 ```
 
+**Glob patterns**
+
+Fields that support glob patterns also support negation patterns (prefixed with `!`) to re-include specific entries.
+For example, `["@fkui/*", "!@fkui/vue-config"]` matches all `@fkui` packages except `@fkui/vue-config`.
+
 ### managedFiles
 
 - type: `string[]`

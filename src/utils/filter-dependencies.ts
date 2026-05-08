@@ -1,4 +1,4 @@
-import { matchesGlob } from "node:path";
+import { matchesPatterns } from "./matches-patterns";
 
 /**
  * Computes the final set of dependencies for an application after a template update.
@@ -26,19 +26,17 @@ export function filterDependencies(options: {
         uninstallDependencies = [],
         ignoredDependencies = [],
     } = options;
-    const ignore = ignoredDependencies;
     const shouldIgnore = (key: string): boolean =>
-        ignore.some((pattern) => matchesGlob(key, pattern));
+        matchesPatterns(key, ignoredDependencies);
     const filteredTemplateDependencies = Object.fromEntries(
         Object.entries(templateDependencies).filter(
             ([key]) => !shouldIgnore(key),
         ),
     );
     const templateKeys = new Set(Object.keys(filteredTemplateDependencies));
-    const uninstall = uninstallDependencies;
 
     const shouldUninstall = (key: string): boolean =>
-        uninstall.some((pattern) => matchesGlob(key, pattern));
+        matchesPatterns(key, uninstallDependencies);
 
     const inTemplate = (key: string): boolean => templateKeys.has(key);
 
