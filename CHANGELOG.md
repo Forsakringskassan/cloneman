@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## [1.10.0](https://github.com/Forsakringskassan/cloneman/compare/v1.9.4...v1.10.0) (2026-05-08)
+
+### Features
+
+* support glob negation for template configuration ([62ac07d](https://github.com/Forsakringskassan/cloneman/commit/62ac07d40fe94fa22895e60309b950d202fae94d))
+
 ## [1.9.4](https://github.com/Forsakringskassan/cloneman/compare/v1.9.3...v1.9.4) (2026-05-07)
 
 ### Bug Fixes
