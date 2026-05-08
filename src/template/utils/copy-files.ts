@@ -2,7 +2,10 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import spawn from "nano-spawn";
 import { getStoredFileName } from "./get-stored-filename";
-import { isIgnored } from "./is-ignored";
+
+function isIgnored(key: string, ignored: string[]): boolean {
+    return ignored.some((pattern) => path.matchesGlob(key, pattern));
+}
 
 const protectedFiles = ["**/.npmrc"];
 
@@ -32,11 +35,7 @@ export async function copyFiles(
         const fileDir = path.join(dstDir, dir);
         await fs.mkdir(fileDir, { recursive: true });
         const dst = path.join(dstDir, dir, fileName);
-        if (
-            protectedFiles.some((pattern) =>
-                path.matchesGlob(filePath, pattern),
-            )
-        ) {
+        if (isIgnored(filePath, protectedFiles)) {
             const { output } = await spawn(
                 "git",
                 ["show", `HEAD:./${filePath}`],
