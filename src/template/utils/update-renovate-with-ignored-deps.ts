@@ -1,5 +1,5 @@
-import path from "node:path";
 import { type TemplateConfig } from "../../config";
+import { matchesPatterns } from "../../utils/matches-patterns";
 import { type PackageJson } from "../../utils/package-json";
 
 /**
@@ -23,7 +23,7 @@ export function updateRenovateWithIgnoredDeps(
             return false;
         }
         /* explicitly configured to not be managed */
-        if (ignored.some((pattern) => path.matchesGlob(it, pattern))) {
+        if (matchesPatterns(it, ignored)) {
             return false;
         }
         return true;

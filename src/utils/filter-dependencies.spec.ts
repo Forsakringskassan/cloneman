@@ -71,6 +71,29 @@ describe("filterDependencies", () => {
         });
     });
 
+    it("should not remove dependencies excluded by a negation pattern in uninstallDependencies", () => {
+        expect.assertions(1);
+        const appDependencies = {
+            "@jest/core": "29.0.0",
+            "@jest/reporters": "29.0.0",
+            "jest-circus": "29.0.0",
+            vitest: "2.0.0",
+        };
+
+        const result = filterDependencies({
+            appDependencies,
+            templateDependencies: { vitest: "3.0.0" },
+            uninstallDependencies: ["@jest/*", "!@jest/reporters"],
+            ignoredDependencies: undefined,
+        });
+
+        expect(result).toEqual({
+            "@jest/reporters": "29.0.0",
+            "jest-circus": "29.0.0",
+            vitest: "3.0.0",
+        });
+    });
+
     it("should not update a dependency that matches an ignored pattern", () => {
         expect.assertions(1);
         const appDependencies = {
@@ -118,6 +141,33 @@ describe("filterDependencies", () => {
         expect(result).toEqual({
             "@scope/foo": "1.0.0",
             "@scope/bar": "1.0.0",
+            other: "2.0.0",
+        });
+    });
+
+    it("should not ignore dependencies excluded by a negation pattern in ignoredDependencies", () => {
+        expect.assertions(1);
+        const appDependencies = {
+            "@scope/foo": "1.0.0",
+            "@scope/bar": "1.0.0",
+            other: "1.0.0",
+        };
+        const templateDependencies = {
+            "@scope/foo": "2.0.0",
+            "@scope/bar": "2.0.0",
+            other: "2.0.0",
+        };
+
+        const result = filterDependencies({
+            appDependencies,
+            templateDependencies,
+            uninstallDependencies: undefined,
+            ignoredDependencies: ["@scope/*", "!@scope/bar"],
+        });
+
+        expect(result).toEqual({
+            "@scope/foo": "1.0.0",
+            "@scope/bar": "2.0.0",
             other: "2.0.0",
         });
     });
