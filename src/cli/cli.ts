@@ -4,6 +4,7 @@ import { UserError } from "../errors";
 import { buildCommand } from "./build";
 import { type Context } from "./context";
 import { createCommand } from "./create";
+import { migrateCommand } from "./migrate";
 import { packCommand } from "./pack";
 import { publishCommand } from "./publish";
 import { updateCommand } from "./update";
@@ -21,6 +22,7 @@ export function createParser(context: Context): ReturnType<typeof yargs> {
         .command(publishCommand(context))
         .command(updateCommand(context))
         .command(verifyCommand(context))
+        .command(migrateCommand(context))
         .demandCommand(1, "You need to provide a command.")
         .strict()
         .help();

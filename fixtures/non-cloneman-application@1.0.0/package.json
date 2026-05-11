@@ -1,0 +1,12 @@
+{
+  "name": "non-cloneman-application",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Used by migration tests",
+  "dependencies": {
+    "@forsakringskassan/api-custom": "1.1.0"
+  },
+  "devDependencies": {
+    "@forsakringskassan/lib-used by application": "1.0.0"
+  }
+}

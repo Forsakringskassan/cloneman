@@ -8,7 +8,8 @@ Available commands
 
 - Create
 - Update
-- verify
+- Verify
+- Migrate
 
 ### Create a new application based on a template
 
@@ -49,6 +50,18 @@ Exits successfully if the application is up-to-date or with a non-zero status an
 It is recommended to run this from the `prepare` script in the applications `package.json`:
 
 > `npm pkg set scripts.prepare="cloneman verify"`
+
+### Migrate
+
+Migrates an existing application to use a cloneman template.
+
+`npx cloneman migrate template-package-name`
+
+After migrating, run update to apply the template files:
+
+`npx cloneman update`
+
+Note: the migration won't modify any files other than `package.json`, which connects your application to a specific template. It is up to the update command to actually modify the repository.
 
 ## Creating and managing templates
 

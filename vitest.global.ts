@@ -63,6 +63,26 @@ async function publishPackage(
     });
 }
 
+function excludeFromCopy(src: string): boolean {
+    const excluded = ["node_modules", "src", "fixtures", "docs"];
+    return !excluded.some((dir) => src.includes(`${path.sep}${dir}`));
+}
+
+async function publishCloneman(authEnv: Record<string, string>): Promise<void> {
+    console.log("Publishing cloneman package...");
+    await withTemporaryDirectory(async (targetDir) => {
+        await fs.cp("./", targetDir, {
+            recursive: true,
+            filter: excludeFromCopy,
+        });
+        await writeNpmRc(targetDir);
+        await spawn("npm", ["publish"], {
+            cwd: targetDir,
+            env: authEnv,
+        });
+    });
+}
+
 function npmrc(): string {
     return [
         `registry=http://${getRegistryHost()}`,
@@ -86,6 +106,8 @@ export async function setup(project: TestProject): Promise<void> {
         await publishFixture("base-template@1.0.2", authEnv);
 
         await publishPackage("non-template-package", authEnv);
+
+        await publishCloneman(authEnv);
     } catch (error) {
         await stop();
         throw error;
