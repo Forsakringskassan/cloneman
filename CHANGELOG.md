@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## [1.11.0](https://github.com/Forsakringskassan/cloneman/compare/v1.10.0...v1.11.0) (2026-05-15)
+
+### Features
+
+* migrate command ([0e93d6f](https://github.com/Forsakringskassan/cloneman/commit/0e93d6fcffd3faafd76fd6a1be5ca664a2f81a5d))
+
+### Bug Fixes
+
+* **deps:** update dependency tar to v7.5.14 ([ade5d79](https://github.com/Forsakringskassan/cloneman/commit/ade5d792476d3f12d43392ceeed7a60fa97a2c55))
+* **deps:** update dependency tar to v7.5.15 ([8ebc09c](https://github.com/Forsakringskassan/cloneman/commit/8ebc09cbb9801d332d9b6f18eb5d2a8e2f72d4e3))
+
 ## [1.10.0](https://github.com/Forsakringskassan/cloneman/compare/v1.9.4...v1.10.0) (2026-05-08)
 
 ### Features
