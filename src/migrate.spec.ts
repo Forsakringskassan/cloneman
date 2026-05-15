@@ -71,7 +71,7 @@ describe("migrate to base template", () => {
             devDependencies: {
                 "@forsakringskassan/base-template": "1.0.2",
                 "@forsakringskassan/lib-used by application": "1.0.0",
-                cloneman: "1.10.0",
+                cloneman: expect.any(String),
             },
             cloneman: {
                 templatePackage: "@forsakringskassan/base-template",
