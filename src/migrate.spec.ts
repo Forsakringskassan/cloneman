@@ -60,27 +60,24 @@ describe("migrate to base template", () => {
             env: userEnv,
         });
 
-        expect(JSON.stringify(await readJsonFile("package.json"), null, 2))
-            .toMatchInlineSnapshot(`
-          {
-            "name": "non-cloneman-application",
-            "version": "1.0.0",
-            "private": true,
-            "description": "Used by migration tests",
-            "dependencies": {
-              "@forsakringskassan/api-custom": "1.1.0"
+        expect(await readJsonFile("package.json")).toEqual({
+            name: "non-cloneman-application",
+            version: "1.0.0",
+            private: true,
+            description: "Used by migration tests",
+            dependencies: {
+                "@forsakringskassan/api-custom": "1.1.0",
             },
-            "devDependencies": {
-              "@forsakringskassan/base-template": "1.0.2",
-              "@forsakringskassan/lib-used by application": "1.0.0",
-              "cloneman": "1.10.0"
+            devDependencies: {
+                "@forsakringskassan/base-template": "1.0.2",
+                "@forsakringskassan/lib-used by application": "1.0.0",
+                cloneman: "1.10.0",
             },
-            "cloneman": {
-              "templatePackage": "@forsakringskassan/base-template",
-              "version": "N/A"
-            }
-          }
-        `);
+            cloneman: {
+                templatePackage: "@forsakringskassan/base-template",
+                version: "N/A",
+            },
+        });
     });
 
     it("should throw error when no application folder is found", async () => {
