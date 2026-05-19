@@ -6,6 +6,7 @@ export { type ApplicationPackageJson } from "./package-json";
 export { readJsonFile } from "./read-json-file";
 export { readPackageJson } from "./read-package-json";
 export { readPackageJsonFromTarball } from "./read-package-json-from-tarball";
+export { runHook } from "./run-hook";
 export { writeJsonFile } from "./write-json-file";
 export {
     isTarball,

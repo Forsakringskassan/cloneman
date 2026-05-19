@@ -3,7 +3,7 @@ import path from "node:path";
 import { PassThrough } from "node:stream";
 import { text } from "node:stream/consumers";
 import { buildTemplate } from "./template";
-import { getHookScriptPath, importHook } from "./utils";
+import { getHookScriptPath, runHook } from "./utils";
 import { isTemplateFolder } from "./utils/is-template";
 
 /**
@@ -31,8 +31,7 @@ export async function prepare(
     const logger = new Console({ stdout: stream, stderr: stream });
 
     try {
-        const build = await importHook("build", buildFile);
-        await build({
+        await runHook("build", hooksDir, {
             buildTemplate(name, config) {
                 return buildTemplate({
                     logger,
