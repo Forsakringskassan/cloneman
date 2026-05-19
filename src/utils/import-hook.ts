@@ -1,8 +1,4 @@
-import { type BuildContext } from "../types";
-
-interface HookMapping {
-    build(this: void, context: BuildContext): void | Promise<void>;
-}
+import { type HookMapping } from "../hooks";
 
 type HookModule<K extends keyof HookMapping> = Record<
     K | "default",
