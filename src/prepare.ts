@@ -1,47 +1,11 @@
 import { Console } from "node:console";
-import fs from "node:fs/promises";
 import path from "node:path";
 import { PassThrough } from "node:stream";
 import { text } from "node:stream/consumers";
-import { pathToFileURL } from "node:url";
 import { BuildNoExportedFnError } from "./errors";
 import { buildTemplate } from "./template";
-import { type BuildContext } from "./types";
+import { getHookScriptPath, importHook } from "./utils";
 import { isTemplateFolder } from "./utils/is-template";
-
-type BuildFunction = (
-    this: void,
-    context: BuildContext,
-) => void | Promise<void>;
-
-interface BuildModule {
-    default?: BuildFunction;
-    build?: BuildFunction;
-}
-
-async function importBuild(
-    filePath: string,
-): Promise<BuildFunction | undefined> {
-    const mod = (await import(filePath)) as BuildModule;
-    if (typeof mod.build === "function") {
-        return mod.build;
-    }
-    if (typeof mod.default === "function") {
-        return mod.default;
-    }
-    return undefined;
-}
-
-async function findBuildFile(templateDir: string): Promise<string | undefined> {
-    const cwd = path.join(templateDir, ".cloneman");
-    const [match] = await Array.fromAsync(
-        fs.glob("build.{js,mjs,ts,mts}", { cwd }),
-    );
-    if (!match) {
-        return undefined;
-    }
-    return pathToFileURL(path.join(cwd, match)).href;
-}
 
 /**
  * Prepares the target directory with a cloneman template by running the build script from the template's ".cloneman" folder.
@@ -62,19 +26,13 @@ export async function prepare(
         );
     }
 
-    const buildFile = await findBuildFile(templateDir);
-
-    if (buildFile === undefined) {
-        throw new Error(
-            `No build file found in ".cloneman". Tried: build.{js,mjs,ts,mts}`,
-        );
-    }
-
+    const hooksDir = path.join(templateDir, ".cloneman");
+    const buildFile = getHookScriptPath("build", hooksDir);
     const stream = new PassThrough();
     const logger = new Console({ stdout: stream, stderr: stream });
 
     try {
-        const build = await importBuild(buildFile);
+        const build = await importHook("build", buildFile);
         if (!build) {
             throw new BuildNoExportedFnError({
                 scriptPath: buildFile,

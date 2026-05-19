@@ -229,7 +229,7 @@ describe("prepare template-missing-build", () => {
         const cwd = path.join(fixtureDir, "template-missing-build");
 
         await expect(prepare(cwd, targetDir)).rejects.toThrow(
-            `No build file found in ".cloneman". Tried: build.{js,mjs,ts,mts}`,
+            /No "build" hook found in "[^"]+"/,
         );
     });
 });
