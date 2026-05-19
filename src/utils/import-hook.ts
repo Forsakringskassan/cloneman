@@ -1,3 +1,4 @@
+import { HookNoExportedFnError } from "../errors";
 import { type HookMapping } from "../hooks";
 
 type HookModule<K extends keyof HookMapping> = Record<
@@ -16,7 +17,7 @@ type HookModule<K extends keyof HookMapping> = Record<
 export async function importHook<K extends keyof HookMapping>(
     hook: K,
     scriptPath: string,
-): Promise<HookMapping[K] | undefined> {
+): Promise<HookMapping[K]> {
     const mod = (await import(scriptPath)) as HookModule<K>;
     if (hook in mod && typeof mod[hook] === "function") {
         return mod[hook];
@@ -24,5 +25,8 @@ export async function importHook<K extends keyof HookMapping>(
     if ("default" in mod && typeof mod.default === "function") {
         return mod.default;
     }
-    return undefined;
+    throw new HookNoExportedFnError({
+        hookName: hook,
+        scriptPath,
+    });
 }

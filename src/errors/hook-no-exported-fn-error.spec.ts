@@ -3,15 +3,16 @@ import "./test-environment";
 
 it("should format pretty message", async () => {
     expect.assertions(1);
-    const { BuildNoExportedFnError } =
-        await import("./build-no-exported-fn-error");
-    const error = new BuildNoExportedFnError({
+    const { HookNoExportedFnError } =
+        await import("./hook-no-exported-fn-error");
+    const error = new HookNoExportedFnError({
+        hookName: "build",
         scriptPath: "/path/to/build.mjs",
     });
     expect(error.prettyMessage()).toMatchInlineSnapshot(`
-      <red>ERROR cloneman cannot compile template: the build script is not exporting a callback function.</color>
+      <red>ERROR cloneman cannot run hook "build": the script is not exporting a callback function.</color>
 
-      The build script at "/path/to/build.mjs" must either:
+      The "build" hook at "/path/to/build.mjs" must either:
 
         - export a named function "build"
         - default export a function

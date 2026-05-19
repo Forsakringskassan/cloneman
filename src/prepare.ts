@@ -2,7 +2,6 @@ import { Console } from "node:console";
 import path from "node:path";
 import { PassThrough } from "node:stream";
 import { text } from "node:stream/consumers";
-import { BuildNoExportedFnError } from "./errors";
 import { buildTemplate } from "./template";
 import { getHookScriptPath, importHook } from "./utils";
 import { isTemplateFolder } from "./utils/is-template";
@@ -33,11 +32,6 @@ export async function prepare(
 
     try {
         const build = await importHook("build", buildFile);
-        if (!build) {
-            throw new BuildNoExportedFnError({
-                scriptPath: buildFile,
-            });
-        }
         await build({
             buildTemplate(name, config) {
                 return buildTemplate({
