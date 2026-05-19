@@ -1,3 +1,5 @@
+export { findHookScriptPath } from "./find-hook-script-path";
+export { getHookScriptPath } from "./get-hook-script-path";
 export { isClientMetadata } from "./is-client-metadata";
 export { type ApplicationPackageJson } from "./package-json";
 export { readJsonFile } from "./read-json-file";
