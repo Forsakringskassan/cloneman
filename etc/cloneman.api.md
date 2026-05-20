@@ -22,6 +22,17 @@ export interface BuildTemplateResult {
     writeFile(filePath: string, content: string): Promise<void>;
 }
 
+// @public (undocumented)
+export interface InstallContext {
+    readonly cwd: string;
+    readonly logger: Console;
+    readFile(filePath: string): Promise<string>;
+    readJsonFile<T = unknown>(filePath: string): Promise<T>;
+    updateJsonFile(filePath: string, content: object): Promise<void>;
+    writeFile(filePath: string, content: string): Promise<void>;
+    writeJsonFile(filePath: string, content: unknown): Promise<void>;
+}
+
 // @public
 export interface NormalizedTemplateConfig {
     [normalizedConfig]: true;

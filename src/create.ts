@@ -4,7 +4,7 @@ import path from "node:path";
 import spawn from "nano-spawn";
 import { type default as yoctoSpinner } from "yocto-spinner";
 import { getStoredFileName } from "./template/utils/get-stored-filename";
-import { readJsonFile } from "./utils";
+import { readJsonFile, runHook, updateJsonFile, writeJsonFile } from "./utils";
 import { getTemplateInfo } from "./utils/get-template-info";
 import { normalizeTemplatePackage } from "./utils/normalize-template-package";
 import { type ApplicationPackageJson } from "./utils/package-json";
@@ -85,7 +85,7 @@ export async function create(options: {
         throw new Error(`Failed to install template package: ${message}`);
     }
 
-    const { filesDir, boilerplateFiles } = await getTemplateInfo(
+    const { filesDir, hooksDir, boilerplateFiles } = await getTemplateInfo(
         templatePackageName,
         appPath,
     );
@@ -118,4 +118,24 @@ export async function create(options: {
             );
         }),
     );
+
+    await runHook("install", hooksDir, {
+        cwd,
+        logger: console,
+        readFile(filePath) {
+            return fs.readFile(path.join(cwd, filePath), "utf8");
+        },
+        readJsonFile<T>(filePath: string) {
+            return readJsonFile<T>(path.join(cwd, filePath));
+        },
+        writeFile(filePath, content) {
+            return fs.writeFile(path.join(cwd, filePath), content, "utf8");
+        },
+        writeJsonFile(filePath, content) {
+            return writeJsonFile(path.join(cwd, filePath), content);
+        },
+        updateJsonFile(filePath, content) {
+            return updateJsonFile(path.join(cwd, filePath), content);
+        },
+    });
 }

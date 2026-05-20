@@ -331,3 +331,20 @@ describe("build script", () => {
         });
     });
 });
+
+describe("hooks", () => {
+    it("should store install hook in tempalte package", async () => {
+        expect.assertions(1);
+        const template = path.join(fixtureDir, "with-install-hook@1.0.0");
+        await prepare(template, targetDir);
+        expect(await printTree(targetDir)).toMatchInlineSnapshot(`
+          "(root)
+              ├── files
+              │   └── package.json
+              ├── hooks
+              │   └── install.mjs
+              ├── index.js
+              └── package.json"
+        `);
+    });
+});

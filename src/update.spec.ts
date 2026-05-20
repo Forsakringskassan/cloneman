@@ -277,3 +277,15 @@ it("should crash if invalid tar path", async () => {
         `Tarball not found at path`,
     );
 });
+
+it("should run install hook if present", async () => {
+    await create({
+        name: "mock-app",
+        templatePackage: "@forsakringskassan/with-install-hook@1.0.0",
+        cwd,
+        env: userEnv,
+    });
+    await update(appDir, "1.0.1", userEnv);
+    expect(await printTree(appDir)).toMatchInlineSnapshot();
+    expect(await readFile("install.txt")).toMatchInlineSnapshot();
+});

@@ -8,6 +8,7 @@ import {
 import { readJsonFile, writeJsonFile } from "../utils";
 import { type PackageJson } from "../utils/package-json";
 
+import { installHook } from "./install-hook";
 import { updateJson } from "./update-json";
 import { copyFiles } from "./utils/copy-files";
 import { createclonemanPackageJson } from "./utils/create-cloneman-package-json";
@@ -98,17 +99,19 @@ export async function buildTemplate(options: {
         const packageJsonFile = await fs.readFile(path.join(import.meta.dirname, "package.json"), "utf8");
         const packageJson = JSON.parse(packageJsonFile);
 
-
         const options = {
             ...packageJson.cloneman,
             filesDir: path.join(import.meta.dirname, "files"),
+            hooksDir: path.join(import.meta.dirname, "hooks"),
         }
-
 
         export default options;
     `;
 
     const files = await copyFiles(logger, templateDir, filesDir, ignoredFiles);
+
+    const hooksDir = path.join(templateDir, ".cloneman");
+    await installHook("install", { targetDir, hooksDir });
 
     await fs.writeFile(path.join(targetDir, "index.js"), indexJs);
 

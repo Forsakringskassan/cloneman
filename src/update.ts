@@ -8,6 +8,8 @@ import {
     isClientMetadata,
     isTarball,
     readJsonFile,
+    runHook,
+    updateJsonFile,
     writeJsonFile,
 } from "./utils";
 import { fetchTarball } from "./utils/fetch-tarball";
@@ -40,6 +42,9 @@ export async function update(
     } else if (!isClientMetadata(cloneman)) {
         throw new InvalidClonemanFieldError(cloneman);
     }
+
+    const templateDir = path.join(cwd, "node_modules", cloneman.template);
+    const hooksDir = path.join(templateDir, "hooks");
 
     let tarballBuffer: Buffer;
     /*
@@ -133,6 +138,26 @@ export async function update(
         devDependencies: {
             ...devDependencies,
             [cloneman.template]: packageJsonVersion,
+        },
+    });
+
+    await runHook("install", hooksDir, {
+        cwd,
+        logger: console,
+        readFile(filePath) {
+            return fs.readFile(path.join(cwd, filePath), "utf8");
+        },
+        readJsonFile<T>(filePath: string) {
+            return readJsonFile<T>(path.join(cwd, filePath));
+        },
+        writeFile(filePath, content) {
+            return fs.writeFile(path.join(cwd, filePath), content, "utf8");
+        },
+        writeJsonFile(filePath, content) {
+            return writeJsonFile(path.join(cwd, filePath), content);
+        },
+        updateJsonFile(filePath, content) {
+            return updateJsonFile(path.join(cwd, filePath), content);
         },
     });
 }

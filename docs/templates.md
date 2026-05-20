@@ -8,7 +8,7 @@ A template is required to have:
 .cloneman
 ├── (optional configuration file)
 ├── (optional hooks)
-└── build.{js,mjs,ts,mts}
+└── build.{js,cts,mjs,ts,cts,mts}
 ```
 
 ## Building
@@ -219,6 +219,21 @@ Create or modify files in a template
 const template = await buildTemplate(pkg.name, config);
 
 await template.writeFile("foo.txt", "New file");
+```
+
+## Hooks
+
+Hooks are additional scripts placed in the `.cloneman` folder.
+Each hook must be self-contained and cannot reference other files or libraries.
+`type` imports may be used but no type-checking is performed by Cloneman itself.
+
+### Install hook
+
+The install hook run when the client creates or updates the application in the context of their repository.
+
+```
+.cloneman
+├── install.{js,cjs,mjs,ts,cts,mts}
 ```
 
 ## Available commands when working with templates
