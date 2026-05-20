@@ -12,6 +12,7 @@ import {
 import { create } from "./create";
 import { pack } from "./pack";
 import { prepare } from "./prepare";
+import { printTree } from "./test-utils";
 import { rmDir } from "./test-utils/rm-dir";
 import { temporaryDirectory } from "./test-utils/temporary-directory";
 import { update } from "./update";
@@ -70,7 +71,7 @@ describe("update existing project with template from registry", () => {
     });
 
     it("should update existing project", async () => {
-        expect.assertions(9);
+        expect.assertions(10);
 
         expect(await readFile("boilerplate.txt")).toMatchInlineSnapshot(
             `boilerplate file at v1.0.0`,
@@ -81,6 +82,18 @@ describe("update existing project with template from registry", () => {
 
         /* update the application to version 1.0.1 */
         await update(appDir, "1.0.1", userEnv);
+        expect(await printTree(appDir)).toMatchInlineSnapshot(`
+          (root)
+              ├── .gitignore
+              ├── .npmrc
+              ├── boilerplate.txt
+              ├── managed.txt
+              ├── package-lock.json
+              ├── package.json
+              ├── renovate.json
+              └── sub-folder
+                  └── sub-file.txt
+        `);
         expect(await readJsonFile("package.json")).toMatchObject({
             devDependencies: {
                 "@forsakringskassan/base-template": "1.0.1",
@@ -186,7 +199,7 @@ describe("update existing project with template from registry", () => {
 });
 
 it("should update existing project from local tar", async () => {
-    expect.assertions(5);
+    expect.assertions(6);
 
     /* create the initial application using template at version 1.0.0 */
     await create({
@@ -219,6 +232,18 @@ it("should update existing project from local tar", async () => {
 
     /* update the application using the local tarball */
     await update(appDir, tarballPath, userEnv);
+    expect(await printTree(appDir)).toMatchInlineSnapshot(`
+      (root)
+          ├── .gitignore
+          ├── .npmrc
+          ├── boilerplate.txt
+          ├── managed.txt
+          ├── package-lock.json
+          ├── package.json
+          ├── renovate.json
+          └── sub-folder
+              └── sub-file.txt
+    `);
     expect(await readJsonFile("package.json")).toMatchObject({
         devDependencies: {
             "@forsakringskassan/base-template": expect.stringContaining(

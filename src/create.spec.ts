@@ -13,6 +13,7 @@ import {
 import { create } from "./create";
 import { pack } from "./pack";
 import { prepare } from "./prepare";
+import { printTree } from "./test-utils";
 import { rmDir } from "./test-utils/rm-dir";
 import { temporaryDirectory } from "./test-utils/temporary-directory";
 
@@ -55,7 +56,7 @@ afterEach(async () => {
 
 describe("create from base template from npm registry", () => {
     it("should create new project", async () => {
-        expect.assertions(3);
+        expect.assertions(4);
         await create({
             name: "mock-app",
             templatePackage: "@forsakringskassan/base-template@1.0.0",
@@ -83,6 +84,18 @@ describe("create from base template from npm registry", () => {
                 version: "1.0.0",
             },
         });
+        expect(await printTree(appDir)).toMatchInlineSnapshot(`
+          (root)
+              ├── .gitignore
+              ├── .npmrc
+              ├── boilerplate.txt
+              ├── managed.txt
+              ├── package-lock.json
+              ├── package.json
+              ├── renovate.json
+              └── sub-folder
+                  └── sub-file.txt
+        `);
         expect(await readFile("boilerplate.txt")).toMatchInlineSnapshot(
             `boilerplate file at v1.0.0`,
         );
@@ -135,7 +148,7 @@ describe("create from base template from npm registry", () => {
 
 describe("create from local template package", () => {
     it("should create new project from local .tgz file", async () => {
-        expect.assertions(3);
+        expect.assertions(4);
 
         /* create a local tarball for version 1.0.0 */
         const tarballPath = path.join(
@@ -178,6 +191,18 @@ describe("create from local template package", () => {
                 version: "1.0.0",
             },
         });
+        expect(await printTree(appDir)).toMatchInlineSnapshot(`
+          (root)
+              ├── .gitignore
+              ├── .npmrc
+              ├── boilerplate.txt
+              ├── managed.txt
+              ├── package-lock.json
+              ├── package.json
+              ├── renovate.json
+              └── sub-folder
+                  └── sub-file.txt
+        `);
         expect(await readFile("boilerplate.txt")).toMatchInlineSnapshot(
             `boilerplate file at v1.0.0`,
         );

@@ -2,7 +2,12 @@ import fs, { readFile } from "node:fs/promises";
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { prepare } from "./prepare";
-import { rmDir, temporaryDirectory, withFixture } from "./test-utils";
+import {
+    printTree,
+    rmDir,
+    temporaryDirectory,
+    withFixture,
+} from "./test-utils";
 import { readJsonFile } from "./utils";
 import { type PackageJson } from "./utils/package-json";
 
@@ -25,7 +30,7 @@ afterEach(async () => {
 
 describe("prepare base template", () => {
     it("prepare", async () => {
-        expect.assertions(3);
+        expect.assertions(2);
 
         const { output } = await prepare(baseTemplate, targetDir);
         expect(output).toMatchInlineSnapshot(`
@@ -34,24 +39,20 @@ describe("prepare base template", () => {
           "
         `);
 
-        const testPath = path.join(targetDir, "files/**/*");
-        const files = await Array.fromAsync(fs.glob(testPath, {}), (file) => {
-            return path.relative(targetDir, file);
-        });
-
-        expect(files).toEqual(
-            expect.arrayContaining([
-                path.join("files", "_gitignore"),
-                path.join("files", "boilerplate.txt"),
-                path.join("files", "managed.txt"),
-                path.join("files", "package.json"),
-                path.join("files", "sub-folder"),
-                path.join("files", "renovate.json"),
-                path.join("files", "sub-folder", "sub-file.txt"),
-                path.join("files", "_npmrc"),
-            ]),
-        );
-        expect(files).toHaveLength(8);
+        expect(await printTree(targetDir)).toMatchInlineSnapshot(`
+          "(root)
+              ├── files
+              │   ├── _gitignore
+              │   ├── _npmrc
+              │   ├── boilerplate.txt
+              │   ├── managed.txt
+              │   ├── package.json
+              │   ├── renovate.json
+              │   └── sub-folder
+              │       └── sub-file.txt
+              ├── index.js
+              └── package.json"
+        `);
     });
 
     it("should create a massaged template package.json", async () => {
