@@ -171,6 +171,10 @@ export async function update(
         await runHook("install", hooksDir, {
             targetDir: cwd,
             logger: console,
+            version: {
+                oldVersion: cloneman.version,
+                newVersion: tmplPackageJson.version,
+            },
             getApplicationName(options) {
                 return getApplicationName(name, {
                     unscoped: false,

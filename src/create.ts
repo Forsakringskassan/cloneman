@@ -131,6 +131,10 @@ export async function create(options: {
         await runHook("install", hooksDir, {
             targetDir: appPath,
             logger: console,
+            version: {
+                oldVersion: null,
+                newVersion: templatePackageVersion,
+            },
             getApplicationName(options) {
                 return getApplicationName(name, {
                     unscoped: false,
