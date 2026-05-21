@@ -18,6 +18,13 @@ export interface TarballContents {
     files: Map<string, Buffer>;
 }
 
+function isRelavant(filePath: string): boolean {
+    return (
+        filePath.startsWith("package/files") ||
+        filePath.startsWith("package/hooks")
+    );
+}
+
 /**
  * Parses a cloneman template tarball in-memory, extracting the `package.json`
  * and all files under `package/files/`.
@@ -41,7 +48,7 @@ export async function parseTarball(buffer: Buffer): Promise<TarballContents> {
                 void tmplPackageJsonPromise.then((data) =>
                     files.set(path, data),
                 );
-            } else if (entry.path.startsWith("package/files/")) {
+            } else if (isRelavant(entry.path)) {
                 const { path } = entry;
                 void toBuffer(entry).then((data) => files.set(path, data));
             } else {

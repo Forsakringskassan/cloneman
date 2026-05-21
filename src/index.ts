@@ -3,7 +3,7 @@ export {
     type TemplateConfig,
     readConfigFile,
 } from "./config";
-export { type BuildContext } from "./hooks";
+export { type BuildContext, type InstallContext } from "./hooks";
 export { readJsonFile, readPackageJson } from "./utils";
 export { type BuildTemplateResult } from "./template";
 export { type PackageJson } from "./utils/package-json";

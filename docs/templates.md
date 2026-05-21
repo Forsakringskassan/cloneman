@@ -4,11 +4,11 @@ The best way to understand how a template is defined is to check the example tem
 
 A template is required to have:
 
-```
+```plaintext
 .cloneman
 ├── (optional configuration file)
 ├── (optional hooks)
-└── build.{js,mjs,ts,mts}
+└── build.{js,cjs,mjs,ts,cts,mts}
 ```
 
 ## Building
@@ -220,6 +220,45 @@ const template = await buildTemplate(pkg.name, config);
 
 await template.writeFile("foo.txt", "New file");
 ```
+
+## Hooks
+
+Hooks are additional scripts placed in the `.cloneman` folder.
+Each hook must be self-contained and cannot reference other files or libraries.
+`type` imports may be used but no type-checking is performed by Cloneman itself.
+
+### Install hook
+
+The install hook run when the client creates or updates the application in the context of their repository.
+
+```plaintext
+.cloneman
+├── install.{js,cjs,mjs,ts,cts,mts}
+```
+
+The install hook should export a named function `install` or a default exported function, taking the install context as the only parameter.
+
+With TypeScript (`.cloneman/install.mts`):
+
+```ts
+import { type InstallContext } from "cloneman";
+
+export async function install(context: InstallContext): Promise<void> {
+    /* perform custom installation steps */
+}
+```
+
+The install context contains:
+
+- `targetDir` - the application directory.
+- `logger` - a `Console` object to log information to the user.
+- `readFile(filePath)` - a helper function to read a file.
+- `readJsonFile(filePath)` - a helper function to read a json file.
+- `writeFile(filePath, content)` - a helper function to write a file.
+- `writeJsonFile(filePath, content)` - a helper function to write a json file.
+- `updateJsonFile(filePath, content)` - a helper function to update an existing json file.
+
+All helper functions take a path relative to the application directory and returns a promise resolved when the operation is complete.
 
 ## Available commands when working with templates
 
