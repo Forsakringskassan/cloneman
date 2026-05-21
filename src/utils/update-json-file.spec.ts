@@ -151,3 +151,33 @@ it("should replace arrays", async () => {
         bar: [3, 4],
     });
 });
+
+it("should preserve LF trailing newline when present", async () => {
+    expect.assertions(1);
+    vol.fromJSON({
+        "/path/to/file.json": '{"foo":"bar"}\n',
+    });
+    await updateJsonFile("/path/to/file.json", { foo: "baz" });
+    const raw = await fs.promises.readFile("/path/to/file.json", "utf8");
+    expect(raw.toString().endsWith("\n")).toBe(true);
+});
+
+it("should preserve CRLF trailing newline when present", async () => {
+    expect.assertions(1);
+    vol.fromJSON({
+        "/path/to/file.json": '{"foo":"bar"}\r\n',
+    });
+    await updateJsonFile("/path/to/file.json", { foo: "baz" });
+    const raw = await fs.promises.readFile("/path/to/file.json", "utf8");
+    expect(raw.toString().endsWith("\r\n")).toBe(true);
+});
+
+it("should not add trailing newline when not present", async () => {
+    expect.assertions(1);
+    vol.fromJSON({
+        "/path/to/file.json": '{"foo":"bar"}',
+    });
+    await updateJsonFile("/path/to/file.json", { foo: "baz" });
+    const raw = await fs.promises.readFile("/path/to/file.json", "utf8");
+    expect(raw.toString().endsWith("\n")).toBe(false);
+});
