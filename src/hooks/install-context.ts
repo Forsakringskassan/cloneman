@@ -1,4 +1,5 @@
 import { type Console } from "node:console";
+import { type PackageJson } from "../utils";
 
 /**
  * @public
@@ -31,6 +32,22 @@ export interface InstallContext {
      * ```
      */
     readFile(filePath: string): Promise<string>;
+
+    /**
+     * Read and parse a JSON file.
+     *
+     * @public
+     * @since v1.12.0
+     * @param filePath - Path relative to application root.
+     * @returns A promise resolved with the parsed file content.
+     *
+     * @example
+     *
+     * ```ts
+     * const content = await context.readJsonFile("example.json");
+     * ```
+     */
+    readJsonFile(filePath: "package.json"): Promise<PackageJson>;
 
     /**
      * Read and parse a JSON file.
