@@ -1,3 +1,4 @@
+export { createInstallContext } from "./create-install-context";
 export { findHookScriptPath } from "./find-hook-script-path";
 export { getApplicationName } from "./get-application-name";
 export { getApplicationSelector } from "./get-application-selector";
