@@ -18,6 +18,20 @@ export interface InstallContext {
     readonly logger: Console;
 
     /**
+     * Template version.
+     *
+     * When this is a newly created application (`npx cloneman create`) the
+     * `oldVersion` field is `null`.
+     *
+     * @public
+     * @since %version%
+     */
+    readonly version: {
+        readonly oldVersion: string | null;
+        readonly newVersion: string;
+    };
+
+    /**
      * Get the application name, e.g. the `name` field in `package.json`.
      *
      * @public

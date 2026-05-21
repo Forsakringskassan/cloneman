@@ -35,6 +35,10 @@ export interface InstallContext {
     readJsonFile<T = unknown>(filePath: string): Promise<T>;
     readonly targetDir: string;
     updateJsonFile(filePath: string, content: object): Promise<void>;
+    readonly version: {
+        readonly oldVersion: string | null;
+        readonly newVersion: string;
+    };
     writeFile(filePath: string, content: string): Promise<void>;
     writeJsonFile(filePath: string, content: unknown): Promise<void>;
 }
