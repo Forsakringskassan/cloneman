@@ -6,6 +6,9 @@ import type yoctoSpinner from "yocto-spinner";
 import { InvalidClonemanFieldError, MissingClonemanFieldError } from "./errors";
 import { getStoredFileName } from "./template/utils/get-stored-filename";
 import {
+    getApplicationName,
+    getApplicationSelector,
+    getApplicationSlug,
     info,
     isClientMetadata,
     isTarball,
@@ -168,6 +171,18 @@ export async function update(
         await runHook("install", hooksDir, {
             targetDir: cwd,
             logger: console,
+            getApplicationName(options) {
+                return getApplicationName(name, {
+                    unscoped: false,
+                    ...options,
+                });
+            },
+            getApplicationSlug() {
+                return getApplicationSlug(name);
+            },
+            getApplicationSelector() {
+                return getApplicationSelector(name);
+            },
             readFile(filePath) {
                 return fs.readFile(path.join(cwd, filePath), "utf8");
             },
