@@ -6,15 +6,12 @@ import type yoctoSpinner from "yocto-spinner";
 import { InvalidClonemanFieldError, MissingClonemanFieldError } from "./errors";
 import { getStoredFileName } from "./template/utils/get-stored-filename";
 import {
-    getApplicationName,
-    getApplicationSelector,
-    getApplicationSlug,
+    createInstallContext,
     info,
     isClientMetadata,
     isTarball,
     readJsonFile,
     runHook,
-    updateJsonFile,
     writeJsonFile,
 } from "./utils";
 import { fetchTarball } from "./utils/fetch-tarball";
@@ -175,43 +172,14 @@ export async function update(
                 return fs.writeFile(dst, content);
             });
         await Promise.all(hooks);
-        await runHook("install", hooksDir, {
+        const context = createInstallContext({
             targetDir: cwd,
-            logger: console,
+            name,
             version: {
                 oldVersion: cloneman.version,
                 newVersion: tmplPackageJson.version,
             },
-            getApplicationName(options) {
-                return getApplicationName(name, {
-                    unscoped: false,
-                    ...options,
-                });
-            },
-            getApplicationSlug() {
-                return getApplicationSlug(name);
-            },
-            getApplicationSelector() {
-                return getApplicationSelector(name);
-            },
-            readFile(filePath) {
-                return fs.readFile(path.join(cwd, filePath), "utf8");
-            },
-            readJsonFile<T>(filePath: string) {
-                return readJsonFile<T>(path.join(cwd, filePath));
-            },
-            writeFile(filePath, content) {
-                return fs.writeFile(path.join(cwd, filePath), content, "utf8");
-            },
-            writeJsonFile(filePath, content) {
-                return writeJsonFile(path.join(cwd, filePath), content, {
-                    indent: 2,
-                    trailer: "",
-                });
-            },
-            updateJsonFile(filePath, content) {
-                return updateJsonFile(path.join(cwd, filePath), content);
-            },
         });
+        await runHook("install", hooksDir, context);
     });
 }
