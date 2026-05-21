@@ -1,4 +1,7 @@
 export { findHookScriptPath } from "./find-hook-script-path";
+export { getApplicationName } from "./get-application-name";
+export { getApplicationSelector } from "./get-application-selector";
+export { getApplicationSlug } from "./get-application-slug";
 export { getHookScriptPath } from "./get-hook-script-path";
 export { importHook } from "./import-hook";
 export { isClientMetadata } from "./is-client-metadata";
