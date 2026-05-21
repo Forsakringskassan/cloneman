@@ -58,6 +58,7 @@
   },
   "dependencies": {
     "deepmerge": "4.3.1",
+    "detect-indent": "7.0.2",
     "nano-spawn": "2.1.0",
     "sort-package-json": "3.6.1",
     "tar": "7.5.15",
