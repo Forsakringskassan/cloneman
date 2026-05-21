@@ -138,8 +138,9 @@ export interface InstallContext {
     /**
      * Serialize JSON and write to file.
      *
-     * If the file exists, the existing indentation is used when writing the new
-     * file.
+     * If the file exists, the existing indentation and trailing newline are
+     * preserved when writing the new file. If the file does not exist, it is
+     * written without a trailing newline.
      *
      * @public
      * @since v1.12.0
@@ -163,6 +164,8 @@ export interface InstallContext {
      * - Objects are updated recursively, keys set to `undefined` are removed
      *   from the target object.
      * - Arrays are always replaced.
+     *
+     * Trailing newline is preserved if present.
      *
      * @public
      * @since v1.12.0

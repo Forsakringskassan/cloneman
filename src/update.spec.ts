@@ -67,7 +67,10 @@ describe("update existing project with template from registry", () => {
         packageJson.description = "description";
         packageJson.version = "0.0.1";
 
-        await writeJsonFile(path.join(appDir, "package.json"), packageJson);
+        await writeJsonFile(path.join(appDir, "package.json"), packageJson, {
+            indent: 2,
+            trailer: "",
+        });
     });
 
     it("should update existing project", async () => {
@@ -134,7 +137,10 @@ describe("update existing project with template from registry", () => {
         packageJson.dependencies = {
             "@forsakringskassan/lib-used-by-app": "1.2.3",
         };
-        await writeJsonFile(path.join(appDir, "package.json"), packageJson);
+        await writeJsonFile(path.join(appDir, "package.json"), packageJson, {
+            indent: 2,
+            trailer: "",
+        });
 
         await update(appDir, "1.0.1", userEnv);
         const updatedPackageJson =
@@ -155,7 +161,10 @@ describe("update existing project with template from registry", () => {
             ...packageJson.dependencies,
             "@forsakringskassan/lib-used-by-templates": "1.2.3",
         };
-        await writeJsonFile(path.join(appDir, "package.json"), packageJson);
+        await writeJsonFile(path.join(appDir, "package.json"), packageJson, {
+            indent: 2,
+            trailer: "",
+        });
 
         await update(appDir, "1.0.1", userEnv);
 
@@ -181,7 +190,14 @@ describe("update existing project with template from registry", () => {
             ...applicationJson.devDependencies,
             "@forsakringskassan/old-lib": "2.0.0",
         };
-        await writeJsonFile(path.join(appDir, "package.json"), applicationJson);
+        await writeJsonFile(
+            path.join(appDir, "package.json"),
+            applicationJson,
+            {
+                indent: 2,
+                trailer: "",
+            },
+        );
 
         await update(appDir, "1.0.2", userEnv);
 

@@ -14,6 +14,8 @@ function overwriteMerge(_a: unknown[], b: unknown[]): unknown[] {
  *   from the target object.
  * - Arrays are always replaced.
  *
+ * Trailing newline is preserved if present.
+ *
  * @internal
  * @param filePath - Path to the file to update
  * @param content - Content to update.
@@ -26,5 +28,5 @@ export async function updateJsonFile(
     const updated = deepmerge(original, content, {
         arrayMerge: overwriteMerge,
     });
-    await writeJsonFile(filePath, updated);
+    await writeJsonFile(filePath, updated, { indent: 2, trailer: "" });
 }

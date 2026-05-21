@@ -144,17 +144,24 @@ export async function update(
         ignoredDependencies,
     });
 
-    await writeJsonFile(path.join(cwd, "package.json"), {
-        ...tmplPackageJson,
-        name,
-        version,
-        description,
-        dependencies,
-        devDependencies: {
-            ...devDependencies,
-            [cloneman.template]: packageJsonVersion,
+    await writeJsonFile(
+        path.join(cwd, "package.json"),
+        {
+            ...tmplPackageJson,
+            name,
+            version,
+            description,
+            dependencies,
+            devDependencies: {
+                ...devDependencies,
+                [cloneman.template]: packageJsonVersion,
+            },
         },
-    });
+        {
+            indent: 2,
+            trailer: "\n",
+        },
+    );
 
     /* create a temporary directory with the hooks we extracted from the tarball
      * and run hooks from there, as the hooks installed in `node_modules` right
@@ -197,7 +204,10 @@ export async function update(
                 return fs.writeFile(path.join(cwd, filePath), content, "utf8");
             },
             writeJsonFile(filePath, content) {
-                return writeJsonFile(path.join(cwd, filePath), content);
+                return writeJsonFile(path.join(cwd, filePath), content, {
+                    indent: 2,
+                    trailer: "",
+                });
             },
             updateJsonFile(filePath, content) {
                 return updateJsonFile(path.join(cwd, filePath), content);
