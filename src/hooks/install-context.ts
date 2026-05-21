@@ -18,6 +18,45 @@ export interface InstallContext {
     readonly logger: Console;
 
     /**
+     * Get the application name, e.g. the `name` field in `package.json`.
+     *
+     * @public
+     * @since %version%
+     * @param options - Optional options:
+     *   - `unscoped` - When `true`, the returned name is the package name without the scope. Default `false`.
+     * @returns The application name.
+     */
+    getApplicationName(options?: { unscoped?: boolean }): string;
+
+    /**
+     * Returns a slug derived from the application name.
+     *
+     * - `foo` becomes `foo`
+     * - `@scope/foo` becomes `scope--foo`.
+     * - name is lowercased
+     * - all non-alphanumeric characters except for hyphens and underscores are removed.
+     *
+     * @public
+     * @since %version%
+     * @returns Application slug.
+     */
+    getApplicationSlug(): string;
+
+    /**
+     * Returns a CSS class selector derived from the application name.
+     *
+     * - `foo` becomes `.foo`
+     * - `@scope/foo` becomes `.scope--foo`.
+     * - name is lowercased
+     * - all non-alphanumeric characters except for hyphens and underscores are removed.
+     *
+     * @public
+     * @since %version%
+     * @returns Application CSS selector.
+     */
+    getApplicationSelector(): string;
+
+    /**
      * Read file content.
      *
      * @public

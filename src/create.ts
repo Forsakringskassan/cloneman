@@ -4,7 +4,15 @@ import path from "node:path";
 import spawn from "nano-spawn";
 import { type default as yoctoSpinner } from "yocto-spinner";
 import { getStoredFileName } from "./template/utils/get-stored-filename";
-import { readJsonFile, runHook, updateJsonFile, writeJsonFile } from "./utils";
+import {
+    getApplicationName,
+    getApplicationSelector,
+    getApplicationSlug,
+    readJsonFile,
+    runHook,
+    updateJsonFile,
+    writeJsonFile,
+} from "./utils";
 import { getTemplateInfo } from "./utils/get-template-info";
 import { normalizeTemplatePackage } from "./utils/normalize-template-package";
 import { type ApplicationPackageJson } from "./utils/package-json";
@@ -123,6 +131,18 @@ export async function create(options: {
         await runHook("install", hooksDir, {
             targetDir: appPath,
             logger: console,
+            getApplicationName(options) {
+                return getApplicationName(name, {
+                    unscoped: false,
+                    ...options,
+                });
+            },
+            getApplicationSlug() {
+                return getApplicationSlug(name);
+            },
+            getApplicationSelector() {
+                return getApplicationSelector(name);
+            },
             readFile(filePath) {
                 return fs.readFile(path.join(appPath, filePath), "utf8");
             },
