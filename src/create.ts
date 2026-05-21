@@ -4,7 +4,7 @@ import path from "node:path";
 import spawn from "nano-spawn";
 import { type default as yoctoSpinner } from "yocto-spinner";
 import { getStoredFileName } from "./template/utils/get-stored-filename";
-import { readJsonFile, runHook, updateJsonFile, writeJsonFile } from "./utils";
+import { createInstallContext, readJsonFile, runHook } from "./utils";
 import { getTemplateInfo } from "./utils/get-template-info";
 import { normalizeTemplatePackage } from "./utils/normalize-template-package";
 import { type ApplicationPackageJson } from "./utils/package-json";
@@ -120,28 +120,14 @@ export async function create(options: {
     );
 
     if (hooksDir) {
-        await runHook("install", hooksDir, {
+        const context = createInstallContext({
             targetDir: appPath,
-            logger: console,
-            readFile(filePath) {
-                return fs.readFile(path.join(appPath, filePath), "utf8");
-            },
-            readJsonFile<T>(filePath: string) {
-                return readJsonFile<T>(path.join(appPath, filePath));
-            },
-            writeFile(filePath, content) {
-                return fs.writeFile(
-                    path.join(appPath, filePath),
-                    content,
-                    "utf8",
-                );
-            },
-            writeJsonFile(filePath, content) {
-                return writeJsonFile(path.join(appPath, filePath), content);
-            },
-            updateJsonFile(filePath, content) {
-                return updateJsonFile(path.join(appPath, filePath), content);
+            name,
+            version: {
+                oldVersion: null,
+                newVersion: templatePackageVersion,
             },
         });
+        await runHook("install", hooksDir, context);
     }
 }

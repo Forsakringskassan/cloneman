@@ -1,4 +1,5 @@
 import { type Console } from "node:console";
+import { type PackageJson } from "../utils";
 
 /**
  * @public
@@ -17,6 +18,59 @@ export interface InstallContext {
     readonly logger: Console;
 
     /**
+     * Template version.
+     *
+     * When this is a newly created application (`npx cloneman create`) the
+     * `oldVersion` field is `null`.
+     *
+     * @public
+     * @since %version%
+     */
+    readonly version: {
+        readonly oldVersion: string | null;
+        readonly newVersion: string;
+    };
+
+    /**
+     * Get the application name, e.g. the `name` field in `package.json`.
+     *
+     * @public
+     * @since %version%
+     * @param options - Optional options:
+     *   - `unscoped` - When `true`, the returned name is the package name without the scope. Default `false`.
+     * @returns The application name.
+     */
+    getApplicationName(options?: { unscoped?: boolean }): string;
+
+    /**
+     * Returns a slug derived from the application name.
+     *
+     * - `foo` becomes `foo`
+     * - `@scope/foo` becomes `scope--foo`.
+     * - name is lowercased
+     * - all non-alphanumeric characters except for hyphens and underscores are removed.
+     *
+     * @public
+     * @since %version%
+     * @returns Application slug.
+     */
+    getApplicationSlug(): string;
+
+    /**
+     * Returns a CSS class selector derived from the application name.
+     *
+     * - `foo` becomes `.foo`
+     * - `@scope/foo` becomes `.scope--foo`.
+     * - name is lowercased
+     * - all non-alphanumeric characters except for hyphens and underscores are removed.
+     *
+     * @public
+     * @since %version%
+     * @returns Application CSS selector.
+     */
+    getApplicationSelector(): string;
+
+    /**
      * Read file content.
      *
      * @public
@@ -31,6 +85,22 @@ export interface InstallContext {
      * ```
      */
     readFile(filePath: string): Promise<string>;
+
+    /**
+     * Read and parse a JSON file.
+     *
+     * @public
+     * @since v1.12.0
+     * @param filePath - Path relative to application root.
+     * @returns A promise resolved with the parsed file content.
+     *
+     * @example
+     *
+     * ```ts
+     * const content = await context.readJsonFile("example.json");
+     * ```
+     */
+    readJsonFile(filePath: "package.json"): Promise<PackageJson>;
 
     /**
      * Read and parse a JSON file.
@@ -93,6 +163,8 @@ export interface InstallContext {
      * - Objects are updated recursively, keys set to `undefined` are removed
      *   from the target object.
      * - Arrays are always replaced.
+     *
+     * Trailing newline is preserved if present.
      *
      * @public
      * @since v1.12.0

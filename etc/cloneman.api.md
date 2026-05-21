@@ -24,11 +24,21 @@ export interface BuildTemplateResult {
 
 // @public (undocumented)
 export interface InstallContext {
+    getApplicationName(options?: {
+        unscoped?: boolean;
+    }): string;
+    getApplicationSelector(): string;
+    getApplicationSlug(): string;
     readonly logger: Console_2;
     readFile(filePath: string): Promise<string>;
+    readJsonFile(filePath: "package.json"): Promise<PackageJson>;
     readJsonFile<T = unknown>(filePath: string): Promise<T>;
     readonly targetDir: string;
     updateJsonFile(filePath: string, content: object): Promise<void>;
+    readonly version: {
+        readonly oldVersion: string | null;
+        readonly newVersion: string;
+    };
     writeFile(filePath: string, content: string): Promise<void>;
     writeJsonFile(filePath: string, content: unknown): Promise<void>;
 }

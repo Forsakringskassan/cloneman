@@ -252,13 +252,18 @@ The install context contains:
 
 - `targetDir` - the application directory.
 - `logger` - a `Console` object to log information to the user.
+- `version` - a readonly object with the `newVersion` and `oldVersion` fields.
+- `getApplicationName()` - returns the name of the application (typically from the `name` field in `package.json`).
+- `getApplicationSlug()` - returns a slug derived from the application name, safe for use in urls, selectors, etc.
+- `getApplicationSelector()` - returns a CSS class selector derived from the application name.
 - `readFile(filePath)` - a helper function to read a file.
 - `readJsonFile(filePath)` - a helper function to read a json file.
 - `writeFile(filePath, content)` - a helper function to write a file.
 - `writeJsonFile(filePath, content)` - a helper function to write a json file.
 - `updateJsonFile(filePath, content)` - a helper function to update an existing json file.
 
-All helper functions take a path relative to the application directory and returns a promise resolved when the operation is complete.
+All helper functions taking a filePath are relative to the application directory.
+File operations return a promise resolved when the operation is complete.
 
 ## Available commands when working with templates
 

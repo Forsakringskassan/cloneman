@@ -151,3 +151,63 @@ it("should replace arrays", async () => {
         bar: [3, 4],
     });
 });
+
+it("should preserve LF trailing newline when present", async () => {
+    expect.assertions(1);
+    vol.fromJSON({
+        "/path/to/file.json": '{"foo":"bar"}\n',
+    });
+    await updateJsonFile("/path/to/file.json", { foo: "baz" });
+    const raw = await fs.promises.readFile("/path/to/file.json", "utf8");
+    expect(raw.toString().endsWith("\n")).toBe(true);
+});
+
+it("should preserve CRLF trailing newline when present", async () => {
+    expect.assertions(1);
+    vol.fromJSON({
+        "/path/to/file.json": '{"foo":"bar"}\r\n',
+    });
+    await updateJsonFile("/path/to/file.json", { foo: "baz" });
+    const raw = await fs.promises.readFile("/path/to/file.json", "utf8");
+    expect(raw.toString().endsWith("\r\n")).toBe(true);
+});
+
+it("should not add trailing newline when not present", async () => {
+    expect.assertions(1);
+    vol.fromJSON({
+        "/path/to/file.json": '{"foo":"bar"}',
+    });
+    await updateJsonFile("/path/to/file.json", { foo: "baz" });
+    const raw = await fs.promises.readFile("/path/to/file.json", "utf8");
+    expect(raw.toString().endsWith("\n")).toBe(false);
+});
+
+it("should preserve 2-space indentation", async () => {
+    expect.assertions(1);
+    vol.fromJSON({
+        "/path/to/file.json": '{\n  "foo": "bar"\n}\n',
+    });
+    await updateJsonFile("/path/to/file.json", { foo: "baz" });
+    const raw = await fs.promises.readFile("/path/to/file.json", "utf8");
+    expect(raw.toString()).toBe('{\n  "foo": "baz"\n}\n');
+});
+
+it("should preserve 4-space indentation", async () => {
+    expect.assertions(1);
+    vol.fromJSON({
+        "/path/to/file.json": '{\n    "foo": "bar"\n}\n',
+    });
+    await updateJsonFile("/path/to/file.json", { foo: "baz" });
+    const raw = await fs.promises.readFile("/path/to/file.json", "utf8");
+    expect(raw.toString()).toBe('{\n    "foo": "baz"\n}\n');
+});
+
+it("should preserve tab indentation", async () => {
+    expect.assertions(1);
+    vol.fromJSON({
+        "/path/to/file.json": '{\n\t"foo": "bar"\n}\n',
+    });
+    await updateJsonFile("/path/to/file.json", { foo: "baz" });
+    const raw = await fs.promises.readFile("/path/to/file.json", "utf8");
+    expect(raw.toString()).toBe('{\n\t"foo": "baz"\n}\n');
+});

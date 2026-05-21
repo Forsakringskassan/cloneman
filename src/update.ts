@@ -6,12 +6,12 @@ import type yoctoSpinner from "yocto-spinner";
 import { InvalidClonemanFieldError, MissingClonemanFieldError } from "./errors";
 import { getStoredFileName } from "./template/utils/get-stored-filename";
 import {
+    createInstallContext,
     info,
     isClientMetadata,
     isTarball,
     readJsonFile,
     runHook,
-    updateJsonFile,
     writeJsonFile,
 } from "./utils";
 import { fetchTarball } from "./utils/fetch-tarball";
@@ -141,17 +141,24 @@ export async function update(
         ignoredDependencies,
     });
 
-    await writeJsonFile(path.join(cwd, "package.json"), {
-        ...tmplPackageJson,
-        name,
-        version,
-        description,
-        dependencies,
-        devDependencies: {
-            ...devDependencies,
-            [cloneman.template]: packageJsonVersion,
+    await writeJsonFile(
+        path.join(cwd, "package.json"),
+        {
+            ...tmplPackageJson,
+            name,
+            version,
+            description,
+            dependencies,
+            devDependencies: {
+                ...devDependencies,
+                [cloneman.template]: packageJsonVersion,
+            },
         },
-    });
+        {
+            indent: 2,
+            trailer: "\n",
+        },
+    );
 
     /* create a temporary directory with the hooks we extracted from the tarball
      * and run hooks from there, as the hooks installed in `node_modules` right
@@ -165,24 +172,14 @@ export async function update(
                 return fs.writeFile(dst, content);
             });
         await Promise.all(hooks);
-        await runHook("install", hooksDir, {
+        const context = createInstallContext({
             targetDir: cwd,
-            logger: console,
-            readFile(filePath) {
-                return fs.readFile(path.join(cwd, filePath), "utf8");
-            },
-            readJsonFile<T>(filePath: string) {
-                return readJsonFile<T>(path.join(cwd, filePath));
-            },
-            writeFile(filePath, content) {
-                return fs.writeFile(path.join(cwd, filePath), content, "utf8");
-            },
-            writeJsonFile(filePath, content) {
-                return writeJsonFile(path.join(cwd, filePath), content);
-            },
-            updateJsonFile(filePath, content) {
-                return updateJsonFile(path.join(cwd, filePath), content);
+            name,
+            version: {
+                oldVersion: cloneman.version,
+                newVersion: tmplPackageJson.version,
             },
         });
+        await runHook("install", hooksDir, context);
     });
 }

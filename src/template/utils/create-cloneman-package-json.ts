@@ -35,7 +35,10 @@ export async function createclonemanPackageJson(
         },
     };
 
-    await writeJsonFile(dst, pkg);
+    await writeJsonFile(dst, pkg, {
+        indent: 2,
+        trailer: "\n",
+    });
 
     return pkg;
 }
