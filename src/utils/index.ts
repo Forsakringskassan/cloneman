@@ -2,7 +2,7 @@ export { findHookScriptPath } from "./find-hook-script-path";
 export { getHookScriptPath } from "./get-hook-script-path";
 export { importHook } from "./import-hook";
 export { isClientMetadata } from "./is-client-metadata";
-export { type ApplicationPackageJson } from "./package-json";
+export { type ApplicationPackageJson, type PackageJson } from "./package-json";
 export { readJsonFile } from "./read-json-file";
 export { readPackageJson } from "./read-package-json";
 export { readPackageJsonFromTarball } from "./read-package-json-from-tarball";

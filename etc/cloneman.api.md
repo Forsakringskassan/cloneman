@@ -26,6 +26,7 @@ export interface BuildTemplateResult {
 export interface InstallContext {
     readonly logger: Console_2;
     readFile(filePath: string): Promise<string>;
+    readJsonFile(filePath: "package.json"): Promise<PackageJson>;
     readJsonFile<T = unknown>(filePath: string): Promise<T>;
     readonly targetDir: string;
     updateJsonFile(filePath: string, content: object): Promise<void>;
