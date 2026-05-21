@@ -181,3 +181,33 @@ it("should not add trailing newline when not present", async () => {
     const raw = await fs.promises.readFile("/path/to/file.json", "utf8");
     expect(raw.toString().endsWith("\n")).toBe(false);
 });
+
+it("should preserve 2-space indentation", async () => {
+    expect.assertions(1);
+    vol.fromJSON({
+        "/path/to/file.json": '{\n  "foo": "bar"\n}\n',
+    });
+    await updateJsonFile("/path/to/file.json", { foo: "baz" });
+    const raw = await fs.promises.readFile("/path/to/file.json", "utf8");
+    expect(raw.toString()).toBe('{\n  "foo": "baz"\n}\n');
+});
+
+it("should preserve 4-space indentation", async () => {
+    expect.assertions(1);
+    vol.fromJSON({
+        "/path/to/file.json": '{\n    "foo": "bar"\n}\n',
+    });
+    await updateJsonFile("/path/to/file.json", { foo: "baz" });
+    const raw = await fs.promises.readFile("/path/to/file.json", "utf8");
+    expect(raw.toString()).toBe('{\n    "foo": "baz"\n}\n');
+});
+
+it("should preserve tab indentation", async () => {
+    expect.assertions(1);
+    vol.fromJSON({
+        "/path/to/file.json": '{\n\t"foo": "bar"\n}\n',
+    });
+    await updateJsonFile("/path/to/file.json", { foo: "baz" });
+    const raw = await fs.promises.readFile("/path/to/file.json", "utf8");
+    expect(raw.toString()).toBe('{\n\t"foo": "baz"\n}\n');
+});

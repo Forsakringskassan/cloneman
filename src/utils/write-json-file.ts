@@ -1,17 +1,23 @@
 import fs from "node:fs/promises";
+import detectIndent from "detect-indent";
 
-async function sniffTrailer(
+async function sniff(
     filePath: string,
-    options: { trailer: string },
-): Promise<string> {
+    options: { indent: number | string; trailer: string },
+): Promise<{ indent: number | string; trailer: string }> {
     let raw: string;
     try {
         raw = await fs.readFile(filePath, "utf8");
     } catch {
-        return options.trailer;
+        return options;
     }
+    const { indent } = detectIndent(raw);
     const match = /(\r?\n)$/.exec(raw);
-    return match ? match[1] : "";
+    const trailer = match ? match[0] : "";
+    return {
+        indent,
+        trailer,
+    };
 }
 
 /**
@@ -25,10 +31,9 @@ async function sniffTrailer(
 export async function writeJsonFile(
     filename: string,
     value: unknown,
-    options: { indent: number; trailer: string },
+    options: { indent: number | string; trailer: string },
 ): Promise<void> {
-    const { indent } = options;
-    const trailer = await sniffTrailer(filename, options);
+    const { indent, trailer } = await sniff(filename, options);
     const content = JSON.stringify(value, null, indent);
     await fs.writeFile(filename, `${content}${trailer}`, "utf8");
 }

@@ -28,7 +28,7 @@ export interface BuildTemplateResult {
      *   from the target object.
      * - Arrays are always replaced.
      *
-     * Trailing newline is preserved if present.
+     * Indentation and trailing newline is preserved if present.
      *
      * @public
      * @since v1.5.0
@@ -47,6 +47,7 @@ export interface BuildTemplateResult {
      * List of files included in the template
      */
     readonly files: string[];
+
     /**
      * Writes a file to the template's file directory.
      *
