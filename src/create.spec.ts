@@ -211,3 +211,22 @@ describe("create from local template package", () => {
         );
     });
 });
+
+it("should run install hook if present", async () => {
+    expect.assertions(2);
+    await create({
+        name: "mock-app",
+        templatePackage: "@forsakringskassan/with-install-hook@1.0.0",
+        cwd,
+        env: userEnv,
+    });
+    expect(await printTree(appDir)).toMatchInlineSnapshot(`
+      (root)
+          ├── install.txt
+          ├── package-lock.json
+          └── package.json
+    `);
+    expect(await readFile("install.txt")).toMatchInlineSnapshot(
+        `install script at v1.0.0`,
+    );
+});

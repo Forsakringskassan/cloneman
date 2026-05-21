@@ -5,6 +5,7 @@ import spawn from "nano-spawn";
  */
 export interface TemplateInfo {
     readonly filesDir: string;
+    readonly hooksDir: string | null;
     readonly boilerplateFiles: string[];
     readonly managedFiles: string[];
 }
@@ -37,10 +38,16 @@ export async function getTemplateInfo(
 
     const templateInfo = JSON.parse(getInfo.stdout) as {
         filesDir: string;
+        hooksDir?: string;
         boilerplateFiles: string[];
         managedFiles: string[];
     };
 
-    const { filesDir, boilerplateFiles, managedFiles } = templateInfo;
-    return { filesDir, boilerplateFiles, managedFiles };
+    const { filesDir, hooksDir, boilerplateFiles, managedFiles } = templateInfo;
+    return {
+        filesDir,
+        hooksDir: hooksDir ?? null,
+        boilerplateFiles,
+        managedFiles,
+    };
 }

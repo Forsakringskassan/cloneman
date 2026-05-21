@@ -1,4 +1,6 @@
+import { randomBytes } from "node:crypto";
 import fs from "node:fs/promises";
+import os from "node:os";
 import path from "node:path";
 import type yoctoSpinner from "yocto-spinner";
 import { InvalidClonemanFieldError, MissingClonemanFieldError } from "./errors";
@@ -8,12 +10,27 @@ import {
     isClientMetadata,
     isTarball,
     readJsonFile,
+    runHook,
+    updateJsonFile,
     writeJsonFile,
 } from "./utils";
 import { fetchTarball } from "./utils/fetch-tarball";
 import { filterDependencies } from "./utils/filter-dependencies";
 import { type PackageJson } from "./utils/package-json";
 import { parseTarball } from "./utils/parse-tarball";
+
+async function withTemporaryDirectory(
+    cb: (dir: string) => void | Promise<void>,
+): Promise<void> {
+    const tempdir = await fs.realpath(os.tmpdir());
+    const dir = path.join(tempdir, randomBytes(16).toString("hex"));
+    await fs.mkdir(dir);
+    try {
+        await cb(dir);
+    } finally {
+        await fs.rm(dir, { recursive: true, force: true, maxRetries: 3 });
+    }
+}
 
 /**
  * @internal
@@ -134,5 +151,38 @@ export async function update(
             ...devDependencies,
             [cloneman.template]: packageJsonVersion,
         },
+    });
+
+    /* create a temporary directory with the hooks we extracted from the tarball
+     * and run hooks from there, as the hooks installed in `node_modules` right
+     * now would be the old and not the current version */
+    await withTemporaryDirectory(async (hooksDir) => {
+        const hooks = Array.from(files.keys())
+            .filter((it) => it.startsWith("package/hooks/"))
+            .map((filePath) => {
+                const dst = path.join(hooksDir, path.basename(filePath));
+                const content = files.get(filePath)!; // eslint-disable-line @typescript-eslint/no-non-null-assertion -- we know it will exist as we are looping over existing entries (let it crash if this assumption is false) */
+                return fs.writeFile(dst, content);
+            });
+        await Promise.all(hooks);
+        await runHook("install", hooksDir, {
+            targetDir: cwd,
+            logger: console,
+            readFile(filePath) {
+                return fs.readFile(path.join(cwd, filePath), "utf8");
+            },
+            readJsonFile<T>(filePath: string) {
+                return readJsonFile<T>(path.join(cwd, filePath));
+            },
+            writeFile(filePath, content) {
+                return fs.writeFile(path.join(cwd, filePath), content, "utf8");
+            },
+            writeJsonFile(filePath, content) {
+                return writeJsonFile(path.join(cwd, filePath), content);
+            },
+            updateJsonFile(filePath, content) {
+                return updateJsonFile(path.join(cwd, filePath), content);
+            },
+        });
     });
 }
