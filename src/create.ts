@@ -161,7 +161,10 @@ export async function create(options: {
                 );
             },
             writeJsonFile(filePath, content) {
-                return writeJsonFile(path.join(appPath, filePath), content);
+                return writeJsonFile(path.join(appPath, filePath), content, {
+                    indent: 2,
+                    trailer: "",
+                });
             },
             updateJsonFile(filePath, content) {
                 return updateJsonFile(path.join(appPath, filePath), content);

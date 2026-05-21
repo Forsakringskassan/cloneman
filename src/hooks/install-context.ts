@@ -164,6 +164,8 @@ export interface InstallContext {
      *   from the target object.
      * - Arrays are always replaced.
      *
+     * Trailing newline is preserved if present.
+     *
      * @public
      * @since v1.12.0
      * @param filePath - Path relative to the application root.

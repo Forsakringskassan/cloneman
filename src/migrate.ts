@@ -57,5 +57,8 @@ export async function migrate(options: {
         version: "N/A",
     };
 
-    await writeJsonFile(`${cwd}/package.json`, sortPackageJson(packageJson));
+    await writeJsonFile(`${cwd}/package.json`, sortPackageJson(packageJson), {
+        indent: 2,
+        trailer: "\n",
+    });
 }

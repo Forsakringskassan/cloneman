@@ -6,7 +6,9 @@ import fs from "node:fs/promises";
 export async function writeJsonFile(
     filename: string,
     value: unknown,
+    options: { indent: number; trailer: string },
 ): Promise<void> {
-    const content = JSON.stringify(value, null, 2);
-    await fs.writeFile(filename, content, "utf8");
+    const { indent, trailer } = options;
+    const content = JSON.stringify(value, null, indent);
+    await fs.writeFile(filename, `${content}${trailer}`, "utf8");
 }

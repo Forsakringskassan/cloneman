@@ -135,6 +135,10 @@ export async function buildTemplate(options: {
     await writeJsonFile(
         path.join(filesDir, "package.json"),
         massagedTemplatePackageJson,
+        {
+            indent: 2,
+            trailer: "\n",
+        },
     );
 
     logger.groupEnd();
@@ -185,5 +189,8 @@ async function renovateIgnoreDependencies(
         templatePackageName,
         templateConfig,
     );
-    await writeJsonFile(renovateFilePath, newConfig);
+    await writeJsonFile(renovateFilePath, newConfig, {
+        indent: 4,
+        trailer: "\n",
+    });
 }
