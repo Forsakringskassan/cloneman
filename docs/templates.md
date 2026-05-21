@@ -252,6 +252,7 @@ The install context contains:
 
 - `targetDir` - the application directory.
 - `logger` - a `Console` object to log information to the user.
+- `version` - a readonly object with the `newVersion` and `oldVersion` fields.
 - `getApplicationName()` - returns the name of the application (typically from the `name` field in `package.json`).
 - `getApplicationSlug()` - returns a slug derived from the application name, safe for use in urls, selectors, etc.
 - `getApplicationSelector()` - returns a CSS class selector derived from the application name.
