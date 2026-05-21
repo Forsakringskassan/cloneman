@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## [1.12.0](https://github.com/Forsakringskassan/cloneman/compare/v1.11.0...v1.12.0) (2026-05-21)
+
+### Features
+
+* install hook ([9f78eb7](https://github.com/Forsakringskassan/cloneman/commit/9f78eb76598e1a87c20b873c50ae1a146db3416c))
+
 ## [1.11.0](https://github.com/Forsakringskassan/cloneman/compare/v1.10.0...v1.11.0) (2026-05-15)
 
 ### Features

@@ -2,7 +2,7 @@ import { type Console } from "node:console";
 
 /**
  * @public
- * @since %version%
+ * @since v1.12.0
  */
 export interface InstallContext {
     /**
@@ -20,7 +20,7 @@ export interface InstallContext {
      * Read file content.
      *
      * @public
-     * @since %version%
+     * @since v1.12.0
      * @param filePath - Path relative to application root.
      * @returns A promise resolved with the file content.
      *
@@ -36,7 +36,7 @@ export interface InstallContext {
      * Read and parse a JSON file.
      *
      * @public
-     * @since %version%
+     * @since v1.12.0
      * @param filePath - Path relative to application root.
      * @returns A promise resolved with the parsed file content.
      *
@@ -52,7 +52,7 @@ export interface InstallContext {
      * Write content to file.
      *
      * @public
-     * @since %version%
+     * @since v1.12.0
      * @param filePath - Path relative to application root.
      * @param content - File content to write.
      * @returns A promise resolved when the file has been written.
@@ -72,7 +72,7 @@ export interface InstallContext {
      * file.
      *
      * @public
-     * @since %version%
+     * @since v1.12.0
      * @param filePath - Path relative to application root.
      * @param content - File content to write.
      * @returns A promise resolved when the file has been written.
@@ -95,7 +95,7 @@ export interface InstallContext {
      * - Arrays are always replaced.
      *
      * @public
-     * @since %version%
+     * @since v1.12.0
      * @param filePath - Path relative to the application root.
      * @param content - Content to add to the existing JSON.
      * @returns A promise resolved when the updated file has been written.
