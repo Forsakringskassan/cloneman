@@ -7,6 +7,7 @@ import { createCommand } from "./create";
 import { migrateCommand } from "./migrate";
 import { packCommand } from "./pack";
 import { publishCommand } from "./publish";
+import { runHookCommand } from "./run-hook";
 import { updateCommand } from "./update";
 import { verifyCommand } from "./verify";
 
@@ -20,6 +21,7 @@ export function createParser(context: Context): ReturnType<typeof yargs> {
         .command(createCommand(context))
         .command(packCommand(context))
         .command(publishCommand(context))
+        .command(runHookCommand(context))
         .command(updateCommand(context))
         .command(verifyCommand(context))
         .command(migrateCommand(context))
