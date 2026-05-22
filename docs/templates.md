@@ -265,13 +265,23 @@ The install context contains:
 All helper functions taking a filePath are relative to the application directory.
 File operations return a promise resolved when the operation is complete.
 
+Use `cloneman run-hook install` to run the hook locally from inside your template repository without publishing a new version.
+
+The hook is resolved from `.cloneman/` in the current directory.
+Pass `--target` to specify the application directory the hook should act on (defaults to the current directory):
+
+```sh
+npx cloneman run-hook install --target ../my-application
+```
+
 ## Available commands when working with templates
 
-Both commands requires to be called insisde a template folder.
+Both commands requires to be called inside a template folder.
 
 - `build`
 - `pack`
 - `publish`
+- `run-hook`
 
 ### Build
 
@@ -292,3 +302,15 @@ Similar to the build command, but also creates a local tar file of your template
 > `npx cloneman publish`
 
 Publish a new template version to the npm registry. (i.e npm publish)
+
+### Run Hook
+
+> `npx cloneman run-hook HOOK`
+
+Run a hook from `.cloneman/` in the current template directory against a target application directory.
+By default the current directory is used as the target.
+Use `--target` to run the hook against a different application:
+
+> `npx cloneman run-hook install --target ../my-application`
+
+The `version.oldVersion` passed to the hook context is always `null` (simulating a fresh install), and `version.newVersion` is read from the template's own `package.json`.
