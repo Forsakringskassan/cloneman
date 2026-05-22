@@ -97,3 +97,17 @@ it("should use indent from options when file does not exist", async () => {
     const raw = await fs.promises.readFile(filename, "utf8");
     expect(raw.toString()).toBe('{\n    "foo": "bar"\n}');
 });
+
+it("should throw when value is undefined", async () => {
+    expect.assertions(1);
+    await expect(
+        writeJsonFile(filename, undefined, { indent: 2, trailer: "" }),
+    ).rejects.toThrow(TypeError);
+});
+
+it("should throw when value is null", async () => {
+    expect.assertions(1);
+    await expect(
+        writeJsonFile(filename, null, { indent: 2, trailer: "" }),
+    ).rejects.toThrow(TypeError);
+});
