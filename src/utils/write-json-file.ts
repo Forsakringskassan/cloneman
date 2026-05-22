@@ -33,6 +33,11 @@ export async function writeJsonFile(
     value: unknown,
     options: { indent: number | string; trailer: string },
 ): Promise<void> {
+    if (value === undefined || value === null) {
+        throw new TypeError(
+            `writeJsonFile(): value "${String(value)}" cannot be serialized to JSON`,
+        );
+    }
     const { indent, trailer } = await sniff(filename, options);
     const content = JSON.stringify(value, null, indent);
     await fs.writeFile(filename, `${content}${trailer}`, "utf8");
