@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## [1.13.0](https://github.com/Forsakringskassan/cloneman/compare/v1.12.0...v1.13.0) (2026-05-22)
+
+### Features
+
+* add a specialization of `readJsonFile("package.json")` ([fda6d31](https://github.com/Forsakringskassan/cloneman/commit/fda6d310531011d42acb3f45a5547b4fe948e661))
+* add helpers to get application name, slug and selector ([91033f5](https://github.com/Forsakringskassan/cloneman/commit/91033f55b4114a67670a680e7f55c511506cdf02))
+* add version information ([86fcc52](https://github.com/Forsakringskassan/cloneman/commit/86fcc5276708ee896111b1fd9a389dd127118f7c))
+* preserve indentation in `writeJsonFile()` and `updateJsonFile()` ([93d51af](https://github.com/Forsakringskassan/cloneman/commit/93d51aff0187ddaadbe755edc33c5710afd27f77))
+* preserve trailing newline in `writeJsonFile()` and `updateJsonFile()` ([5f8cb09](https://github.com/Forsakringskassan/cloneman/commit/5f8cb09a5918aa9d8fae9c6a640ee66b49f30759))
+
 ## [1.12.0](https://github.com/Forsakringskassan/cloneman/compare/v1.11.0...v1.12.0) (2026-05-21)
 
 ### Features

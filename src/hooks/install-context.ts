@@ -24,7 +24,7 @@ export interface InstallContext {
      * `oldVersion` field is `null`.
      *
      * @public
-     * @since %version%
+     * @since v1.13.0
      */
     readonly version: {
         readonly oldVersion: string | null;
@@ -35,7 +35,7 @@ export interface InstallContext {
      * Get the application name, e.g. the `name` field in `package.json`.
      *
      * @public
-     * @since %version%
+     * @since v1.13.0
      * @param options - Optional options:
      *   - `unscoped` - When `true`, the returned name is the package name without the scope. Default `false`.
      * @returns The application name.
@@ -51,7 +51,7 @@ export interface InstallContext {
      * - all non-alphanumeric characters except for hyphens and underscores are removed.
      *
      * @public
-     * @since %version%
+     * @since v1.13.0
      * @returns Application slug.
      */
     getApplicationSlug(): string;
@@ -65,7 +65,7 @@ export interface InstallContext {
      * - all non-alphanumeric characters except for hyphens and underscores are removed.
      *
      * @public
-     * @since %version%
+     * @since v1.13.0
      * @returns Application CSS selector.
      */
     getApplicationSelector(): string;
