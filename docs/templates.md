@@ -276,7 +276,7 @@ npx cloneman run-hook install --target ../my-application
 
 ## Available commands when working with templates
 
-Both commands requires to be called inside a template folder.
+These commands requires to be called inside a template folder.
 
 - `build`
 - `pack`

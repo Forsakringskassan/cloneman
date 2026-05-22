@@ -76,7 +76,10 @@ export function runHookCommand(
                 });
         },
         async handler(argv) {
-            await runHookHandler(context, argv);
+            const ok = await runHookHandler(context, argv);
+            if (!ok) {
+                process.exitCode = 1;
+            }
         },
     };
 }
