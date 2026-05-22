@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## [1.14.0](https://github.com/Forsakringskassan/cloneman/compare/v1.13.0...v1.14.0) (2026-05-22)
+
+### Features
+
+* **cli:** new `run-hook` command ([8ab74da](https://github.com/Forsakringskassan/cloneman/commit/8ab74da71e3884a24441d0f4a851c2b8ef7e1e61))
+
 ## [1.13.0](https://github.com/Forsakringskassan/cloneman/compare/v1.12.0...v1.13.0) (2026-05-22)
 
 ### Features
