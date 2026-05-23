@@ -92,7 +92,7 @@
     "stream-buffers": "3.0.3",
     "typescript": "6.0.3",
     "verdaccio": "6.6.0",
-    "vitest": "4.1.6"
+    "vitest": "4.1.7"
   },
   "engines": {
     "node": ">= 22.20.0 || >= 24.8.0",
