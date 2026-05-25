@@ -173,6 +173,7 @@ export async function update(
             });
         await Promise.all(hooks);
         const context = createInstallContext({
+            command: "update",
             targetDir: cwd,
             name,
             version: {

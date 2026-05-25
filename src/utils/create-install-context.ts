@@ -13,15 +13,17 @@ import { writeJsonFile } from "./write-json-file";
  * @internal
  */
 export function createInstallContext(options: {
+    command: "create" | "update";
     targetDir: string;
     name: string;
     version: { oldVersion: string | null; newVersion: string };
     logger?: Console;
 }): InstallContext {
-    const { targetDir, name, version, logger = console } = options;
+    const { command, targetDir, name, version, logger = console } = options;
     return {
         targetDir,
         logger,
+        command,
         version,
         getApplicationName(opts) {
             return getApplicationName(name, {

@@ -121,6 +121,7 @@ export async function create(options: {
 
     if (hooksDir) {
         const context = createInstallContext({
+            command: "create",
             targetDir: appPath,
             name,
             version: {

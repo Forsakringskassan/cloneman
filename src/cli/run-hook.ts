@@ -36,6 +36,7 @@ async function runHookHandler(
     switch (hook) {
         case "install": {
             const context = createInstallContext({
+                command: "update",
                 targetDir,
                 name: targetPkgJson.name,
                 version: {

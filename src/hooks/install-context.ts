@@ -18,6 +18,11 @@ export interface InstallContext {
     readonly logger: Console;
 
     /**
+     * The command being issued by the user.
+     */
+    readonly command: "create" | "update";
+
+    /**
      * Template version.
      *
      * When this is a newly created application (`npx cloneman create`) the
