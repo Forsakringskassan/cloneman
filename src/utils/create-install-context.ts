@@ -30,6 +30,7 @@ export function createInstallContext(options: {
     } = options;
     return {
         targetDir,
+        relativeTargetDir: path.relative(process.cwd(), targetDir),
         logger,
         command,
         version,
