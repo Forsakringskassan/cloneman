@@ -12,6 +12,11 @@ export interface InstallContext {
     readonly targetDir: string;
 
     /**
+     * Path to the application being created/updated, relative to cwd.
+     */
+    readonly relativeTargetDir: string;
+
+    /**
      * A console instance to be used for logging (do not log directly on stdout
      * or stderr).
      */
