@@ -294,15 +294,31 @@ it("should crash if invalid tar path", async () => {
     );
 });
 
+it("should return a default instructions message", async () => {
+    expect.assertions(1);
+    await create({
+        name: "mock-app",
+        templatePackage: "@forsakringskassan/base-template@1.0.0",
+        cwd,
+        env: userEnv,
+    });
+    const { message } = await update(appDir, "1.0.1", userEnv);
+    expect(message).toMatchInlineSnapshot(`
+      Now run:
+
+        npm install
+    `);
+});
+
 it("should run install hook if present", async () => {
-    expect.assertions(2);
+    expect.assertions(3);
     await create({
         name: "mock-app",
         templatePackage: "@forsakringskassan/with-install-hook@1.0.0",
         cwd,
         env: userEnv,
     });
-    await update(appDir, "1.0.1", userEnv);
+    const { message } = await update(appDir, "1.0.1", userEnv);
     expect(await printTree(appDir)).toMatchInlineSnapshot(`
       (root)
           ├── install.txt
@@ -312,4 +328,5 @@ it("should run install hook if present", async () => {
     expect(await readFile("install.txt")).toMatchInlineSnapshot(
         `install script at v1.0.1`,
     );
+    expect(message).toMatchInlineSnapshot(`custom instruction from v1.0.1`);
 });

@@ -35,6 +35,7 @@ async function runHookHandler(
 
     switch (hook) {
         case "install": {
+            let message = "";
             const context = createInstallContext({
                 command: "update",
                 targetDir,
@@ -43,8 +44,19 @@ async function runHookHandler(
                     oldVersion: null,
                     newVersion: cwdPkgJson.version,
                 },
+                setMessage(text) {
+                    message = text;
+                },
             });
             await runHook(hook, hooksDir, context);
+            if (message !== "") {
+                console.log(
+                    "The hook produced the following instruction message:",
+                );
+                console.group("");
+                console.log(message);
+                console.groupEnd();
+            }
             return true;
         }
         case "build":

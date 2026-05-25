@@ -212,9 +212,25 @@ describe("create from local template package", () => {
     });
 });
 
+it("should return a default instructions message", async () => {
+    expect.assertions(1);
+    const { message } = await create({
+        name: "mock-app",
+        templatePackage: "@forsakringskassan/base-template@1.0.0",
+        cwd,
+        env: userEnv,
+    });
+    expect(message).toMatchInlineSnapshot(`
+      Now run:
+
+        cd mock-app
+        npm install
+    `);
+});
+
 it("should run install hook if present", async () => {
-    expect.assertions(2);
-    await create({
+    expect.assertions(3);
+    const { message } = await create({
         name: "mock-app",
         templatePackage: "@forsakringskassan/with-install-hook@1.0.0",
         cwd,
@@ -229,4 +245,5 @@ it("should run install hook if present", async () => {
     expect(await readFile("install.txt")).toMatchInlineSnapshot(
         `install script at v1.0.0`,
     );
+    expect(message).toMatchInlineSnapshot(`custom instruction from v1.0.0`);
 });

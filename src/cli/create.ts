@@ -19,8 +19,14 @@ async function createHandler(
         text: `Creating application "${name}" with template "${template}"...`,
     }).start();
 
+    let result: Awaited<ReturnType<typeof create>>;
     try {
-        await create({ name, templatePackage: template, cwd, spinner });
+        result = await create({
+            name,
+            templatePackage: template,
+            cwd,
+            spinner,
+        });
     } catch (err) {
         spinner.stop();
         throw err;
@@ -28,12 +34,10 @@ async function createHandler(
 
     spinner.success(`Application created successfully`);
 
-    console.log(`
-Now run:
-
-  cd ${name}
-  npm install
-`);
+    const { message } = result;
+    console.group("");
+    console.log(message);
+    console.groupEnd();
 }
 /**
  * @internal

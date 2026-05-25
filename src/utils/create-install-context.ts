@@ -18,8 +18,16 @@ export function createInstallContext(options: {
     name: string;
     version: { oldVersion: string | null; newVersion: string };
     logger?: Console;
+    setMessage(this: void, text: string): void;
 }): InstallContext {
-    const { command, targetDir, name, version, logger = console } = options;
+    const {
+        command,
+        targetDir,
+        name,
+        version,
+        logger = console,
+        setMessage,
+    } = options;
     return {
         targetDir,
         logger,
@@ -58,6 +66,9 @@ export function createInstallContext(options: {
         },
         updateJsonFile(filePath, content) {
             return updateJsonFile(path.join(targetDir, filePath), content);
+        },
+        setMessage(text, delimiter = "\n") {
+            setMessage(Array.isArray(text) ? text.join(delimiter) : text);
         },
     };
 }
