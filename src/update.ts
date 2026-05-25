@@ -40,7 +40,7 @@ export async function update(
     versionOrTar: string,
     env: Record<string, string> = {},
     spinner?: ReturnType<typeof yoctoSpinner>,
-): Promise<void> {
+): Promise<{ message: string }> {
     function text(newText: string): void {
         if (spinner) {
             spinner.text = newText;
@@ -160,6 +160,8 @@ export async function update(
         },
     );
 
+    let message = [`Now run:`, ``, `  npm install`].join("\n");
+
     /* create a temporary directory with the hooks we extracted from the tarball
      * and run hooks from there, as the hooks installed in `node_modules` right
      * now would be the old and not the current version */
@@ -180,7 +182,12 @@ export async function update(
                 oldVersion: cloneman.version,
                 newVersion: tmplPackageJson.version,
             },
+            setMessage(text) {
+                message = text;
+            },
         });
         await runHook("install", hooksDir, context);
     });
+
+    return { message };
 }

@@ -18,7 +18,7 @@ export async function create(options: {
     cwd: string;
     env?: Record<string, string>;
     spinner?: ReturnType<typeof yoctoSpinner>;
-}): Promise<void> {
+}): Promise<{ message: string }> {
     function text(newText: string): void {
         if (options.spinner) {
             options.spinner.text = newText;
@@ -119,6 +119,8 @@ export async function create(options: {
         }),
     );
 
+    let message = [`Now run:`, ``, `  cd ${name}`, `  npm install`].join("\n");
+
     if (hooksDir) {
         const context = createInstallContext({
             command: "create",
@@ -128,7 +130,12 @@ export async function create(options: {
                 oldVersion: null,
                 newVersion: templatePackageVersion,
             },
+            setMessage(text) {
+                message = text;
+            },
         });
         await runHook("install", hooksDir, context);
     }
+
+    return { message };
 }

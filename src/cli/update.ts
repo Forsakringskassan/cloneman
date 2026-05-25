@@ -20,8 +20,9 @@ async function updateHandler(
         text: `Updating template package to version ${version}...`,
     }).start();
 
+    let result: Awaited<ReturnType<typeof update>>;
     try {
-        await update(cwd, version, {}, spinner);
+        result = await update(cwd, version, {}, spinner);
     } catch (err) {
         spinner.stop();
         throw err;
@@ -29,11 +30,10 @@ async function updateHandler(
 
     spinner.success(`Template package updated to version ${version}`);
 
-    console.log(`
-Now run:
-
-  npm install
-    `);
+    const { message } = result;
+    console.group("");
+    console.log(message);
+    console.groupEnd();
 }
 
 /**

@@ -187,4 +187,21 @@ export interface InstallContext {
      * ```
      */
     updateJsonFile(filePath: string, content: object): Promise<void>;
+
+    /**
+     * Override the default message shown to the user after successfully
+     * creating/updating the application.
+     *
+     * @example
+     *
+     * ```ts
+     * context.setMessage("lorem ipsum");
+     * ```
+     *
+     * @public
+     * @since %version%
+     * @param text - Text to show. When passing in an array it is joined by `delimiter`.
+     * @param delimiter - Optional delimiter to use for arrays, default `\n`.
+     */
+    setMessage(text: string | string[], delimiter?: string): void;
 }
