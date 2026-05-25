@@ -204,7 +204,7 @@ export interface InstallContext {
      * ```
      *
      * @public
-     * @since %version%
+     * @since v1.15.0
      * @param text - Text to show. When passing in an array it is joined by `delimiter`.
      * @param delimiter - Optional delimiter to use for arrays, default `\n`.
      */

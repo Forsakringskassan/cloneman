@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## [1.15.0](https://github.com/Forsakringskassan/cloneman/compare/v1.14.0...v1.15.0) (2026-05-25)
+
+### Features
+
+* **hooks:** add `InstallContext.command` to distinguish between create and update commands ([ceccde8](https://github.com/Forsakringskassan/cloneman/commit/ceccde8d784276959b4aaf8cca7464a4da086d1d))
+* **hooks:** add `InstallContext.relativeTargetDir` ([217394b](https://github.com/Forsakringskassan/cloneman/commit/217394b51ebbceadd1cc65d3f431bf15f870bead))
+* **hooks:** add `InstallContext.setMessage()` to customize instruction message ([5952c9c](https://github.com/Forsakringskassan/cloneman/commit/5952c9c3b4b5fac17572ac11b2d500c4220af758))
+
+### Bug Fixes
+
+* exit with code 1 when run-hook fails ([1874358](https://github.com/Forsakringskassan/cloneman/commit/187435850611535243a160f55fa67ecc73504f3d))
+
 ## [1.14.0](https://github.com/Forsakringskassan/cloneman/compare/v1.13.0...v1.14.0) (2026-05-22)
 
 ### Features
