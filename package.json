@@ -37,6 +37,7 @@
     "build": "node ./build.mjs",
     "eslint": "eslint --cache .",
     "eslint:fix": "eslint --fix .",
+    "integration-test": "vitest run --mode integration",
     "lint": "run-s eslint prettier:check",
     "lint:fix": "run-s eslint:fix prettier:write",
     "prepack": "release-prepack --bundle",
