@@ -1,12 +1,28 @@
 import { defineConfig } from "vitest/config";
 
-export default defineConfig({
+const unitTestConfig = defineConfig({
+    test: {
+        exclude: ["**/node_modules/**", "**/*.integration.spec.ts"],
+    },
+});
+
+const integrationTestConfig = defineConfig({
     test: {
         globalSetup: ["./vitest.global.ts"],
+        include: ["**/*.integration.spec.ts"],
     },
-    server: {
-        watch: {
-            ignored: ["**/node_modules/**", "**/temp/**"],
+});
+
+export default defineConfig(({ mode }) => {
+    const { test } =
+        mode === "integration" ? integrationTestConfig : unitTestConfig;
+    console.log({ test });
+    return {
+        test,
+        server: {
+            watch: {
+                ignored: ["**/node_modules/**", "**/temp/**"],
+            },
         },
-    },
+    };
 });

@@ -22,7 +22,9 @@ jobs:
               run: npm ci
             - name: Build
               run: npm run --if-present build
-            - name: Test
+            - name: Unit tests
               run: npm test --ignore-scripts
+            - name: Integration tests
+              run: npm run integration-test --ignore-scripts
             - name: Selftest
               run: node bin/cloneman.mjs --help
