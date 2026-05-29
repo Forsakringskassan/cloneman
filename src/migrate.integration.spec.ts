@@ -74,7 +74,7 @@ describe("migrate to base template", () => {
                 cloneman: expect.any(String),
             },
             cloneman: {
-                templatePackage: "@forsakringskassan/base-template",
+                template: "@forsakringskassan/base-template",
                 version: "N/A",
             },
         });

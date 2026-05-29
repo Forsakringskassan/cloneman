@@ -48,5 +48,8 @@ export interface TemplatePackageJson extends PackageJson {
  * @internal
  */
 export interface ApplicationPackageJson extends PackageJson {
-    cloneman: unknown;
+    cloneman?: {
+        version: string;
+        template: string;
+    };
 }

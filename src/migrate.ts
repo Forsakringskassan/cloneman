@@ -53,7 +53,7 @@ export async function migrate(options: {
     devDependencies[templatePackage] = templateVersion;
 
     packageJson.cloneman = {
-        templatePackage,
+        template: templatePackage,
         version: "N/A",
     };
 
