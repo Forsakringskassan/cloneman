@@ -4,6 +4,7 @@ import { sortPackageJson } from "sort-package-json";
 import { type default as yoctoSpinner } from "yocto-spinner";
 
 import { NoApplicationFolderError } from "./errors";
+import { type ClientMetadata } from "./types";
 import {
     type ApplicationPackageJson,
     info,
@@ -55,7 +56,7 @@ export async function migrate(options: {
     packageJson.cloneman = {
         template: templatePackage,
         version: "N/A",
-    };
+    } satisfies ClientMetadata;
 
     await writeJsonFile(`${cwd}/package.json`, sortPackageJson(packageJson), {
         indent: 2,
