@@ -6,6 +6,7 @@ import { getApplicationName } from "./get-application-name";
 import { getApplicationSelector } from "./get-application-selector";
 import { getApplicationSlug } from "./get-application-slug";
 import { readJsonFile } from "./read-json-file";
+import { replaceInFile } from "./replace-in-file";
 import { updateJsonFile } from "./update-json-file";
 import { writeJsonFile } from "./write-json-file";
 
@@ -51,6 +52,24 @@ export function createInstallContext(options: {
         },
         readJsonFile<T>(filePath: string) {
             return readJsonFile<T>(path.join(targetDir, filePath));
+        },
+        replaceInFile(
+            filePath: string,
+            ...args:
+                | [pattern: string | RegExp, replacement: string]
+                | [
+                      matcher: RegExp,
+                      pattern: string | RegExp,
+                      replacement: string,
+                  ]
+        ) {
+            const [match, pattern, replacement] =
+                args.length === 3 ? args : [undefined, ...args];
+            return replaceInFile(path.join(targetDir, filePath), {
+                match,
+                pattern,
+                replacement,
+            });
         },
         writeFile(filePath, content) {
             return fs.writeFile(

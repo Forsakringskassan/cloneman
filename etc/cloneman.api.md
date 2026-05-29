@@ -35,6 +35,8 @@ export interface InstallContext {
     readJsonFile(filePath: "package.json"): Promise<PackageJson>;
     readJsonFile<T = unknown>(filePath: string): Promise<T>;
     readonly relativeTargetDir: string;
+    replaceInFile(filePath: string, pattern: string | RegExp, replacement: string): Promise<void>;
+    replaceInFile(filePath: string, matcher: RegExp, pattern: string | RegExp, replacement: string): Promise<void>;
     setMessage(text: string | string[], delimiter?: string): void;
     readonly targetDir: string;
     updateJsonFile(filePath: string, content: object): Promise<void>;

@@ -10,6 +10,7 @@ export { type ApplicationPackageJson, type PackageJson } from "./package-json";
 export { readJsonFile } from "./read-json-file";
 export { readPackageJson } from "./read-package-json";
 export { readPackageJsonFromTarball } from "./read-package-json-from-tarball";
+export { replaceInFile } from "./replace-in-file";
 export { runHook } from "./run-hook";
 export { writeJsonFile } from "./write-json-file";
 export {
