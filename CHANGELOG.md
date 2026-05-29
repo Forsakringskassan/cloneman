@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## [1.16.0](https://github.com/Forsakringskassan/cloneman/compare/v1.15.0...v1.16.0) (2026-05-29)
+
+### Features
+
+* add `InstallContext.replaceInFile()` ([bf0c9ed](https://github.com/Forsakringskassan/cloneman/commit/bf0c9edcfcb53064711494a6068698bf66b902d3))
+
+### Bug Fixes
+
+* migrate command added wrong property name for template into cloneman field ([065ac44](https://github.com/Forsakringskassan/cloneman/commit/065ac44aaacd6e7cbae21493e70a2a95d51a4d58))
+
 ## [1.15.0](https://github.com/Forsakringskassan/cloneman/compare/v1.14.0...v1.15.0) (2026-05-25)
 
 ### Features
