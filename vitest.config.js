@@ -16,7 +16,6 @@ const integrationTestConfig = defineConfig({
 export default defineConfig(({ mode }) => {
     const { test } =
         mode === "integration" ? integrationTestConfig : unitTestConfig;
-    console.log({ test });
     return {
         test,
         server: {
