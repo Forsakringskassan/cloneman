@@ -5,8 +5,11 @@ import {
     TemplateDependencyMissingError,
     TemplateVersionMismatchError,
 } from "./errors";
-import { isClientMetadata, readJsonFile } from "./utils";
-import { type ApplicationPackageJson } from "./utils/package-json";
+import {
+    type ApplicationPackageJson,
+    isClientMetadata,
+    readJsonFile,
+} from "./utils";
 
 /**
  * @internal

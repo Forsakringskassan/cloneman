@@ -3,11 +3,15 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import spawn from "nano-spawn";
 import { type default as yoctoSpinner } from "yocto-spinner";
-import { getStoredFileName } from "./template/utils/get-stored-filename";
-import { createInstallContext, readJsonFile, runHook } from "./utils";
-import { getTemplateInfo } from "./utils/get-template-info";
-import { normalizeTemplatePackage } from "./utils/normalize-template-package";
-import { type ApplicationPackageJson } from "./utils/package-json";
+import { getStoredFileName } from "./template/utils";
+import {
+    type ApplicationPackageJson,
+    createInstallContext,
+    getTemplateInfo,
+    normalizeTemplatePackage,
+    readJsonFile,
+    runHook,
+} from "./utils";
 
 /**
  * @internal

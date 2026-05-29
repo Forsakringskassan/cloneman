@@ -4,20 +4,20 @@ import os from "node:os";
 import path from "node:path";
 import type yoctoSpinner from "yocto-spinner";
 import { InvalidClonemanFieldError, MissingClonemanFieldError } from "./errors";
-import { getStoredFileName } from "./template/utils/get-stored-filename";
+import { getStoredFileName } from "./template/utils";
 import {
+    type PackageJson,
     createInstallContext,
+    fetchTarball,
+    filterDependencies,
     info,
     isClientMetadata,
     isTarball,
+    parseTarball,
     readJsonFile,
     runHook,
     writeJsonFile,
 } from "./utils";
-import { fetchTarball } from "./utils/fetch-tarball";
-import { filterDependencies } from "./utils/filter-dependencies";
-import { type PackageJson } from "./utils/package-json";
-import { parseTarball } from "./utils/parse-tarball";
 
 async function withTemporaryDirectory(
     cb: (dir: string) => void | Promise<void>,

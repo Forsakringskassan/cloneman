@@ -8,8 +8,7 @@ import {
     temporaryDirectory,
     withFixture,
 } from "./test-utils";
-import { readJsonFile } from "./utils";
-import { type PackageJson } from "./utils/package-json";
+import { type PackageJson, readJsonFile } from "./utils";
 
 const fixtureDir = path.resolve(import.meta.dirname, "../fixtures");
 const baseTemplate = path.join(fixtureDir, "base-template@1.0.0");

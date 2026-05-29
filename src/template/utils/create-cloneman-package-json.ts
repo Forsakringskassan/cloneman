@@ -1,5 +1,5 @@
 import { writeJsonFile } from "../../utils";
-import { type TemplatePackageJson } from "../../utils/package-json";
+import { type TemplatePackageJson } from "../../utils";
 
 export async function createclonemanPackageJson(
     dst: string,
