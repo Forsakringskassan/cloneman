@@ -82,7 +82,9 @@ export async function create(options: {
         }
     } catch (err) {
         const message = err instanceof Error ? err.message : "unknown error";
-        throw new Error(`Failed to install template package: ${message}`);
+        throw new Error(`Failed to install template package: ${message}`, {
+            cause: err,
+        });
     }
 
     const { filesDir, hooksDir, boilerplateFiles } = await getTemplateInfo(

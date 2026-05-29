@@ -68,8 +68,6 @@ export async function update(
 
     text("Retrieving template files...");
     if (isTarball(versionOrTar)) {
-        packageJsonVersion = versionOrTar;
-
         const tarPath = path.isAbsolute(versionOrTar)
             ? versionOrTar
             : path.resolve(versionOrTar);
