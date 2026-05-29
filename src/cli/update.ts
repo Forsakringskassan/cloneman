@@ -22,7 +22,12 @@ async function updateHandler(
 
     let result: Awaited<ReturnType<typeof update>>;
     try {
-        result = await update(cwd, version, {}, spinner);
+        result = await update({
+            cwd,
+            version,
+            env: {},
+            spinner,
+        });
     } catch (err) {
         spinner.stop();
         throw err;

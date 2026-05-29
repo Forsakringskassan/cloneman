@@ -35,20 +35,22 @@ async function withTemporaryDirectory(
 /**
  * @internal
  */
-export async function update(
-    cwd: string,
-    versionOrTar: string,
-    env: Record<string, string> = {},
-    spinner?: ReturnType<typeof yoctoSpinner>,
-): Promise<{ message: string }> {
+export async function update(options: {
+    cwd: string;
+    version: string;
+    env: Record<string, string>;
+    spinner?: ReturnType<typeof yoctoSpinner>;
+}): Promise<{ message: string }> {
     function text(newText: string): void {
         if (spinner) {
             spinner.text = newText;
         }
     }
 
+    const { cwd: appDir, version: templateVersion, env, spinner } = options;
+
     const applicationPackageJson = await readJsonFile<PackageJson>(
-        path.join(cwd, "package.json"),
+        path.join(appDir, "package.json"),
     );
 
     const { cloneman, name, version, description } = applicationPackageJson;
@@ -67,23 +69,25 @@ export async function update(
     let packageJsonVersion: string;
 
     text("Retrieving template files...");
-    if (isTarball(versionOrTar)) {
-        const tarPath = path.isAbsolute(versionOrTar)
-            ? versionOrTar
-            : path.resolve(versionOrTar);
+    if (isTarball(templateVersion)) {
+        const tarPath = path.isAbsolute(templateVersion)
+            ? templateVersion
+            : path.resolve(templateVersion);
         try {
             tarballBuffer = await fs.readFile(tarPath);
         } catch {
             throw new Error(`Tarball not found at path "${tarPath}"`);
         }
         /* Version is a relative path to the tarball, since it points to a local file. */
-        packageJsonVersion = path.relative(cwd, tarPath).replaceAll("\\", "/");
+        packageJsonVersion = path
+            .relative(appDir, tarPath)
+            .replaceAll("\\", "/");
     } else {
-        packageJsonVersion = versionOrTar;
+        packageJsonVersion = templateVersion;
 
-        if (versionOrTar === "latest") {
+        if (templateVersion === "latest") {
             packageJsonVersion = await info<string>(
-                `${cloneman.template}@${versionOrTar}`,
+                `${cloneman.template}@${templateVersion}`,
                 {
                     field: "version",
                     env,
@@ -119,7 +123,7 @@ export async function update(
                     `Managed file "${filename}" not found in tarball`,
                 );
             }
-            const dest = path.join(cwd, filename);
+            const dest = path.join(appDir, filename);
             await fs.mkdir(path.dirname(dest), { recursive: true });
             await fs.writeFile(dest, content);
         }),
@@ -140,7 +144,7 @@ export async function update(
     });
 
     await writeJsonFile(
-        path.join(cwd, "package.json"),
+        path.join(appDir, "package.json"),
         {
             ...tmplPackageJson,
             name,
@@ -174,7 +178,7 @@ export async function update(
         await Promise.all(hooks);
         const context = createInstallContext({
             command: "update",
-            targetDir: cwd,
+            targetDir: appDir,
             name,
             version: {
                 oldVersion: cloneman.version,
