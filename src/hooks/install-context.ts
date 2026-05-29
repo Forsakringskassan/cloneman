@@ -129,6 +129,52 @@ export interface InstallContext {
     readJsonFile<T = unknown>(filePath: string): Promise<T>;
 
     /**
+     * Replaces content in file. Each occurrence of `pattern` is replaced by
+     * `replacement`.
+     *
+     * When passing in a regular expression as pattern make sure to use the
+     * global flag `/g`.
+     *
+     * Replacement occurs line-by-line.
+     *
+     * @public
+     * @since %version%
+     * @param filePath - Path relative to application root.
+     * @param pattern - Pattern to replace in file.
+     * @param replacement - Value to replace pattern with.
+     * @returns A promise resolved when the updated file has been written.
+     */
+    replaceInFile(
+        filePath: string,
+        pattern: string | RegExp,
+        replacement: string,
+    ): Promise<void>;
+
+    /**
+     * Replaces content in file. For each line matching `matcher`, each
+     * occurrence of `pattern` is replaced by `replacement`.
+     *
+     * When passing in a regular expression as pattern make sure to use the
+     * global flag `/g`.
+     *
+     * Replacement occurs line-by-line.
+     *
+     * @public
+     * @since %version%
+     * @param filePath - Path relative to application root.
+     * @param matcher - RegExp to match a specific line to perform replacements on.
+     * @param pattern - Pattern to replace in file.
+     * @param replacement - Value to replace pattern with.
+     * @returns A promise resolved when the updated file has been written.
+     */
+    replaceInFile(
+        filePath: string,
+        matcher: RegExp,
+        pattern: string | RegExp,
+        replacement: string,
+    ): Promise<void>;
+
+    /**
      * Write content to file.
      *
      * @public
