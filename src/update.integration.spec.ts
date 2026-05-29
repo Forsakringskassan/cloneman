@@ -84,7 +84,7 @@ describe("update existing project with template from registry", () => {
         );
 
         /* update the application to version 1.0.1 */
-        await update(appDir, "1.0.1", userEnv);
+        await update({ cwd: appDir, version: "1.0.1", env: userEnv });
         expect(await printTree(appDir)).toMatchInlineSnapshot(`
           (root)
               ├── .gitignore
@@ -121,7 +121,7 @@ describe("update existing project with template from registry", () => {
     it("should set actual version to the resolved version if input version is 'latest'", async () => {
         expect.assertions(1);
 
-        await update(appDir, "latest", userEnv);
+        await update({ cwd: appDir, version: "latest", env: userEnv });
         const packageJson =
             await readJsonFile<ApplicationPackageJson>("package.json");
         expect(
@@ -142,7 +142,7 @@ describe("update existing project with template from registry", () => {
             trailer: "",
         });
 
-        await update(appDir, "1.0.1", userEnv);
+        await update({ cwd: appDir, version: "1.0.1", env: userEnv });
         const updatedPackageJson =
             await readJsonFile<ApplicationPackageJson>("package.json");
         expect(updatedPackageJson.dependencies).toEqual({
@@ -166,7 +166,7 @@ describe("update existing project with template from registry", () => {
             trailer: "",
         });
 
-        await update(appDir, "1.0.1", userEnv);
+        await update({ cwd: appDir, version: "1.0.1", env: userEnv });
 
         const updatedPackageJson =
             await readJsonFile<ApplicationPackageJson>("package.json");
@@ -199,7 +199,7 @@ describe("update existing project with template from registry", () => {
             },
         );
 
-        await update(appDir, "1.0.2", userEnv);
+        await update({ cwd: appDir, version: "1.0.2", env: userEnv });
 
         const updatedPackageJson =
             await readJsonFile<ApplicationPackageJson>("package.json");
@@ -247,7 +247,7 @@ it("should update existing project from local tar", async () => {
     const relativeTarballPath = path.relative(appDir, tarballPath);
 
     /* update the application using the local tarball */
-    await update(appDir, tarballPath, userEnv);
+    await update({ cwd: appDir, version: tarballPath, env: userEnv });
     expect(await printTree(appDir)).toMatchInlineSnapshot(`
       (root)
           ├── .gitignore
@@ -289,9 +289,9 @@ it("should crash if invalid tar path", async () => {
 
     /* try to update to a non-existing tarball */
     const invalidTarPath = path.join(appDir, "base-template-4.0.4.tgz");
-    await expect(update(appDir, invalidTarPath, userEnv)).rejects.toThrow(
-        `Tarball not found at path`,
-    );
+    await expect(
+        update({ cwd: appDir, version: invalidTarPath, env: userEnv }),
+    ).rejects.toThrow(`Tarball not found at path`);
 });
 
 it("should return a default instructions message", async () => {
@@ -302,7 +302,11 @@ it("should return a default instructions message", async () => {
         cwd,
         env: userEnv,
     });
-    const { message } = await update(appDir, "1.0.1", userEnv);
+    const { message } = await update({
+        cwd: appDir,
+        version: "1.0.1",
+        env: userEnv,
+    });
     expect(message).toMatchInlineSnapshot(`
       Now run:
 
@@ -318,7 +322,11 @@ it("should run install hook if present", async () => {
         cwd,
         env: userEnv,
     });
-    const { message } = await update(appDir, "1.0.1", userEnv);
+    const { message } = await update({
+        cwd: appDir,
+        version: "1.0.1",
+        env: userEnv,
+    });
     expect(await printTree(appDir)).toMatchInlineSnapshot(`
       (root)
           ├── install.txt
