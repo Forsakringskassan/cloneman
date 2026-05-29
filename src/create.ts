@@ -101,7 +101,6 @@ export async function create(options: {
     applicationPackageJson.description = "";
 
     applicationPackageJson.devDependencies ??= {};
-
     applicationPackageJson.devDependencies[templatePackageName] =
         templatePackageVersion;
 
