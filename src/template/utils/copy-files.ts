@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import spawn from "nano-spawn";
-import { getStoredFileName } from "./get-stored-filename";
+import { getStoredFileName } from "./get-stored-file-name";
 
 function isIgnored(key: string, ignored: string[]): boolean {
     return ignored.some((pattern) => path.matchesGlob(key, pattern));

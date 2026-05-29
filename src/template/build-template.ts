@@ -5,15 +5,15 @@ import {
     type TemplateConfig,
     normalizeTemplateConfig,
 } from "../config";
-import { readJsonFile, writeJsonFile } from "../utils";
-import { type PackageJson } from "../utils/package-json";
-
+import { type PackageJson, readJsonFile, writeJsonFile } from "../utils";
 import { installHook } from "./install-hook";
 import { updateJson } from "./update-json";
-import { copyFiles } from "./utils/copy-files";
-import { createclonemanPackageJson } from "./utils/create-cloneman-package-json";
-import { prepareTemplatePackageJson } from "./utils/prepare-template-package-json";
-import { updateRenovateWithIgnoredDeps } from "./utils/update-renovate-with-ignored-deps";
+import {
+    copyFiles,
+    createclonemanPackageJson,
+    prepareTemplatePackageJson,
+    updateRenovateWithIgnoredDeps,
+} from "./utils";
 import { writeFile } from "./write-file";
 
 /**

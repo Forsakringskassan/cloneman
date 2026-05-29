@@ -3,8 +3,7 @@ import path from "node:path";
 import { PassThrough } from "node:stream";
 import { text } from "node:stream/consumers";
 import { buildTemplate } from "./template";
-import { getHookScriptPath, runHook } from "./utils";
-import { isTemplateFolder } from "./utils/is-template";
+import { getHookScriptPath, isTemplateFolder, runHook } from "./utils";
 
 /**
  * Prepares the target directory with a cloneman template by running the build script from the template's ".cloneman" folder.

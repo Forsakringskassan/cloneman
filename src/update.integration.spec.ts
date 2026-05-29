@@ -16,8 +16,7 @@ import { printTree } from "./test-utils";
 import { rmDir } from "./test-utils/rm-dir";
 import { temporaryDirectory } from "./test-utils/temporary-directory";
 import { update } from "./update";
-import { writeJsonFile } from "./utils";
-import { type ApplicationPackageJson } from "./utils/package-json";
+import { type ApplicationPackageJson, writeJsonFile } from "./utils";
 
 /* Increased timeout time since test involves a lot reading & writing to disc, and also fetching data from a local npm registry */
 vi.setConfig({ testTimeout: 30000 });

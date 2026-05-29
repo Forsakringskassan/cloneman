@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { type TemplateConfig } from "../../config";
-import { type PackageJson } from "../../utils/package-json";
+import { type PackageJson } from "../../utils";
 import {
     type RenovateJson,
     updateRenovateWithIgnoredDeps,

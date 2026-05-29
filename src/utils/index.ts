@@ -1,4 +1,5 @@
 export { createInstallContext } from "./create-install-context";
+export { filterDependencies } from "./filter-dependencies";
 export { findHookScriptPath } from "./find-hook-script-path";
 export { getApplicationName } from "./get-application-name";
 export { getApplicationSelector } from "./get-application-selector";
@@ -6,7 +7,13 @@ export { getApplicationSlug } from "./get-application-slug";
 export { getHookScriptPath } from "./get-hook-script-path";
 export { importHook } from "./import-hook";
 export { isClientMetadata } from "./is-client-metadata";
-export { type ApplicationPackageJson, type PackageJson } from "./package-json";
+export { isTemplateFolder } from "./is-template";
+export { matchesPatterns } from "./matches-patterns";
+export {
+    type ApplicationPackageJson,
+    type PackageJson,
+    type TemplatePackageJson,
+} from "./package-json";
 export { readJsonFile } from "./read-json-file";
 export { readPackageJson } from "./read-package-json";
 export { readPackageJsonFromTarball } from "./read-package-json-from-tarball";

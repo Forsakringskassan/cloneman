@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { type PackageJson } from "../../utils/package-json";
+import { type PackageJson } from "../../utils";
 import { prepareTemplatePackageJson } from "./prepare-template-package-json";
 
 const template: PackageJson = {

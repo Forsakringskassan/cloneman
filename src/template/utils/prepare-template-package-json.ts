@@ -1,6 +1,6 @@
 import { sortPackageJson } from "sort-package-json";
 import { type ClientMetadata } from "../../types";
-import { type PackageJson } from "../../utils/package-json";
+import { type PackageJson } from "../../utils";
 
 /**
  * @internal

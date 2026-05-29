@@ -2,12 +2,12 @@ import path from "node:path";
 import { type CommandModule } from "yargs";
 import { type HookMapping } from "../hooks";
 import {
+    type PackageJson,
     createInstallContext,
     findHookScriptPath,
     readJsonFile,
     runHook,
 } from "../utils";
-import { type PackageJson } from "../utils/package-json";
 import { type Context } from "./context";
 
 interface RunHookArguments {

@@ -1,6 +1,5 @@
 import { type TemplateConfig } from "../../config";
-import { matchesPatterns } from "../../utils/matches-patterns";
-import { type PackageJson } from "../../utils/package-json";
+import { type PackageJson, matchesPatterns } from "../../utils";
 
 /**
  * @internal
