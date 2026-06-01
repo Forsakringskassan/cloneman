@@ -64,7 +64,7 @@ it("should replace all occurrences pattern in file", async () => {
         ].join("\n"),
     });
     await replaceInFile("/path/to/file.txt", {
-        pattern: "spam",
+        pattern: /spam/g,
         replacement: "ham",
     });
     const content = await fs.promises.readFile("/path/to/file.txt", "utf8");

@@ -18,7 +18,7 @@ export async function replaceInFile(
         .map((line) => {
             match.lastIndex = 0;
             if (match.test(line)) {
-                return line.replaceAll(pattern, replacement);
+                return line.replace(pattern, replacement);
             } else {
                 return line;
             }

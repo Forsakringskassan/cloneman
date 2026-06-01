@@ -132,8 +132,9 @@ export interface InstallContext {
      * Replaces content in file. Each occurrence of `pattern` is replaced by
      * `replacement`.
      *
-     * When passing in a regular expression as pattern make sure to use the
-     * global flag `/g`.
+     * When passing in a regular expression as pattern, make sure to use the
+     * global flag `/g` if you intend to replace multiple matches. Default is to
+     * replace the first occurrence only.
      *
      * Replacement occurs line-by-line.
      *
