@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## [1.17.0](https://github.com/Forsakringskassan/cloneman/compare/v1.16.0...v1.17.0) (2026-06-02)
+
+### Features
+
+* support template parameters ([8d62880](https://github.com/Forsakringskassan/cloneman/commit/8d62880b0369381293016250303f64bf9d9a0eb8))
+
+### Bug Fixes
+
+* change `replaceInFile()` to replace first occurrence only unless using `/g` ([48adc06](https://github.com/Forsakringskassan/cloneman/commit/48adc069d80093be05b8134b4c1e83dbb61381ff))
+
 ## [1.16.0](https://github.com/Forsakringskassan/cloneman/compare/v1.15.0...v1.16.0) (2026-05-29)
 
 ### Features

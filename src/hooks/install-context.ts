@@ -266,7 +266,7 @@ export interface InstallContext {
      * Throws an error if the parameter key was not declared by the template.
      *
      * @public
-     * @since %version%
+     * @since v1.17.0
      * @param key - The parameter key as declared with `addParameter()` in the build hook.
      * @returns The parameter value.
      */

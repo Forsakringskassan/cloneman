@@ -45,7 +45,7 @@ export interface BuildTemplateResult {
      * ```
      *
      * @public
-     * @since %version%
+     * @since v1.17.0
      * @see https://github.com/Forsakringskassan/cloneman/blob/main/docs/templates.md#addparameter
      * @param key - Parameter key (used when retrieving parameter in other hooks). Key must be `[a-z0-9-]+`..
      * @param definition - The parameter definition.

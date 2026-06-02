@@ -2,7 +2,7 @@
  * Defines a parameter that a template requires from the user.
  *
  * @public
- * @since %version%
+ * @since v1.17.0
  */
 export interface Parameter {
     /**
