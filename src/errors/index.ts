@@ -1,8 +1,14 @@
+export { FetchTarballError } from "./fetch-tarball-error";
 export { HookNoExportedFnError } from "./hook-no-exported-fn-error";
 export { InvalidClonemanFieldError } from "./invalid-cloneman-field-error";
 export { MissingClonemanFieldError } from "./missing-cloneman-field-error";
-export { FetchTarballError } from "./fetch-tarball-error";
 export { NoApplicationFolderError } from "./no-application-folder-error";
+export { ParameterDuplicateKeyError } from "./parameter-duplicate-key-error";
+export { ParameterInvalidKeyError } from "./parameter-invalid-key-error";
+export { ParameterInvalidPatternError } from "./parameter-invalid-pattern-error";
+export { ParameterNotDeclaredError } from "./parameter-not-declared-error";
+export { ParameterRequiredError } from "./parameter-required-error";
+export { ParameterValidationError } from "./parameter-validation-error";
 export { TemplateDependencyMissingError } from "./template-dependency-missing-error";
 export { TemplateVersionMismatchError } from "./template-version-mismatch-error";
 export { UserError } from "./user-error";

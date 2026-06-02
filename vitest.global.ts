@@ -106,6 +106,7 @@ export async function setup(project: TestProject): Promise<void> {
         await publishFixture("base-template@1.0.2", authEnv);
         await publishFixture("with-install-hook@1.0.0", authEnv);
         await publishFixture("with-install-hook@1.0.1", authEnv);
+        await publishFixture("with-parameters@1.0.0", authEnv);
 
         await publishPackage("non-template-package", authEnv);
 

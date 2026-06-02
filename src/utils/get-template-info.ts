@@ -1,4 +1,5 @@
 import spawn from "nano-spawn";
+import { type Parameter } from "../types";
 
 /**
  * @internal
@@ -8,6 +9,7 @@ export interface TemplateInfo {
     readonly hooksDir: string | null;
     readonly boilerplateFiles: string[];
     readonly managedFiles: string[];
+    readonly parameters: Parameter[];
 }
 
 /**
@@ -41,13 +43,16 @@ export async function getTemplateInfo(
         hooksDir?: string;
         boilerplateFiles: string[];
         managedFiles: string[];
+        parameters?: Parameter[];
     };
 
-    const { filesDir, hooksDir, boilerplateFiles, managedFiles } = templateInfo;
+    const { filesDir, hooksDir, boilerplateFiles, managedFiles, parameters } =
+        templateInfo;
     return {
         filesDir,
         hooksDir: hooksDir ?? null,
         boilerplateFiles,
         managedFiles,
+        parameters: parameters ?? [],
     };
 }

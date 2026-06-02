@@ -1,6 +1,7 @@
 import { type Console } from "node:console";
 import fs from "node:fs/promises";
 import path from "node:path";
+import { ParameterNotDeclaredError } from "../errors";
 import { type InstallContext } from "../hooks";
 import { getApplicationName } from "./get-application-name";
 import { getApplicationSelector } from "./get-application-selector";
@@ -19,6 +20,7 @@ export function createInstallContext(options: {
     name: string;
     version: { oldVersion: string | null; newVersion: string };
     logger?: Console;
+    parameters: Map<string, string>;
     setMessage(this: void, text: string): void;
 }): InstallContext {
     const {
@@ -27,6 +29,7 @@ export function createInstallContext(options: {
         name,
         version,
         logger = console,
+        parameters,
         setMessage,
     } = options;
     return {
@@ -89,6 +92,16 @@ export function createInstallContext(options: {
         },
         setMessage(text, delimiter = "\n") {
             setMessage(Array.isArray(text) ? text.join(delimiter) : text);
+        },
+        getParameter(key) {
+            const value = parameters.get(key);
+            if (value === undefined) {
+                throw new ParameterNotDeclaredError({
+                    hook: "install",
+                    parameter: key,
+                });
+            }
+            return value;
         },
     };
 }

@@ -15,6 +15,7 @@ import { prepare } from "./prepare";
 import { printTree } from "./test-utils";
 import { rmDir } from "./test-utils/rm-dir";
 import { temporaryDirectory } from "./test-utils/temporary-directory";
+import { type ClientMetadata } from "./types";
 import { update } from "./update";
 import { type ApplicationPackageJson, writeJsonFile } from "./utils";
 
@@ -60,6 +61,7 @@ describe("update existing project with template from registry", () => {
             templatePackage: "@forsakringskassan/base-template@1.0.0",
             cwd,
             env: userEnv,
+            parameters: new Map(),
         });
         const packageJson =
             await readJsonFile<ApplicationPackageJson>("package.json");
@@ -83,7 +85,12 @@ describe("update existing project with template from registry", () => {
         );
 
         /* update the application to version 1.0.1 */
-        await update({ cwd: appDir, version: "1.0.1", env: userEnv });
+        await update({
+            cwd: appDir,
+            version: "1.0.1",
+            env: userEnv,
+            parameters: new Map(),
+        });
         expect(await printTree(appDir)).toMatchInlineSnapshot(`
           (root)
               ├── .gitignore
@@ -119,8 +126,12 @@ describe("update existing project with template from registry", () => {
 
     it("should set actual version to the resolved version if input version is 'latest'", async () => {
         expect.assertions(1);
-
-        await update({ cwd: appDir, version: "latest", env: userEnv });
+        await update({
+            cwd: appDir,
+            version: "latest",
+            env: userEnv,
+            parameters: new Map(),
+        });
         const packageJson =
             await readJsonFile<ApplicationPackageJson>("package.json");
         expect(
@@ -141,7 +152,12 @@ describe("update existing project with template from registry", () => {
             trailer: "",
         });
 
-        await update({ cwd: appDir, version: "1.0.1", env: userEnv });
+        await update({
+            cwd: appDir,
+            version: "1.0.1",
+            env: userEnv,
+            parameters: new Map(),
+        });
         const updatedPackageJson =
             await readJsonFile<ApplicationPackageJson>("package.json");
         expect(updatedPackageJson.dependencies).toEqual({
@@ -165,7 +181,12 @@ describe("update existing project with template from registry", () => {
             trailer: "",
         });
 
-        await update({ cwd: appDir, version: "1.0.1", env: userEnv });
+        await update({
+            cwd: appDir,
+            version: "1.0.1",
+            env: userEnv,
+            parameters: new Map(),
+        });
 
         const updatedPackageJson =
             await readJsonFile<ApplicationPackageJson>("package.json");
@@ -198,7 +219,12 @@ describe("update existing project with template from registry", () => {
             },
         );
 
-        await update({ cwd: appDir, version: "1.0.2", env: userEnv });
+        await update({
+            cwd: appDir,
+            version: "1.0.2",
+            env: userEnv,
+            parameters: new Map(),
+        });
 
         const updatedPackageJson =
             await readJsonFile<ApplicationPackageJson>("package.json");
@@ -222,6 +248,7 @@ it("should update existing project from local tar", async () => {
         templatePackage: "@forsakringskassan/base-template@1.0.0",
         cwd,
         env: userEnv,
+        parameters: new Map(),
     });
     expect(await readFile("boilerplate.txt")).toMatchInlineSnapshot(
         `boilerplate file at v1.0.0`,
@@ -246,7 +273,12 @@ it("should update existing project from local tar", async () => {
     const relativeTarballPath = path.relative(appDir, tarballPath);
 
     /* update the application using the local tarball */
-    await update({ cwd: appDir, version: tarballPath, env: userEnv });
+    await update({
+        cwd: appDir,
+        version: tarballPath,
+        env: userEnv,
+        parameters: new Map(),
+    });
     expect(await printTree(appDir)).toMatchInlineSnapshot(`
       (root)
           ├── .gitignore
@@ -284,12 +316,18 @@ it("should crash if invalid tar path", async () => {
         templatePackage: "@forsakringskassan/base-template@1.0.0",
         cwd,
         env: userEnv,
+        parameters: new Map(),
     });
 
     /* try to update to a non-existing tarball */
     const invalidTarPath = path.join(appDir, "base-template-4.0.4.tgz");
     await expect(
-        update({ cwd: appDir, version: invalidTarPath, env: userEnv }),
+        update({
+            cwd: appDir,
+            version: invalidTarPath,
+            env: userEnv,
+            parameters: new Map(),
+        }),
     ).rejects.toThrow(`Tarball not found at path`);
 });
 
@@ -300,11 +338,13 @@ it("should return a default instructions message", async () => {
         templatePackage: "@forsakringskassan/base-template@1.0.0",
         cwd,
         env: userEnv,
+        parameters: new Map(),
     });
     const { message } = await update({
         cwd: appDir,
         version: "1.0.1",
         env: userEnv,
+        parameters: new Map(),
     });
     expect(message).toMatchInlineSnapshot(`
       Now run:
@@ -320,11 +360,13 @@ it("should run install hook if present", async () => {
         templatePackage: "@forsakringskassan/with-install-hook@1.0.0",
         cwd,
         env: userEnv,
+        parameters: new Map(),
     });
     const { message } = await update({
         cwd: appDir,
         version: "1.0.1",
         env: userEnv,
+        parameters: new Map(),
     });
     expect(await printTree(appDir)).toMatchInlineSnapshot(`
       (root)
@@ -336,4 +378,69 @@ it("should run install hook if present", async () => {
         `install script at v1.0.1`,
     );
     expect(message).toMatchInlineSnapshot(`custom instruction from v1.0.1`);
+});
+
+it("should keep existing parameters when updating without overrides", async () => {
+    expect.assertions(2);
+    await create({
+        name: "mock-app",
+        templatePackage: "@forsakringskassan/with-parameters-template@1.0.0",
+        cwd,
+        env: userEnv,
+        parameters: new Map([
+            ["repository", "git+https://example.net/repo"],
+            ["description", ""],
+        ]),
+    });
+    await update({
+        cwd: appDir,
+        version: "1.0.0",
+        env: userEnv,
+        parameters: new Map(),
+    });
+    const { cloneman } = await readJsonFile<{ cloneman?: ClientMetadata }>(
+        "package.json",
+    );
+    expect(cloneman?.parameters).toEqual({
+        repository: "git+https://example.net/repo",
+        description: "",
+    });
+    expect(await readFile("parameters.txt")).toMatchInlineSnapshot(`
+      repository=git+https://example.net/repo
+      description=
+    `);
+});
+
+it("should override existing parameters when updating with overrides", async () => {
+    expect.assertions(2);
+    await create({
+        name: "mock-app",
+        templatePackage: "@forsakringskassan/with-parameters-template@1.0.0",
+        cwd,
+        env: userEnv,
+        parameters: new Map([
+            ["repository", "git+https://example.net/repo"],
+            ["description", ""],
+        ]),
+    });
+    await update({
+        cwd: appDir,
+        version: "1.0.0",
+        env: userEnv,
+        parameters: new Map([
+            ["repository", "git+https://example.net/overridden"],
+            ["description", ""],
+        ]),
+    });
+    const { cloneman } = await readJsonFile<{ cloneman?: ClientMetadata }>(
+        "package.json",
+    );
+    expect(cloneman?.parameters).toEqual({
+        repository: "git+https://example.net/overridden",
+        description: "",
+    });
+    expect(await readFile("parameters.txt")).toMatchInlineSnapshot(`
+      repository=git+https://example.net/overridden
+      description=
+    `);
 });

@@ -5,8 +5,10 @@ import path from "node:path";
 import type yoctoSpinner from "yocto-spinner";
 import { InvalidClonemanFieldError, MissingClonemanFieldError } from "./errors";
 import { getStoredFileName } from "./template/utils";
+import { type ClientMetadata } from "./types";
 import {
     type PackageJson,
+    collectParameters,
     createInstallContext,
     fetchTarball,
     filterDependencies,
@@ -39,15 +41,22 @@ export async function update(options: {
     cwd: string;
     version: string;
     env: Record<string, string>;
+    parameters: Map<string, string>;
     spinner?: ReturnType<typeof yoctoSpinner>;
 }): Promise<{ message: string }> {
+    const {
+        cwd: appDir,
+        version: templateVersion,
+        env,
+        parameters: cliParameters,
+        spinner,
+    } = options;
+
     function text(newText: string): void {
         if (spinner) {
             spinner.text = newText;
         }
     }
-
-    const { cwd: appDir, version: templateVersion, env, spinner } = options;
 
     const applicationPackageJson = await readJsonFile<PackageJson>(
         path.join(appDir, "package.json"),
@@ -111,8 +120,36 @@ export async function update(options: {
         );
     }
 
-    const { managedFiles, uninstallDependencies, ignoredDependencies } =
-        tarballPackageJson.cloneman;
+    /* sanity-check: ensure template have a proper cloneman field */
+    if (!isClientMetadata(tmplPackageJson.cloneman)) {
+        throw new TypeError(
+            `Template "files/package.json" contains malformed "cloneman" field`,
+        );
+    }
+
+    const {
+        managedFiles,
+        uninstallDependencies,
+        ignoredDependencies,
+        parameters: parameterDefinitions,
+    } = tarballPackageJson.cloneman;
+
+    if (spinner) {
+        spinner.stop();
+    }
+
+    const parameters = await collectParameters({
+        definitions: parameterDefinitions ?? [],
+        existing: new Map(Object.entries(cloneman.parameters ?? {})),
+        overrides: cliParameters,
+        interactive: process.stdin.isTTY,
+    });
+
+    if (spinner) {
+        spinner.start();
+    }
+
+    text("Copying managed files");
 
     await Promise.all(
         managedFiles.map(async (filename) => {
@@ -155,6 +192,10 @@ export async function update(options: {
                 ...devDependencies,
                 [cloneman.template]: packageJsonVersion,
             },
+            cloneman: {
+                ...tmplPackageJson.cloneman,
+                parameters: Object.fromEntries(parameters.entries()),
+            } satisfies ClientMetadata,
         },
         {
             indent: 2,
@@ -180,6 +221,7 @@ export async function update(options: {
             command: "update",
             targetDir: appDir,
             name,
+            parameters,
             version: {
                 oldVersion: cloneman.version,
                 newVersion: tmplPackageJson.version,

@@ -4,10 +4,13 @@ import path from "node:path";
 import spawn from "nano-spawn";
 import { type default as yoctoSpinner } from "yocto-spinner";
 import { getStoredFileName } from "./template/utils";
+import { type ClientMetadata } from "./types";
 import {
     type ApplicationPackageJson,
+    collectParameters,
     createInstallContext,
     getTemplateInfo,
+    isClientMetadata,
     normalizeTemplatePackage,
     readJsonFile,
     runHook,
@@ -21,15 +24,24 @@ export async function create(options: {
     templatePackage: string;
     cwd: string;
     env?: Record<string, string>;
+    parameters: Map<string, string>;
     spinner?: ReturnType<typeof yoctoSpinner>;
 }): Promise<{ message: string }> {
+    const {
+        name,
+        templatePackage,
+        cwd,
+        env = {},
+        parameters: cliParameters,
+        spinner,
+    } = options;
+
     function text(newText: string): void {
-        if (options.spinner) {
-            options.spinner.text = newText;
+        if (spinner) {
+            spinner.text = newText;
         }
     }
 
-    const { name, templatePackage, cwd, env = {} } = options;
     const appPath = path.join(cwd, name);
     if (existsSync(appPath)) {
         throw new Error("application dir already exists");
@@ -91,14 +103,38 @@ export async function create(options: {
         });
     }
 
-    const { filesDir, hooksDir, boilerplateFiles } = await getTemplateInfo(
-        templatePackageName,
-        appPath,
-    );
+    const {
+        filesDir,
+        hooksDir,
+        boilerplateFiles,
+        parameters: parameterDefinitions,
+    } = await getTemplateInfo(templatePackageName, appPath);
+
+    if (spinner) {
+        spinner.stop();
+    }
+
+    const parameters = await collectParameters({
+        definitions: parameterDefinitions,
+        existing: new Map(),
+        overrides: cliParameters,
+        interactive: process.stdin.isTTY,
+    });
+
+    if (spinner) {
+        spinner.start();
+    }
 
     const applicationPackageJson = await readJsonFile<ApplicationPackageJson>(
         path.join(filesDir, "package.json"),
     );
+
+    /* sanity-check: ensure template have a proper cloneman field */
+    if (!isClientMetadata(applicationPackageJson.cloneman)) {
+        throw new TypeError(
+            `Template "files/package.json" contains malformed "cloneman" field`,
+        );
+    }
 
     applicationPackageJson.name = name;
     applicationPackageJson.version = "0.0.0";
@@ -107,6 +143,11 @@ export async function create(options: {
     applicationPackageJson.devDependencies ??= {};
     applicationPackageJson.devDependencies[templatePackageName] =
         templatePackageVersion;
+
+    applicationPackageJson.cloneman = {
+        ...applicationPackageJson.cloneman,
+        parameters: Object.fromEntries(parameters.entries()),
+    } satisfies ClientMetadata;
 
     await fs.writeFile(
         path.join(appPath, "package.json"),
@@ -131,6 +172,7 @@ export async function create(options: {
             command: "create",
             targetDir: appPath,
             name,
+            parameters,
             version: {
                 oldVersion: null,
                 newVersion: templatePackageVersion,

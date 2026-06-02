@@ -5,6 +5,11 @@ import {
     type TemplateConfig,
     normalizeTemplateConfig,
 } from "../config";
+import {
+    ParameterDuplicateKeyError,
+    ParameterInvalidKeyError,
+} from "../errors";
+import { type Parameter } from "../types";
 import { type PackageJson, readJsonFile, writeJsonFile } from "../utils";
 import { installHook } from "./install-hook";
 import { updateJson } from "./update-json";
@@ -21,6 +26,35 @@ import { writeFile } from "./write-file";
  * @since v1.2.0
  */
 export interface BuildTemplateResult {
+    /**
+     * Declares a parameter that this template requires from the user.
+     *
+     * Parameters are collected at `create`/`update` time (interactively or via
+     * `--param key=value`).
+     *
+     * Parameters must not be used for sensitive information such as API keys,
+     * passwords, etc. Parameters are persisted in plain-text in the
+     * application.
+     *
+     * @example
+     * ```ts
+     * template.addParameter("foo", {
+     *     description: "What should foo be set to",
+     *     required: true,
+     * });
+     * ```
+     *
+     * @public
+     * @since %version%
+     * @see https://github.com/Forsakringskassan/cloneman/blob/main/docs/templates.md#addparameter
+     * @param key - Parameter key (used when retrieving parameter in other hooks). Key must be `[a-z0-9-]+`..
+     * @param definition - The parameter definition.
+     */
+    addParameter(
+        key: string,
+        definition?: Partial<Omit<Parameter, "key">>,
+    ): void;
+
     /**
      * Updates the content of the JSON file at given path with given content.
      *
@@ -71,8 +105,10 @@ export async function buildTemplate(options: {
     templateDir: string;
     targetDir: string;
     config: TemplateConfig | NormalizedTemplateConfig;
+    parameters: Parameter[];
 }): Promise<BuildTemplateResult> {
-    const { logger, name, templateDir, targetDir, config } = options;
+    const { logger, name, templateDir, targetDir, config, parameters } =
+        options;
     const pkgJsonPath = path.join(templateDir, "package.json");
     const pkg = await readJsonFile<PackageJson>(pkgJsonPath);
 
@@ -147,6 +183,21 @@ export async function buildTemplate(options: {
     logger.groupEnd();
 
     return {
+        addParameter(key, definition) {
+            if (!/^[\da-z-]+$/.test(key)) {
+                throw new ParameterInvalidKeyError({ key });
+            }
+            if (parameters.some((it) => it.key === key)) {
+                throw new ParameterDuplicateKeyError({ key });
+            }
+            parameters.push({
+                key,
+                description: "",
+                help: null,
+                required: false,
+                ...definition,
+            });
+        },
         updateJson: updateJson.bind(undefined, { filesDir }),
         renovateIgnoreDependencies() {
             return renovateIgnoreDependencies(
