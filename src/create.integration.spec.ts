@@ -16,6 +16,7 @@ import { prepare } from "./prepare";
 import { printTree } from "./test-utils";
 import { rmDir } from "./test-utils/rm-dir";
 import { temporaryDirectory } from "./test-utils/temporary-directory";
+import { type ClientMetadata } from "./types";
 
 /* Increased timeout time since test involves a lot reading & writing to disc, and also fetching data from a local npm registry */
 vi.setConfig({ testTimeout: 30000 });
@@ -62,6 +63,7 @@ describe("create from base template from npm registry", () => {
             templatePackage: "@forsakringskassan/base-template@1.0.0",
             cwd,
             env: userEnv,
+            parameters: new Map(),
         });
         expect(await readJsonFile("package.json")).toEqual({
             name: "mock-app",
@@ -82,6 +84,7 @@ describe("create from base template from npm registry", () => {
             cloneman: {
                 template: "@forsakringskassan/base-template",
                 version: "1.0.0",
+                parameters: {},
             },
         });
         expect(await printTree(appDir)).toMatchInlineSnapshot(`
@@ -112,6 +115,7 @@ describe("create from base template from npm registry", () => {
                 name: "mock-app",
                 templatePackage: "@forsakringskassan/base-template@1.0.0",
                 cwd,
+                parameters: new Map(),
             }),
         ).rejects.toThrow("application dir already exists");
     });
@@ -124,6 +128,7 @@ describe("create from base template from npm registry", () => {
                 templatePackage: "@forsakringskassan/non-existing-package",
                 cwd,
                 env: userEnv,
+                parameters: new Map(),
             }),
         ).rejects.toThrow(
             `Failed to install template package: Command failed with exit code 1: npm install --save-dev --save-exact '@forsakringskassan/non-existing-package'`,
@@ -139,6 +144,7 @@ describe("create from base template from npm registry", () => {
                 templatePackage: "@forsakringskassan/non-template-package",
                 cwd,
                 env: userEnv,
+                parameters: new Map(),
             }),
         ).rejects.toThrow(
             `Package @forsakringskassan/non-template-package is not a valid cloneman template package`,
@@ -167,6 +173,7 @@ describe("create from local template package", () => {
             templatePackage: tarballPath,
             cwd,
             env: {},
+            parameters: new Map(),
         });
         expect(await readJsonFile("package.json")).toEqual({
             name: "mock-app",
@@ -189,6 +196,7 @@ describe("create from local template package", () => {
             cloneman: {
                 template: "@forsakringskassan/base-template",
                 version: "1.0.0",
+                parameters: {},
             },
         });
         expect(await printTree(appDir)).toMatchInlineSnapshot(`
@@ -219,6 +227,7 @@ it("should return a default instructions message", async () => {
         templatePackage: "@forsakringskassan/base-template@1.0.0",
         cwd,
         env: userEnv,
+        parameters: new Map(),
     });
     expect(message).toMatchInlineSnapshot(`
       Now run:
@@ -235,6 +244,7 @@ it("should run install hook if present", async () => {
         templatePackage: "@forsakringskassan/with-install-hook@1.0.0",
         cwd,
         env: userEnv,
+        parameters: new Map(),
     });
     expect(await printTree(appDir)).toMatchInlineSnapshot(`
       (root)
@@ -246,4 +256,29 @@ it("should run install hook if present", async () => {
         `install script at v1.0.0`,
     );
     expect(message).toMatchInlineSnapshot(`custom instruction from v1.0.0`);
+});
+
+it("should collect parameters via overrides and store them in package.json", async () => {
+    expect.assertions(2);
+    await create({
+        name: "mock-app",
+        templatePackage: "@forsakringskassan/with-parameters-template@1.0.0",
+        cwd,
+        env: userEnv,
+        parameters: new Map([
+            ["repository", "git+https://example.net/repo"],
+            ["description", ""],
+        ]),
+    });
+    const { cloneman } = await readJsonFile<{ cloneman?: ClientMetadata }>(
+        "package.json",
+    );
+    expect(cloneman?.parameters).toEqual({
+        repository: "git+https://example.net/repo",
+        description: "",
+    });
+    expect(await readFile("parameters.txt")).toMatchInlineSnapshot(`
+      repository=git+https://example.net/repo
+      description=
+    `);
 });

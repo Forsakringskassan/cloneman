@@ -23,6 +23,13 @@ The latest version of the template is installed by default. To install a specifi
 You can also refer to a local template file:
 `npx cloneman create my-new-application ../directory/template.tgz`
 
+If the template declares parameters, cloneman will prompt for their values when the terminal is interactive.
+Values can also be supplied non-interactively using `--param key=value`:
+
+`npx cloneman create my-new-application template-package-name --param KEY=VALUE`
+
+The `--param` flag can be used multiple times.
+
 ### Update your application
 
 > Note: You can only update your application using the same template it was created with.
@@ -32,6 +39,13 @@ To the latest version:
 
 You can also update to a specific version:
 `npx cloneman update 1.2.3`
+
+If the template declares parameters, cloneman will prompt for their values when the terminal is interactive.
+Values can also be supplied non-interactively using `--param key=value`:
+
+`npx cloneman update --param KEY=VALUE`
+
+The `--param` flag can be used multiple times.
 
 #### Local tarball
 

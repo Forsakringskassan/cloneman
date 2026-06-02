@@ -2,18 +2,21 @@ import { type CommandModule } from "yargs";
 import yoctoSpinner from "yocto-spinner";
 import { create } from "../create";
 import { type Context } from "./context";
+import { parseParams } from "./parse-params";
 
 interface CreateArguments {
     name: string;
     template: string;
+    param: string[];
 }
 
 async function createHandler(
     context: Context,
     argv: CreateArguments,
 ): Promise<void> {
-    const { name, template } = argv;
+    const { name, template, param } = argv;
     const { cwd } = context;
+    const parameters = parseParams(param);
 
     const spinner = yoctoSpinner({
         text: `Creating application "${name}" with template "${template}"...`,
@@ -25,6 +28,7 @@ async function createHandler(
             name,
             templatePackage: template,
             cwd,
+            parameters,
             spinner,
         });
     } catch (err) {
@@ -59,6 +63,12 @@ export function createCommand(
                     describe: "Template package name",
                     type: "string",
                     demandOption: true,
+                })
+                .option("param", {
+                    describe: "Override a template parameter (key=value)",
+                    type: "string",
+                    array: true,
+                    default: [],
                 });
         },
         async handler(argv) {

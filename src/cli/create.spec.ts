@@ -42,6 +42,7 @@ it("create app", async () => {
         name: appName,
         templatePackage: templateName,
         cwd: "./new-app",
+        parameters: new Map(),
         spinner: mockSpinner,
     });
 

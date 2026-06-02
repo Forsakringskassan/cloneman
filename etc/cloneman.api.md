@@ -16,6 +16,7 @@ export interface BuildContext {
 
 // @public (undocumented)
 export interface BuildTemplateResult {
+    addParameter(key: string, definition?: Partial<Omit<Parameter, "key">>): void;
     readonly files: string[];
     renovateIgnoreDependencies(): Promise<void>;
     updateJson(this: void, filePath: string, content: unknown): Promise<void>;
@@ -30,6 +31,7 @@ export interface InstallContext {
     }): string;
     getApplicationSelector(): string;
     getApplicationSlug(): string;
+    getParameter(key: string): string;
     readonly logger: Console_2;
     readFile(filePath: string): Promise<string>;
     readJsonFile(filePath: "package.json"): Promise<PackageJson>;
@@ -88,6 +90,16 @@ export interface PackageJson {
     type?: "module" | "commonjs";
     // (undocumented)
     version: string;
+}
+
+// @public
+export interface Parameter {
+    readonly defaultValue?: string;
+    readonly description: string;
+    readonly help: string | null;
+    readonly key: string;
+    readonly pattern?: string;
+    readonly required: boolean;
 }
 
 // @public

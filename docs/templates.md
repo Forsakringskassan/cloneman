@@ -144,7 +144,92 @@ Useful when a template is migrating between tools, e.g. from Jest to Vitest, to 
 
 Supports exact package names or glob patterns, e.g. `@fkui/*` to remove all dependencies in the `@fkui` scope.
 
+## Parameters
+
+Templates can declare parameters that the user must input when creating or updating an application.
+Parameters are declared in the build hook with `addParameter()` and their values are read in subsequent hooks with `getParameter()`.
+
+> [!NOTE]
+> Parameters must not be used for sensitive information such as API keys, passwords, etc.
+> Parameters are persisted in plain-text in the application.
+
+```ts
+// .cloneman/build.mts
+import { type BuildContext } from "cloneman";
+import pkg from "../package.json" with { type: "json" };
+
+export default async ({ buildTemplate }: BuildContext): Promise<void> => {
+    const template = await buildTemplate(pkg.name);
+
+    template.addParameter("maintainer", {
+        description: "Who maintains this repository (username)",
+        required: true,
+    });
+};
+```
+
+```ts
+// .cloneman/install.mts
+import { type InstallContext } from "cloneman";
+
+export default async (context: InstallContext): Promise<void> => {
+    const maintainer = context.getParameter("maintainer");
+    await context.writeFile("CODEOWNERS", `* @${maintainer}`);
+};
+```
+
 ## Function reference
+
+### addParameter
+
+Declare a parameter that the template requires from the user.
+
+**Syntax**
+
+```js
+template.addParameter(key, definition);
+```
+
+**Parameters**
+
+: `key: string`
+Unique identifier for the parameter.
+
+: `definition?: object`
+Optional options for the parameter.
+
+: `definition.description?: string`
+Human-readable description shown to the user.
+
+: `definition.help?: string`
+Additional help text shown to the user.
+
+: `definition.required?: boolean`
+When `true`, the user must provide a non-empty value.
+Cloneman throws an error if no value is available.
+
+: `definition.defaultValue?: string`
+Fallback value used when no existing stored value is present and the user does not provide one.
+
+: `definition.pattern?: string`
+Optional regular expression (anchored) used to validate the value.
+Cloneman throws an error if the value does not match.
+
+**Return value**
+
+`void`
+
+**Example:**
+
+```ts
+const template = await buildTemplate(pkg.name);
+
+template.addParameter("repository", {
+    description: "Repository owner and name (e.g. org/my-app)",
+    required: true,
+    pattern: "[a-z-]+/[a-z-]+",
+});
+```
 
 ### renovateIgnoreDependencies
 
@@ -256,6 +341,7 @@ The install context contains:
 - `getApplicationName()` - returns the name of the application (typically from the `name` field in `package.json`).
 - `getApplicationSlug()` - returns a slug derived from the application name, safe for use in urls, selectors, etc.
 - `getApplicationSelector()` - returns a CSS class selector derived from the application name.
+- `getParameter(key)` - returns the value of a declared parameter (see [Parameters](#parameters)).
 - `readFile(filePath)` - a helper function to read a file.
 - `readJsonFile(filePath)` - a helper function to read a json file.
 - `writeFile(filePath, content)` - a helper function to write a file.

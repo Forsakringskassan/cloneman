@@ -1,3 +1,5 @@
+import { type Parameter } from "../types";
+
 /**
  * Typings for the `package.json` exports field
  *
@@ -39,6 +41,7 @@ export interface TemplatePackageJson extends PackageJson {
         managedFiles: string[];
         uninstallDependencies: string[];
         ignoredDependencies: string[];
+        parameters?: Parameter[];
     };
 }
 

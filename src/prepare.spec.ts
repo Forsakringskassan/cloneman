@@ -8,7 +8,11 @@ import {
     temporaryDirectory,
     withFixture,
 } from "./test-utils";
-import { type PackageJson, readJsonFile } from "./utils";
+import {
+    type PackageJson,
+    type TemplatePackageJson,
+    readJsonFile,
+} from "./utils";
 
 const fixtureDir = path.resolve(import.meta.dirname, "../fixtures");
 const baseTemplate = path.join(fixtureDir, "base-template@1.0.0");
@@ -356,5 +360,32 @@ describe("hooks", () => {
           };
           "
         `);
+    });
+});
+
+describe("parameters", () => {
+    it("should be saved to template package.json", async () => {
+        expect.assertions(1);
+        const template = path.join(fixtureDir, "with-parameters@1.0.0");
+        await prepare(template, targetDir);
+        const packageJson = await readJsonFile<TemplatePackageJson>(
+            path.join(targetDir, "package.json"),
+        );
+        expect(packageJson.cloneman.parameters).toEqual([
+            {
+                key: "repository",
+                description: "Repository url",
+                help: "This should be a valid URL to a Git repository",
+                pattern: "git[+]https://.+",
+                required: true,
+            },
+            {
+                key: "description",
+                description: "Project description",
+                help: null,
+                required: false,
+                defaultValue: "Awesome project",
+            },
+        ]);
     });
 });

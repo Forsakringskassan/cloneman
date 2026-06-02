@@ -9,10 +9,12 @@ import {
     runHook,
 } from "../utils";
 import { type Context } from "./context";
+import { parseParams } from "./parse-params";
 
 interface RunHookArguments {
     hook: keyof HookMapping;
     target: string | undefined;
+    param: string[];
 }
 
 async function runHookHandler(
@@ -20,7 +22,8 @@ async function runHookHandler(
     argv: RunHookArguments,
 ): Promise<boolean> {
     const { cwd } = context;
-    const { hook, target: targetDir = cwd } = argv;
+    const { hook, target: targetDir = cwd, param } = argv;
+    const parameters = parseParams(param);
     const hooksDir = path.join(cwd, ".cloneman");
 
     if (!findHookScriptPath(hook, hooksDir)) {
@@ -40,6 +43,7 @@ async function runHookHandler(
                 command: "update",
                 targetDir,
                 name: targetPkgJson.name,
+                parameters,
                 version: {
                     oldVersion: null,
                     newVersion: cwdPkgJson.version,
@@ -86,6 +90,12 @@ export function runHookCommand(
                 .option("target", {
                     describe: "Target directory (defaults to cwd)",
                     type: "string",
+                })
+                .option("param", {
+                    describe: "Override a template parameter (key=value)",
+                    type: "string",
+                    array: true,
+                    default: [],
                 });
         },
         async handler(argv) {

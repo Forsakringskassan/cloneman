@@ -1,5 +1,9 @@
 export { createInstallContext } from "./create-install-context";
 export { filterDependencies } from "./filter-dependencies";
+export {
+    type CollectParametersOptions,
+    collectParameters,
+} from "./collect-parameters";
 export { findHookScriptPath } from "./find-hook-script-path";
 export { getApplicationName } from "./get-application-name";
 export { getApplicationSelector } from "./get-application-selector";

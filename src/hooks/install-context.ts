@@ -256,4 +256,19 @@ export interface InstallContext {
      * @param delimiter - Optional delimiter to use for arrays, default `\n`.
      */
     setMessage(text: string | string[], delimiter?: string): void;
+
+    /**
+     * Get a parameter value by key.
+     *
+     * Parameters are declared by the template using `addParameter()` in the
+     * build hook and collected from the user before the install hook runs.
+     *
+     * Throws an error if the parameter key was not declared by the template.
+     *
+     * @public
+     * @since %version%
+     * @param key - The parameter key as declared with `addParameter()` in the build hook.
+     * @returns The parameter value.
+     */
+    getParameter(key: string): string;
 }
