@@ -62,7 +62,7 @@
     "detect-indent": "7.0.2",
     "nano-spawn": "2.1.0",
     "sort-package-json": "3.6.1",
-    "tar": "7.5.15",
+    "tar": "7.5.16",
     "yargs": "18.0.0",
     "yocto-spinner": "1.2.0"
   },
