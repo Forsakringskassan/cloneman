@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## [1.18.0](https://github.com/Forsakringskassan/cloneman/compare/v1.17.0...v1.18.0) (2026-06-12)
+
+### Features
+
+* **deps:** update dependency sort-package-json to v4 ([6d78ac6](https://github.com/Forsakringskassan/cloneman/commit/6d78ac6a03bd5842dac25d2f523d62d572558acc))
+
+### Bug Fixes
+
+* **deps:** update dependency sort-package-json to v3.7.0 ([9d20e9b](https://github.com/Forsakringskassan/cloneman/commit/9d20e9b4e611fd0abf96bb161e0ca5e160aaf8d0))
+* **deps:** update dependency sort-package-json to v3.7.1 ([0a4cb6f](https://github.com/Forsakringskassan/cloneman/commit/0a4cb6f19919959b48fc80540f2465bec57903c4))
+* **deps:** update dependency tar to v7.5.16 ([d401d88](https://github.com/Forsakringskassan/cloneman/commit/d401d88cea115f8e9d4d29b6dac07aea7541946f))
+
 ## [1.17.0](https://github.com/Forsakringskassan/cloneman/compare/v1.16.0...v1.17.0) (2026-06-02)
 
 ### Features
