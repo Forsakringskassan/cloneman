@@ -6,27 +6,27 @@
 
 Available commands
 
-- Create
-- Update
-- Verify
-- Migrate
+- [Create](#create-a-new-application-based-on-a-template)
+- [Update](#update-your-application)
+- [Verify](#verify)
+- [Migrate](#migrate)
 
 ### Create a new application based on a template
 
-`npx cloneman create my-new-application template-package-name`
+`npx cloneman@latest create my-new-application template-package-name`
 
 Keep in mind that `template-package-name` needs to be published to the npm registry.
 
 The latest version of the template is installed by default. To install a specific version, specify it using the `@version` suffix:
-`npx cloneman create my-new-application template-package-name@1.2.3`
+`npx cloneman@latest create my-new-application template-package-name@1.2.3`
 
 You can also refer to a local template file:
-`npx cloneman create my-new-application ../directory/template.tgz`
+`npx cloneman@latest create my-new-application ../directory/template.tgz`
 
 If the template declares parameters, cloneman will prompt for their values when the terminal is interactive.
 Values can also be supplied non-interactively using `--param key=value`:
 
-`npx cloneman create my-new-application template-package-name --param KEY=VALUE`
+`npx cloneman@latest create my-new-application template-package-name --param KEY=VALUE`
 
 The `--param` flag can be used multiple times.
 
@@ -35,22 +35,22 @@ The `--param` flag can be used multiple times.
 > Note: You can only update your application using the same template it was created with.
 
 To the latest version:
-`npx cloneman update`
+`npx cloneman@latest update`
 
 You can also update to a specific version:
-`npx cloneman update 1.2.3`
+`npx cloneman@latest update 1.2.3`
 
 If the template declares parameters, cloneman will prompt for their values when the terminal is interactive.
 Values can also be supplied non-interactively using `--param key=value`:
 
-`npx cloneman update --param KEY=VALUE`
+`npx cloneman@latest update --param KEY=VALUE`
 
 The `--param` flag can be used multiple times.
 
 #### Local tarball
 
 As with the create command, you can also point to a local tarball:
-`npx cloneman update ../directory/template.tgz`
+`npx cloneman@latest update ../directory/template.tgz`
 
 ### Verify
 
@@ -69,11 +69,11 @@ It is recommended to run this from the `prepare` script in the applications `pac
 
 Migrates an existing application to use a cloneman template.
 
-`npx cloneman migrate template-package-name`
+`npx cloneman@latest migrate template-package-name`
 
 After migrating, run update to apply the template files:
 
-`npx cloneman update`
+`npx cloneman@latest update`
 
 Note: the migration won't modify any files other than `package.json`, which connects your application to a specific template. It is up to the update command to actually modify the repository.
 
