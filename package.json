@@ -84,7 +84,7 @@
     "@types/stream-buffers": "3.0.8",
     "@types/yargs": "17.0.35",
     "@verdaccio/types": "13.0.1",
-    "esbuild": "0.28.0",
+    "esbuild": "0.28.1",
     "is-ci": "4.1.0",
     "memfs": "4.57.7",
     "npm-pkg-lint": "5.1.7",
