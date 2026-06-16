@@ -88,7 +88,7 @@
     "is-ci": "4.1.0",
     "memfs": "4.57.7",
     "npm-pkg-lint": "5.1.7",
-    "npm-run-all2": "9.0.1",
+    "npm-run-all2": "9.0.2",
     "pretty-ansi": "4.0.0",
     "stream-buffers": "3.0.3",
     "typescript": "6.0.3",
