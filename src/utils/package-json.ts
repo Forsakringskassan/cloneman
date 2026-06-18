@@ -19,6 +19,10 @@ export interface PackageJson {
     name: string;
     version: string;
     type?: "module" | "commonjs";
+    keywords?: string[];
+    homepage?: string;
+    bugs?: { email?: string; url?: string };
+    repository?: string | { type: string; url: string };
     exports?: ExportsField;
     scripts?: Record<string, string>;
     description?: string;

@@ -67,6 +67,10 @@ describe("update existing project with template from registry", () => {
             await readJsonFile<ApplicationPackageJson>("package.json");
         packageJson.description = "description";
         packageJson.version = "0.0.1";
+        packageJson.homepage = "package-homepage";
+        packageJson.bugs = { url: "package-homepage/bugs" };
+        packageJson.keywords = ["foo", "bar"];
+        packageJson.repository = "git+package-homepage";
 
         await writeJsonFile(path.join(appDir, "package.json"), packageJson, {
             indent: 2,
@@ -75,7 +79,7 @@ describe("update existing project with template from registry", () => {
     });
 
     it("should update existing project", async () => {
-        expect.assertions(10);
+        expect.assertions(14);
 
         expect(await readFile("boilerplate.txt")).toMatchInlineSnapshot(
             `boilerplate file at v1.0.0`,
@@ -122,6 +126,14 @@ describe("update existing project with template from registry", () => {
         expect(applicationPackageJson.description).toBe("description");
         expect(applicationPackageJson.version).toBe("0.0.1");
         expect(applicationPackageJson.scripts).toEqual({ a: "foo", b: "bar" });
+
+        /* these fields should be intact, not overwritten */
+        expect(applicationPackageJson.homepage).toBe("package-homepage");
+        expect(applicationPackageJson.bugs).toEqual({
+            url: "package-homepage/bugs",
+        });
+        expect(applicationPackageJson.keywords).toEqual(["foo", "bar"]);
+        expect(applicationPackageJson.repository).toBe("git+package-homepage");
     });
 
     it("should set actual version to the resolved version if input version is 'latest'", async () => {
