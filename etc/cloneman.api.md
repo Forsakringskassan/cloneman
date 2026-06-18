@@ -69,6 +69,11 @@ export function pack(options: {
 // @public
 export interface PackageJson {
     // (undocumented)
+    bugs?: {
+        email?: string;
+        url?: string;
+    };
+    // (undocumented)
     cloneman?: unknown;
     // (undocumented)
     dependencies?: Partial<Record<string, string>>;
@@ -81,9 +86,18 @@ export interface PackageJson {
     // (undocumented)
     exports?: ExportsField;
     // (undocumented)
+    homepage?: string;
+    // (undocumented)
+    keywords?: string[];
+    // (undocumented)
     name: string;
     // (undocumented)
     peerDependencies?: Partial<Record<string, string>>;
+    // (undocumented)
+    repository?: string | {
+        type: string;
+        url: string;
+    };
     // (undocumented)
     scripts?: Record<string, string>;
     // (undocumented)

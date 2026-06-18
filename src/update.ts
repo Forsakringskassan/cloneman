@@ -58,11 +58,11 @@ export async function update(options: {
         }
     }
 
-    const applicationPackageJson = await readJsonFile<PackageJson>(
+    const appPackageJson = await readJsonFile<PackageJson>(
         path.join(appDir, "package.json"),
     );
 
-    const { cloneman, name, version, description } = applicationPackageJson;
+    const { cloneman, name, version, description } = appPackageJson;
     if (cloneman === undefined) {
         throw new MissingClonemanFieldError();
     } else if (!isClientMetadata(cloneman)) {
@@ -167,14 +167,14 @@ export async function update(options: {
     );
 
     const dependencies = filterDependencies({
-        appDependencies: applicationPackageJson.dependencies,
+        appDependencies: appPackageJson.dependencies,
         templateDependencies: tmplPackageJson.dependencies,
         uninstallDependencies,
         ignoredDependencies,
     });
 
     const devDependencies = filterDependencies({
-        appDependencies: applicationPackageJson.devDependencies,
+        appDependencies: appPackageJson.devDependencies,
         templateDependencies: tmplPackageJson.devDependencies,
         uninstallDependencies,
         ignoredDependencies,
@@ -186,6 +186,10 @@ export async function update(options: {
             ...tmplPackageJson,
             name,
             version,
+            keywords: appPackageJson.keywords ?? tmplPackageJson.keywords,
+            homepage: appPackageJson.homepage ?? tmplPackageJson.homepage,
+            bugs: appPackageJson.bugs ?? tmplPackageJson.bugs,
+            repository: appPackageJson.repository ?? appPackageJson.repository,
             description,
             dependencies,
             devDependencies: {
