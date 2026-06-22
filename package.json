@@ -84,7 +84,7 @@
     "@types/jsonwebtoken": "9.0.10",
     "@types/stream-buffers": "3.0.8",
     "@types/yargs": "17.0.35",
-    "@verdaccio/types": "13.0.1",
+    "@verdaccio/types": "13.0.2",
     "esbuild": "0.28.1",
     "is-ci": "4.1.0",
     "memfs": "4.57.7",
