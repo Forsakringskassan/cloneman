@@ -12,7 +12,7 @@ async function sniff(
         return options;
     }
     const { indent } = detectIndent(raw);
-    const match = /(\r?\n)$/.exec(raw);
+    const match = /\r?\n$/.exec(raw);
     const trailer = match ? match[0] : "";
     return {
         indent,

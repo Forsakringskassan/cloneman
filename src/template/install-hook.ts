@@ -36,7 +36,7 @@ export async function installHook(
     );
     const strippedContent = stripTypeScriptTypes(originalContent);
     const cleanContent = strippedContent.replaceAll(
-        /^import {\s*} from ("[^"]+"|'[^']+');$/gm,
+        /^import \{\s*\} from (?:"[^"]+"|'[^']+');$/gm,
         "",
     );
     const dst = path.join(targetDir, "hooks");

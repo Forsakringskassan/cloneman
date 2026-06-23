@@ -8,7 +8,7 @@ export function getApplicationName(
     options: { unscoped: boolean },
 ): string {
     if (options.unscoped) {
-        return name.replaceAll(/^@([^/]+)\//g, "");
+        return name.replaceAll(/^@[^/]+\//g, "");
     } else {
         return name;
     }
