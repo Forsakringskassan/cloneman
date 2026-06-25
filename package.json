@@ -68,7 +68,7 @@
     "yocto-spinner": "1.2.0"
   },
   "devDependencies": {
-    "@arethetypeswrong/cli": "0.18.3",
+    "@arethetypeswrong/cli": "0.18.4",
     "@forsakringskassan/commitlint-config": "4.1.1",
     "@forsakringskassan/eslint-config": "15.1.0",
     "@forsakringskassan/eslint-config-cli": "15.1.0",
