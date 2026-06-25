@@ -1,11 +1,23 @@
-import { writeJsonFile } from "../../utils";
-import { type TemplatePackageJson } from "../../utils";
+import {
+    type PackageJson,
+    type TemplatePackageJson,
+    writeJsonFile,
+} from "../../utils";
 
 export async function createclonemanPackageJson(
     dst: string,
-    options: {
-        name: string;
-        version: string;
+    options: Pick<
+        PackageJson,
+        | "name"
+        | "version"
+        | "description"
+        | "keywords"
+        | "homepage"
+        | "bugs"
+        | "repository"
+        | "license"
+        | "author"
+    > & {
         boilerplateFiles: string[];
         managedFiles: string[];
         uninstallDependencies: string[];
@@ -15,6 +27,13 @@ export async function createclonemanPackageJson(
     const {
         name,
         version,
+        description,
+        keywords,
+        homepage,
+        bugs,
+        repository,
+        license,
+        author,
         boilerplateFiles,
         managedFiles,
         ignoredDependencies,
@@ -22,8 +41,15 @@ export async function createclonemanPackageJson(
     } = options;
     const pkg: TemplatePackageJson = {
         name,
-        type: "module",
         version,
+        description,
+        keywords,
+        homepage,
+        bugs,
+        repository,
+        license,
+        author,
+        type: "module",
         exports: {
             ".": "./index.js",
         },

@@ -178,6 +178,32 @@ export default async (context: InstallContext): Promise<void> => {
 };
 ```
 
+## `package.json`
+
+The fields from the template `package.json` will be used by:
+
+| field         | NPM package | create | update |
+| ------------- | ----------- | ------ | ------ |
+| `name`        | ✓           |        |        |
+| `version`     | ✓           |        |        |
+| `description` | ✓           |        |        |
+| `keywords`    | ✓           | ✓      | \*     |
+| `homepage`    | ✓           | ✓      | \*     |
+| `bugs`        | ✓           | ✓      | \*     |
+| `repository`  | ✓           | ✓      | \*     |
+| `license`     | ✓           | ✓      | ✓      |
+| `author`      | ✓           | ✓      | ✓      |
+| \*            |             | ✓      | ✓      |
+
+where:
+
+- "NPM package" refers to the `package.json` published to the NPM registry.
+- "create" refers to the `package.json` in the application after running `npx cloneman create`.
+- "update" refers to the `package.json` in the application after running `npx cloneman update`.
+
+During `npx cloneman update` fields marked with an asterisk `*` are preserved if present.
+If missing from the application they are written from the template.
+
 ## Function reference
 
 ### addParameter
