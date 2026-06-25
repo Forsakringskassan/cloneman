@@ -159,6 +159,13 @@ export async function buildTemplate(options: {
         {
             name,
             version: pkg.version,
+            description: pkg.description,
+            keywords: pkg.keywords,
+            homepage: pkg.homepage,
+            bugs: pkg.bugs,
+            repository: pkg.repository,
+            license: pkg.license,
+            author: pkg.author,
             boilerplateFiles: files,
             uninstallDependencies,
             ignoredDependencies: templateIgnoredDependencies,

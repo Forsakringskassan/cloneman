@@ -2,6 +2,21 @@
   "name": "@forsakringskassan/base-template",
   "version": "1.0.0",
   "private": true,
+  "description": "base template description",
+  "keywords": [
+    "foo",
+    "bar"
+  ],
+  "homepage": "https://example.net/base-template",
+  "bugs": {
+    "url": "https://example.net/base-template/bugs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://git.example.net/base-template"
+  },
+  "license": "MIT",
+  "author": "Author Name <author.name@example.net>",
   "files": [],
   "scripts": {
     "a": "foo"

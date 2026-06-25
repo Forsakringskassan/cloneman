@@ -189,7 +189,7 @@ export async function update(options: {
             keywords: appPackageJson.keywords ?? tmplPackageJson.keywords,
             homepage: appPackageJson.homepage ?? tmplPackageJson.homepage,
             bugs: appPackageJson.bugs ?? tmplPackageJson.bugs,
-            repository: appPackageJson.repository ?? appPackageJson.repository,
+            repository: appPackageJson.repository ?? tmplPackageJson.repository,
             description,
             dependencies,
             devDependencies: {

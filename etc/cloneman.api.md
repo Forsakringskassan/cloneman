@@ -69,16 +69,18 @@ export function pack(options: {
 // @public
 export interface PackageJson {
     // (undocumented)
-    bugs?: {
+    author?: string | undefined;
+    // (undocumented)
+    bugs?: string | {
         email?: string;
         url?: string;
-    };
+    } | undefined;
     // (undocumented)
     cloneman?: unknown;
     // (undocumented)
     dependencies?: Partial<Record<string, string>>;
     // (undocumented)
-    description?: string;
+    description?: string | undefined;
     // (undocumented)
     devDependencies?: Partial<Record<string, string>>;
     // Warning: (ae-forgotten-export) The symbol "ExportsField" needs to be exported by the entry point index.d.ts
@@ -86,9 +88,11 @@ export interface PackageJson {
     // (undocumented)
     exports?: ExportsField;
     // (undocumented)
-    homepage?: string;
+    homepage?: string | undefined;
     // (undocumented)
-    keywords?: string[];
+    keywords?: string[] | undefined;
+    // (undocumented)
+    license?: string | undefined;
     // (undocumented)
     name: string;
     // (undocumented)
@@ -97,7 +101,7 @@ export interface PackageJson {
     repository?: string | {
         type: string;
         url: string;
-    };
+    } | undefined;
     // (undocumented)
     scripts?: Record<string, string>;
     // (undocumented)

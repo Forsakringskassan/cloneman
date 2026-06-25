@@ -74,6 +74,10 @@ describe("prepare base template", () => {
 
         expect(packageJson).toMatchInlineSnapshot(`
           {
+            "author": "Author Name <author.name@example.net>",
+            "bugs": {
+              "url": "https://example.net/base-template/bugs",
+            },
             "cloneman": {
               "template": "@forsakringskassan/base-template",
               "version": "1.0.0",
@@ -89,8 +93,18 @@ describe("prepare base template", () => {
               "cloneman": ".",
             },
             "files": [],
+            "homepage": "https://example.net/base-template",
+            "keywords": [
+              "foo",
+              "bar",
+            ],
+            "license": "MIT",
             "name": "\${name}",
             "private": true,
+            "repository": {
+              "type": "git",
+              "url": "git+https://git.example.net/base-template",
+            },
             "scripts": {
               "a": "foo",
             },
@@ -100,7 +114,7 @@ describe("prepare base template", () => {
     });
 
     it("should create a new package.json for NPM package", async () => {
-        expect.assertions(2);
+        expect.assertions(14);
 
         const { output } = await prepare(baseTemplate, targetDir);
         expect(output).toMatchInlineSnapshot(`
@@ -113,33 +127,68 @@ describe("prepare base template", () => {
             path.join(targetDir, "package.json"),
         );
 
-        expect(packageJson).toMatchInlineSnapshot(`
+        const {
+            name,
+            version,
+            description,
+            keywords,
+            homepage,
+            bugs,
+            repository,
+            license,
+            author,
+            type,
+            exports,
+            cloneman,
+            ...remainder
+        } = packageJson;
+
+        /* these fields should be copied verbatim from template repository
+         * package.json (see `fixtures/base-template@1.0.0/package.json`) */
+        expect(name).toBe("@forsakringskassan/base-template");
+        expect(version).toBe("1.0.0");
+        expect(description).toBe("base template description");
+        expect(keywords).toEqual(["foo", "bar"]);
+        expect(homepage).toBe("https://example.net/base-template");
+        expect(bugs).toEqual({
+            url: "https://example.net/base-template/bugs",
+        });
+        expect(repository).toEqual({
+            type: "git",
+            url: "git+https://git.example.net/base-template",
+        });
+        expect(license).toBe("MIT");
+        expect(author).toBe("Author Name <author.name@example.net>");
+
+        /* generated fields */
+        expect(type).toBe("module");
+        expect(exports).toEqual({
+            ".": "./index.js",
+        });
+
+        /* cloneman data */
+        expect(cloneman).toMatchInlineSnapshot(`
           {
-            "cloneman": {
-              "boilerplateFiles": [
-                ".gitignore",
-                ".npmrc",
-                "boilerplate.txt",
-                "managed.txt",
-                "renovate.json",
-                "sub-folder/sub-file.txt",
-              ],
-              "ignoredDependencies": [],
-              "managedFiles": [
-                "managed.txt",
-                ".gitignore",
-                "renovate.json",
-              ],
-              "uninstallDependencies": [],
-            },
-            "exports": {
-              ".": "./index.js",
-            },
-            "name": "@forsakringskassan/base-template",
-            "type": "module",
-            "version": "1.0.0",
+            "boilerplateFiles": [
+              ".gitignore",
+              ".npmrc",
+              "boilerplate.txt",
+              "managed.txt",
+              "renovate.json",
+              "sub-folder/sub-file.txt",
+            ],
+            "ignoredDependencies": [],
+            "managedFiles": [
+              "managed.txt",
+              ".gitignore",
+              "renovate.json",
+            ],
+            "uninstallDependencies": [],
           }
         `);
+
+        /* sanity check: should be no keys left */
+        expect(remainder).toEqual({});
     });
 
     it("should add packageRules to managed renovate.json", async () => {
