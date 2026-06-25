@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## [1.18.1](https://github.com/Forsakringskassan/cloneman/compare/v1.18.0...v1.18.1) (2026-06-25)
+
+### Bug Fixes
+
+* do not replace app specific package.json fields. (fixes [#112](https://github.com/Forsakringskassan/cloneman/issues/112)) ([6678830](https://github.com/Forsakringskassan/cloneman/commit/6678830435233a6484219ae1acab4df2b9b287c1))
+* retain repository field during npm publish ([781efee](https://github.com/Forsakringskassan/cloneman/commit/781efeedf383421830073b1d478023d10ebe0919)), closes [#119](https://github.com/Forsakringskassan/cloneman/issues/119)
+
 ## [1.18.0](https://github.com/Forsakringskassan/cloneman/compare/v1.17.0...v1.18.0) (2026-06-12)
 
 ### Features
