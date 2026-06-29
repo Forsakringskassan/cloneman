@@ -343,6 +343,39 @@ it("should crash if invalid tar path", async () => {
     ).rejects.toThrow(`Tarball not found at path`);
 });
 
+it("should remove files set in removeFiles", async () => {
+    expect.assertions(2);
+    await create({
+        name: "mock-app",
+        templatePackage: "@forsakringskassan/with-removed-files@1.0.0",
+        cwd,
+        env: userEnv,
+        parameters: new Map(),
+    });
+    /* should have created file.js and file.json */
+    expect(await printTree(appDir)).toMatchInlineSnapshot(`
+      (root)
+          ├── file.js
+          ├── file.json
+          ├── package-lock.json
+          └── package.json
+    `);
+    await update({
+        cwd: appDir,
+        version: "1.0.1",
+        env: userEnv,
+        parameters: new Map(),
+    });
+    /* should have renamed file.js to file.mts, while keeping file.json */
+    expect(await printTree(appDir)).toMatchInlineSnapshot(`
+      (root)
+          ├── file.json
+          ├── file.mts
+          ├── package-lock.json
+          └── package.json
+    `);
+});
+
 it("should return a default instructions message", async () => {
     expect.assertions(1);
     await create({

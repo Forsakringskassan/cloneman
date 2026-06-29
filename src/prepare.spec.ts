@@ -183,6 +183,7 @@ describe("prepare base template", () => {
               ".gitignore",
               "renovate.json",
             ],
+            "removeFiles": [],
             "uninstallDependencies": [],
           }
         `);

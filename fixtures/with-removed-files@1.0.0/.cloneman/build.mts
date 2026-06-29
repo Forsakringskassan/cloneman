@@ -1,0 +1,8 @@
+import { type BuildContext } from "cloneman";
+import pkg from "../package.json" with { type: "json" };
+
+export async function build({ buildTemplate }: BuildContext): Promise<void> {
+    await buildTemplate(pkg.name, {
+        managedFiles: ["file.js", "file.json"],
+    });
+}

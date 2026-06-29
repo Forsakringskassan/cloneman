@@ -121,6 +121,7 @@ export async function buildTemplate(options: {
     const {
         managedFiles,
         ignoredFiles: templateIgnoredFiles,
+        removeFiles,
         ignoredDependencies: templateIgnoredDependencies,
         uninstallDependencies,
     } = templateConfig;
@@ -167,6 +168,7 @@ export async function buildTemplate(options: {
             license: pkg.license,
             author: pkg.author,
             boilerplateFiles: files,
+            removeFiles,
             uninstallDependencies,
             ignoredDependencies: templateIgnoredDependencies,
             managedFiles,
