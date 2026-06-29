@@ -1,0 +1,9 @@
+{
+  "name": "@forsakringskassan/with-removed-files",
+  "version": "1.0.1",
+  "private": true,
+  "files": [],
+  "devDependencies": {
+    "cloneman": "."
+  }
+}

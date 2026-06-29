@@ -118,6 +118,17 @@ List of files owned by the template.
 All non-ignored files will be included in the template but only the files included in `managedFiles` are updated when running `cloneman update`.
 When running `cloneman create` all non-ignored files are always copied.
 
+### removeFiles
+
+- type: `string[]`
+- default: `[]`
+
+List of files to be removed from the application during an update.
+Supports exact file names or glob patterns, e.g. `tsconfig.*` to remove all matching files.
+
+Files are removed before copying over the new files from the template.
+If `removeFiles` matches entries also present in `managedFiles` the files (or glob patterns) will be removed before copying over the updated files.
+
 ### ignoredFiles
 
 - type: `string[]`

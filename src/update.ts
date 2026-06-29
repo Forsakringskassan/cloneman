@@ -8,6 +8,7 @@ import { getStoredFileName } from "./template/utils";
 import { type ClientMetadata } from "./types";
 import {
     type PackageJson,
+    type TemplatePackageJson,
     collectParameters,
     createInstallContext,
     fetchTarball,
@@ -34,6 +35,56 @@ async function withTemporaryDirectory(
     }
 }
 
+async function removeFiles(
+    cloneman: Partial<TemplatePackageJson["cloneman"]>,
+    { cwd }: { cwd: string },
+): Promise<void> {
+    const { removeFiles } = cloneman;
+    if (!removeFiles) {
+        return;
+    }
+    const include = removeFiles.filter((it) => !it.startsWith("!"));
+    const exclude = removeFiles
+        .filter((it) => it.startsWith("!"))
+        .map((it) => it.slice(1));
+    const iterator = fs.glob(include, { cwd });
+    const filenames = await Array.fromAsync(iterator);
+    await Promise.all(
+        filenames.map(async (it) => {
+            if (exclude.some((pattern) => path.matchesGlob(it, pattern))) {
+                return;
+            }
+            const filename = path.join(cwd, it);
+            await fs.unlink(filename);
+        }),
+    );
+}
+
+async function copyFiles(
+    files: Map<string, Buffer>,
+    cloneman: Partial<TemplatePackageJson["cloneman"]>,
+    { cwd }: { cwd: string },
+): Promise<void> {
+    const { managedFiles } = cloneman;
+    if (!managedFiles) {
+        return;
+    }
+    await Promise.all(
+        managedFiles.map(async (filename) => {
+            const tarEntryPath = `package/files/${getStoredFileName(filename)}`;
+            const content = files.get(tarEntryPath);
+            if (content === undefined) {
+                throw new Error(
+                    `Managed file "${filename}" not found in tarball`,
+                );
+            }
+            const dest = path.join(cwd, filename);
+            await fs.mkdir(path.dirname(dest), { recursive: true });
+            await fs.writeFile(dest, content);
+        }),
+    );
+}
+
 /**
  * @internal
  */
@@ -52,9 +103,15 @@ export async function update(options: {
         spinner,
     } = options;
 
-    function text(newText: string): void {
+    async function text(
+        newText: string,
+        cb?: () => void | Promise<void>,
+    ): Promise<void> {
         if (spinner) {
             spinner.text = newText;
+        }
+        if (cb) {
+            await cb();
         }
     }
 
@@ -77,7 +134,7 @@ export async function update(options: {
      */
     let packageJsonVersion: string;
 
-    text("Retrieving template files...");
+    await text("Retrieving template files...");
     if (isTarball(templateVersion)) {
         const tarPath = path.isAbsolute(templateVersion)
             ? templateVersion
@@ -128,7 +185,6 @@ export async function update(options: {
     }
 
     const {
-        managedFiles,
         uninstallDependencies,
         ignoredDependencies,
         parameters: parameterDefinitions,
@@ -149,22 +205,13 @@ export async function update(options: {
         spinner.start();
     }
 
-    text("Copying managed files");
+    await text("Removing obsolete files", () => {
+        return removeFiles(tarballPackageJson.cloneman, { cwd: appDir });
+    });
 
-    await Promise.all(
-        managedFiles.map(async (filename) => {
-            const tarEntryPath = `package/files/${getStoredFileName(filename)}`;
-            const content = files.get(tarEntryPath);
-            if (content === undefined) {
-                throw new Error(
-                    `Managed file "${filename}" not found in tarball`,
-                );
-            }
-            const dest = path.join(appDir, filename);
-            await fs.mkdir(path.dirname(dest), { recursive: true });
-            await fs.writeFile(dest, content);
-        }),
-    );
+    await text("Copying managed files", () => {
+        return copyFiles(files, tarballPackageJson.cloneman, { cwd: appDir });
+    });
 
     const dependencies = filterDependencies({
         appDependencies: appPackageJson.dependencies,

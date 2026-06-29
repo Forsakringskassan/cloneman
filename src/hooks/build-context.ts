@@ -18,7 +18,19 @@ export interface BuildContext {
     buildTemplate(
         this: void,
         name: string,
-        config?: TemplateConfig | NormalizedTemplateConfig,
+        config?: TemplateConfig,
+    ): Promise<BuildTemplateResult>;
+
+    /**
+     * Builds a cloneman template.
+     *
+     * @param name - The name to publish this package as.
+     * @param config - A normalized template configuration.
+     */
+    buildTemplate(
+        this: void,
+        name: string,
+        config: NormalizedTemplateConfig,
     ): Promise<BuildTemplateResult>;
 
     /**

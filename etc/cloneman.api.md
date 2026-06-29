@@ -8,7 +8,8 @@ import { Console as Console_2 } from 'node:console';
 
 // @public
 export interface BuildContext {
-    buildTemplate(this: void, name: string, config?: TemplateConfig | NormalizedTemplateConfig): Promise<BuildTemplateResult>;
+    buildTemplate(this: void, name: string, config?: TemplateConfig): Promise<BuildTemplateResult>;
+    buildTemplate(this: void, name: string, config: NormalizedTemplateConfig): Promise<BuildTemplateResult>;
     readonly logger: Console_2;
     readonly targetDir: string;
     readonly templateDir: string;
@@ -56,6 +57,7 @@ export interface NormalizedTemplateConfig {
     ignoredDependencies: string[];
     ignoredFiles: string[];
     managedFiles: string[];
+    removeFiles: string[];
     uninstallDependencies: string[];
 }
 
@@ -146,6 +148,7 @@ export interface TemplateConfig {
     ignoredDependencies?: string[];
     ignoredFiles?: string[];
     managedFiles?: string[];
+    removeFiles?: string[];
     uninstallDependencies?: string[];
 }
 

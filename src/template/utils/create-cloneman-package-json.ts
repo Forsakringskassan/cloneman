@@ -20,6 +20,7 @@ export async function createclonemanPackageJson(
     > & {
         boilerplateFiles: string[];
         managedFiles: string[];
+        removeFiles: string[];
         uninstallDependencies: string[];
         ignoredDependencies: string[];
     },
@@ -36,6 +37,7 @@ export async function createclonemanPackageJson(
         author,
         boilerplateFiles,
         managedFiles,
+        removeFiles,
         ignoredDependencies,
         uninstallDependencies,
     } = options;
@@ -56,6 +58,7 @@ export async function createclonemanPackageJson(
         cloneman: {
             boilerplateFiles,
             managedFiles,
+            removeFiles,
             uninstallDependencies,
             ignoredDependencies,
         },
