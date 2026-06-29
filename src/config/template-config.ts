@@ -24,7 +24,7 @@ export interface TemplateConfig {
      * - Remove file by pattern: `["*.tsbuildinfo"]`
      * - Negate pattern: `["tsconfig.*", "!tsconfig.json"]`
      *
-     * @since %version%
+     * @since v1.19.0
      */
     removeFiles?: string[];
     /** list of dependencies (from package.json) to ignore */

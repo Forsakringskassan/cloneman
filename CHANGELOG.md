@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## [1.19.0](https://github.com/Forsakringskassan/cloneman/compare/v1.18.1...v1.19.0) (2026-06-29)
+
+### Features
+
+* support removing files from application ([d2d6412](https://github.com/Forsakringskassan/cloneman/commit/d2d64125cc6895a6a5799b66f8c737636cfbac8f)), closes [#122](https://github.com/Forsakringskassan/cloneman/issues/122)
+
+### Bug Fixes
+
+* **deps:** update dependency tar to v7.5.17 ([aa85736](https://github.com/Forsakringskassan/cloneman/commit/aa85736ce087e14b7ae0f2bd9517ac5e419d1426))
+
 ## [1.18.1](https://github.com/Forsakringskassan/cloneman/compare/v1.18.0...v1.18.1) (2026-06-25)
 
 ### Bug Fixes
