@@ -25,9 +25,7 @@ import pkg from "../package.json" with { type: "json" };
 export async function build(context: BuildContext): Promise<void> {
     const { buildTemplate } = context;
 
-    await buildTemplate(pkg.name, {
-        /* configuration */
-    });
+    await buildTemplate(pkg.name, {/* configuration */});
 }
 ```
 
@@ -42,9 +40,7 @@ import pkg from "../package.json" with { type: "json" };
 export default async (context) => {
     const { buildTemplate } = context;
 
-    await buildTemplate(pkg.name, {
-        /* configuration */
-    });
+    await buildTemplate(pkg.name, {/* configuration */});
 };
 ```
 
@@ -64,9 +60,7 @@ import pkg from "../package.json" with { type: "json" };
 export async function build(context: BuildContext): Promise<void> {
     const { buildTemplate } = context;
 
-    const template = await buildTemplate(pkg.name, {
-        /* configuration */
-    });
+    const template = await buildTemplate(pkg.name, {/* configuration */});
 
     /* add a new file */
     await template.writeFile("awesome.txt", "everything is awesome!");
