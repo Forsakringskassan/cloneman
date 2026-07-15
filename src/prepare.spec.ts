@@ -21,7 +21,7 @@ const baseTemplateUpdated = path.join(fixtureDir, "base-template@1.0.1");
 let targetDir: string;
 
 /* Increased timeout time since test involves a lot reading and writing to disc. */
-vi.setConfig({ testTimeout: 10000 });
+vi.setConfig({ testTimeout: 10_000 });
 
 beforeEach(() => {
     targetDir = temporaryDirectory();

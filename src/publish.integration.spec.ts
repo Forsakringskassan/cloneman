@@ -22,7 +22,7 @@ import { info } from "./utils";
 Increased timeout time since test involves a lot reading and writing to disc.
 Npm publish also takes some time on Windows machines, which causes the test to fail with timeout error.
 */
-vi.setConfig({ testTimeout: 30000 });
+vi.setConfig({ testTimeout: 30_000 });
 
 const targetDir = temporaryDirectory();
 const authEnv = inject("authEnv");

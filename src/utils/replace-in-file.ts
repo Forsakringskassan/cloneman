@@ -18,10 +18,9 @@ export async function replaceInFile(
         .map((line) => {
             match.lastIndex = 0;
             if (match.test(line)) {
-                return line.replace(pattern, replacement);
-            } else {
-                return line;
+                return line.replace(pattern, () => replacement);
             }
+            return line;
         })
         .join("\n");
     await fs.writeFile(filePath, updated, "utf8");

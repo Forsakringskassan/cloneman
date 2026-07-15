@@ -10,7 +10,8 @@ export function parseParams(params: string[]): Map<string, string> {
             throw new Error(
                 `Invalid --param "${param}": invalid format (expected "key=value")`,
             );
-        } else if (index === 0) {
+        }
+        if (index === 0) {
             throw new Error(
                 `Invalid --param "${param}": key missing (expected "key=value")`,
             );

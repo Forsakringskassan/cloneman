@@ -11,17 +11,18 @@ import { type TemplatePackageJson } from "./package-json";
 export async function readPackageJsonFromTarball(
     tarballPath: string,
 ): Promise<TemplatePackageJson> {
-    const chunks: Buffer[] = [];
-
     if (!existsSync(tarballPath)) {
         throw new Error(`Tarball not found at path "${tarballPath}"`);
     }
 
+    const chunks: Buffer[] = [];
     await list({
         file: tarballPath,
         onReadEntry(entry) {
             if (entry.path === "package/package.json") {
-                entry.on("data", (chunk: Buffer) => chunks.push(chunk));
+                entry.on("data", (chunk: Buffer) => {
+                    chunks.push(chunk);
+                });
             } else {
                 entry.resume();
             }

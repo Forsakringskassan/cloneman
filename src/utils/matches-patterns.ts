@@ -15,6 +15,6 @@ export function matchesPatterns(key: string, patterns: string[]): boolean {
         .map((p) => p.slice(1));
     return (
         positive.some((pattern) => matchesGlob(key, pattern)) &&
-        !negative.some((pattern) => matchesGlob(key, pattern))
+        negative.every((pattern) => !matchesGlob(key, pattern))
     );
 }

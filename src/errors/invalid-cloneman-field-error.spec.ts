@@ -37,7 +37,7 @@ it("should handle whitespace", async () => {
     expect.assertions(1);
     const { InvalidClonemanFieldError } =
         await import("./invalid-cloneman-field-error");
-    const error = new InvalidClonemanFieldError("    ");
+    const error = new InvalidClonemanFieldError(" ".repeat(4));
     expect(error.prettyMessage()).toContain(
         `The "cloneman" field is expected to be an object with the template and version fields but was actually: '    '.`,
     );
