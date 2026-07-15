@@ -40,7 +40,7 @@ export async function printTree(rootPath: string): Promise<string> {
                 a.localeCompare(b),
             );
 
-            const extension = isLast ? "    " : "│   ";
+            const extension = isLast ? " ".repeat(4) : "│   ";
             const newPrefix = name ? prefix + extension : "";
 
             for (let i = 0; i < sortedEntries.length; i++) {

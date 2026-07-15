@@ -53,18 +53,17 @@ let server: Server | null = null;
 let registryHost: string = "";
 let registryUrl: string = "";
 
-function startVerdaccio(): Promise<Server> {
+async function startVerdaccio(): Promise<Server> {
+    const server = (await runServer(config)) as Server;
     return new Promise((resolve) => {
-        return runServer(config).then((server: Server) => {
-            server.listen(0, "127.0.0.1", () => {
-                const addr = server.address() as AddressInfo;
-                registryHost = `${addr.address}:${addr.port}`;
-                registryUrl = `http://${registryHost}`;
-                console.log({ registryHost, registryUrl });
-                userEnv.NPM_CONFIG_REGISTRY = registryUrl;
-                authEnv.NPM_CONFIG_REGISTRY = registryUrl;
-                resolve(server);
-            });
+        server.listen(0, "127.0.0.1", () => {
+            const addr = server.address() as AddressInfo;
+            registryHost = `${addr.address}:${addr.port}`;
+            registryUrl = `http://${registryHost}`;
+            console.log({ registryHost, registryUrl });
+            userEnv.NPM_CONFIG_REGISTRY = registryUrl;
+            authEnv.NPM_CONFIG_REGISTRY = registryUrl;
+            resolve(server);
         });
     });
 }

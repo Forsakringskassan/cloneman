@@ -22,6 +22,7 @@ let stream: WritableStreamBuffer;
 
 beforeEach(() => {
     stream = new WritableStreamBuffer();
+    /* eslint-disable-next-line unicorn/no-global-object-property-assignment -- indentional for test */
     globalThis.console = new Console(stream, stream);
     vi.mocked(publish).mockResolvedValue(undefined);
     vi.mocked(prepare).mockResolvedValue({ output: "" });

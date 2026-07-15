@@ -20,15 +20,13 @@ import { update } from "./update";
 import { type ApplicationPackageJson, writeJsonFile } from "./utils";
 
 /* Increased timeout time since test involves a lot reading & writing to disc, and also fetching data from a local npm registry */
-vi.setConfig({ testTimeout: 30000 });
+vi.setConfig({ testTimeout: 30_000 });
 
 expect.addSnapshotSerializer({
     test() {
         return true;
     },
-    serialize(value) {
-        return String(value);
-    },
+    serialize: String,
 });
 
 let cwd: string;

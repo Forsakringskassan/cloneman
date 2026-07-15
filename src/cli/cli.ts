@@ -46,6 +46,7 @@ export async function cli(cwd: string, argv: string[]): Promise<void> {
             } else {
                 console.error(msg);
             }
+            /* eslint-disable-next-line unicorn/no-process-exit -- technical debt */
             process.exit(1);
         })
         .parseAsync(argv);

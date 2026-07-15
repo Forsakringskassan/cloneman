@@ -146,7 +146,7 @@ export async function create(options: {
 
     applicationPackageJson.cloneman = {
         ...applicationPackageJson.cloneman,
-        parameters: Object.fromEntries(parameters.entries()),
+        parameters: Object.fromEntries(parameters),
     } satisfies ClientMetadata;
 
     await fs.writeFile(

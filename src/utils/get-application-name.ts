@@ -9,7 +9,6 @@ export function getApplicationName(
 ): string {
     if (options.unscoped) {
         return name.replaceAll(/^@[^/]+\//g, "");
-    } else {
-        return name;
     }
+    return name;
 }

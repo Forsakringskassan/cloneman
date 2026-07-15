@@ -19,7 +19,7 @@ export async function importHook<K extends keyof HookMapping>(
     scriptPath: string,
 ): Promise<HookMapping[K]> {
     const mod = (await import(scriptPath)) as HookModule<K>;
-    if (hook in mod && typeof mod[hook] === "function") {
+    if (Object.hasOwn(mod, hook) && typeof mod[hook] === "function") {
         return mod[hook];
     }
     if ("default" in mod && typeof mod.default === "function") {

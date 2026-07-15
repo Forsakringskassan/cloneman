@@ -7,7 +7,7 @@ import {
 function isNormalized(
     config: TemplateConfig | NormalizedTemplateConfig,
 ): config is NormalizedTemplateConfig {
-    return normalizedConfig in config;
+    return Object.hasOwn(config, normalizedConfig);
 }
 
 /**

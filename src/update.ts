@@ -39,6 +39,7 @@ async function removeFiles(
     cloneman: Partial<TemplatePackageJson["cloneman"]>,
     { cwd }: { cwd: string },
 ): Promise<void> {
+    /* eslint-disable-next-line unicorn/no-non-function-verb-prefix -- cannot be changed until next major */
     const { removeFiles } = cloneman;
     if (!removeFiles) {
         return;
@@ -122,7 +123,8 @@ export async function update(options: {
     const { cloneman, name, version, description } = appPackageJson;
     if (cloneman === undefined) {
         throw new MissingClonemanFieldError();
-    } else if (!isClientMetadata(cloneman)) {
+    }
+    if (!isClientMetadata(cloneman)) {
         throw new InvalidClonemanFieldError(cloneman);
     }
 
@@ -245,7 +247,7 @@ export async function update(options: {
             },
             cloneman: {
                 ...tmplPackageJson.cloneman,
-                parameters: Object.fromEntries(parameters.entries()),
+                parameters: Object.fromEntries(parameters),
             } satisfies ClientMetadata,
         },
         {

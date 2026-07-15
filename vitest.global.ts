@@ -65,7 +65,7 @@ async function publishPackage(
 
 function excludeFromCopy(src: string): boolean {
     const excluded = ["node_modules", "src", "fixtures", "docs"];
-    return !excluded.some((dir) => src.includes(`${path.sep}${dir}`));
+    return excluded.every((dir) => !src.includes(`${path.sep}${dir}`));
 }
 
 async function publishCloneman(authEnv: Record<string, string>): Promise<void> {

@@ -121,7 +121,7 @@ export async function buildTemplate(options: {
     const {
         managedFiles,
         ignoredFiles: templateIgnoredFiles,
-        removeFiles,
+        removeFiles, // eslint-disable-line unicorn/no-non-function-verb-prefix -- cannot be changed until next major
         ignoredDependencies: templateIgnoredDependencies,
         uninstallDependencies,
     } = templateConfig;

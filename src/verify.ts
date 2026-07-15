@@ -26,7 +26,8 @@ export async function verify(options: {
 
     if (cloneman === undefined) {
         throw new MissingClonemanFieldError();
-    } else if (!isClientMetadata(cloneman)) {
+    }
+    if (!isClientMetadata(cloneman)) {
         throw new InvalidClonemanFieldError(cloneman);
     }
 

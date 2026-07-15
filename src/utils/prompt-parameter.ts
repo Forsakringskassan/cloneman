@@ -30,9 +30,8 @@ export function promptText(
             })
             .join("\n");
         return `${question}\n${indented}\n${suffix} `;
-    } else {
-        return `${question} ${suffix} `;
     }
+    return `${question} ${suffix} `;
 }
 
 /**
