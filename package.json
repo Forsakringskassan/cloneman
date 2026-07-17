@@ -94,7 +94,7 @@
     "pretty-ansi": "4.0.0",
     "stream-buffers": "3.0.3",
     "typescript": "npm:@typescript/typescript6@6.0.2",
-    "verdaccio": "6.7.4",
+    "verdaccio": "6.8.0",
     "vitest": "4.1.10"
   },
   "engines": {
