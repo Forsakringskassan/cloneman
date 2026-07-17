@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## [1.19.3](https://github.com/Forsakringskassan/cloneman/compare/v1.19.2...v1.19.3) (2026-07-17)
+
+### Bug Fixes
+
+* **deps:** update dependency tar to v7.5.20 ([f242931](https://github.com/Forsakringskassan/cloneman/commit/f242931506e7e7f649c08446fb621675cfbcc84a))
+
 ## [1.19.2](https://github.com/Forsakringskassan/cloneman/compare/v1.19.1...v1.19.2) (2026-07-10)
 
 ### Bug Fixes
