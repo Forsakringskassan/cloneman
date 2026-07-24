@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## [1.19.4](https://github.com/Forsakringskassan/cloneman/compare/v1.19.3...v1.19.4) (2026-07-24)
+
+### Bug Fixes
+
+* **deps:** update dependency yocto-spinner to v1.2.2 ([2aa9f60](https://github.com/Forsakringskassan/cloneman/commit/2aa9f6095f6c9c83e02ca31e1faf52ffc5ec5ff9))
+
 ## [1.19.3](https://github.com/Forsakringskassan/cloneman/compare/v1.19.2...v1.19.3) (2026-07-17)
 
 ### Bug Fixes
