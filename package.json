@@ -90,7 +90,7 @@
     "is-ci": "4.1.0",
     "memfs": "4.64.0",
     "npm-pkg-lint": "5.2.2",
-    "npm-run-all2": "9.0.2",
+    "npm-run-all2": "9.0.3",
     "pretty-ansi": "4.0.0",
     "stream-buffers": "3.0.3",
     "typescript": "npm:@typescript/typescript6@6.0.2",
