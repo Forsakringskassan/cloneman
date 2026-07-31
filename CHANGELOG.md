@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## [1.19.5](https://github.com/Forsakringskassan/cloneman/compare/v1.19.4...v1.19.5) (2026-07-31)
+
+### Bug Fixes
+
+* **deps:** update dependency tar to v7.5.21 [security] ([5fc4064](https://github.com/Forsakringskassan/cloneman/commit/5fc4064074d4a8b4ec3cfc92c17f4dff8904213e))
+* **deps:** update dependency tar to v7.5.22 ([bdad7c5](https://github.com/Forsakringskassan/cloneman/commit/bdad7c52c830ca2dd809aa1ac7a7d96c475b485c))
+* **deps:** update dependency yargs to v18.1.0 ([17d7b6a](https://github.com/Forsakringskassan/cloneman/commit/17d7b6a8a387e041c14023eb8c3849eff1e77089))
+
 ## [1.19.4](https://github.com/Forsakringskassan/cloneman/compare/v1.19.3...v1.19.4) (2026-07-24)
 
 ### Bug Fixes
