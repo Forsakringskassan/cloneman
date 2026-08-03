@@ -150,7 +150,37 @@ describe("update existing project with template from registry", () => {
             await readJsonFile<ApplicationPackageJson>("package.json");
         expect(
             packageJson.devDependencies?.["@forsakringskassan/base-template"],
-        ).toBe("1.0.2");
+        ).toBe("1.1.0");
+    });
+
+    it("should set actual version to latest minor in the same major when input version is 'minor'", async () => {
+        expect.assertions(1);
+        await update({
+            cwd: appDir,
+            version: "minor",
+            env: userEnv,
+            parameters: new Map(),
+        });
+        const packageJson =
+            await readJsonFile<ApplicationPackageJson>("package.json");
+        expect(
+            packageJson.devDependencies?.["@forsakringskassan/base-template"],
+        ).toBe("1.1.0");
+    });
+
+    it("should set actual version to latest patch in the same minor when input version is 'patch'", async () => {
+        expect.assertions(1);
+        await update({
+            cwd: appDir,
+            version: "patch",
+            env: userEnv,
+            parameters: new Map(),
+        });
+        const packageJson =
+            await readJsonFile<ApplicationPackageJson>("package.json");
+        expect(
+            packageJson.devDependencies?.["@forsakringskassan/base-template"],
+        ).toBe("1.0.1");
     });
 
     it("should keep dependencies that are not in the template", async () => {
@@ -235,7 +265,7 @@ describe("update existing project with template from registry", () => {
 
         await update({
             cwd: appDir,
-            version: "1.0.2",
+            version: "1.1.0",
             env: userEnv,
             parameters: new Map(),
         });

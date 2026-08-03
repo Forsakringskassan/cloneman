@@ -34,8 +34,13 @@ The `--param` flag can be used multiple times.
 
 > Note: You can only update your application using the same template it was created with.
 
-To the latest version:
+By default, the latest available minor version is installed:
 `npx cloneman@latest update`
+
+Explicit strategy targets are also supported:
+`npx cloneman@latest update minor`
+`npx cloneman@latest update patch`
+`npx cloneman@latest update latest`
 
 You can also update to a specific version:
 `npx cloneman@latest update 1.2.3`
