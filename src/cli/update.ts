@@ -16,11 +16,20 @@ async function updateHandler(
     const { target, param } = argv;
     const { cwd } = context;
 
-    const version = target ?? "latest";
+    const version = target ?? "minor";
     const parameters = parseParams(param);
 
+    let versionText: string;
+    if (version === "latest") {
+        versionText = "latest version";
+    } else if (version === "minor" || version === "patch") {
+        versionText = `latest ${version} version`;
+    } else {
+        versionText = `version ${version}`;
+    }
+
     const spinner = yoctoSpinner({
-        text: `Updating template package to version ${version}...`,
+        text: `Updating template package to ${versionText}...`,
     }).start();
 
     let result: Awaited<ReturnType<typeof update>>;
@@ -37,9 +46,13 @@ async function updateHandler(
         throw err;
     }
 
-    spinner.success(`Template package updated to version ${version}`);
+    const { message, resolvedVersion, notice } = result;
+    spinner.success(`Template package updated to version ${resolvedVersion}`);
 
-    const { message } = result;
+    if (notice) {
+        console.warn(notice);
+    }
+
     console.group("");
     console.log(message);
     console.groupEnd();
@@ -57,7 +70,8 @@ export function updateCommand(
         builder(yargs) {
             return yargs
                 .positional("target", {
-                    describe: "Version to update to",
+                    describe:
+                        "Version or update strategy (latest|minor|patch|x.y.z)",
                     type: "string",
                     demandOption: false,
                 })
