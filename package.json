@@ -88,7 +88,7 @@
     "@verdaccio/types": "13.0.5",
     "esbuild": "0.28.2",
     "is-ci": "4.1.0",
-    "memfs": "4.68.0",
+    "memfs": "4.68.1",
     "npm-pkg-lint": "5.2.2",
     "npm-run-all2": "9.0.3",
     "pretty-ansi": "4.0.0",
