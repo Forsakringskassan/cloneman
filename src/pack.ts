@@ -2,13 +2,23 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import spawn from "nano-spawn";
 
-function getPackOutput(stdout: string): string {
-    const fileName = JSON.parse(stdout)[0].filename as string;
+interface PackStructure {
+    filename: string;
+}
 
-    if (!fileName) {
+type Npm11PackOutput = [PackStructure];
+type Npm12PackOutput = Record<string, PackStructure>;
+
+function getPackOutput(stdout: string): string {
+    /* npm 11 returns an array, npm 12 returns object directly */
+    const parsed = JSON.parse(stdout) as Npm11PackOutput | Npm12PackOutput;
+    const { filename } = Array.isArray(parsed)
+        ? parsed[0]
+        : Object.values(parsed)[0];
+    if (!filename) {
         throw new Error("Failed to pack template: no output file name");
     }
-    return fileName;
+    return filename;
 }
 
 /**
