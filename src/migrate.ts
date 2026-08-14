@@ -31,12 +31,14 @@ export async function migrate(options: {
 
     text("Installing template into existing application...");
 
-    const clonemanVersion = await info<string>("cloneman", {
+    /* npm 11 returns string, npm 12 returns array with a single string */
+    const clonemanVersion = await info<string | [string]>("cloneman", {
         field: "version",
         env,
     });
 
-    const templateVersion = await info<string>(templatePackage, {
+    /* npm 11 returns string, npm 12 returns array with a single string */
+    const templateVersion = await info<string | [string]>(templatePackage, {
         field: "version",
         env,
     });
@@ -50,8 +52,12 @@ export async function migrate(options: {
     );
 
     const devDependencies = packageJson.devDependencies ?? {};
-    devDependencies["cloneman"] = clonemanVersion;
-    devDependencies[templatePackage] = templateVersion;
+    devDependencies["cloneman"] = Array.isArray(clonemanVersion)
+        ? clonemanVersion[0]
+        : clonemanVersion;
+    devDependencies[templatePackage] = Array.isArray(templateVersion)
+        ? templateVersion[0]
+        : templateVersion;
 
     packageJson.cloneman = {
         template: templatePackage,

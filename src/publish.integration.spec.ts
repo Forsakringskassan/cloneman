@@ -74,7 +74,7 @@ it("should publish template", async () => {
     const output = await info("@forsakringskassan/publish-template", {
         env: authEnv,
     });
-    expect(output).toEqual(
+    expect(Array.isArray(output) ? output[0] : output).toEqual(
         expect.objectContaining({
             cloneman: {
                 boilerplateFiles: ["boilerplate.txt", "managed.txt"],

@@ -154,13 +154,15 @@ export async function update(options: {
         packageJsonVersion = templateVersion;
 
         if (templateVersion === "latest") {
-            packageJsonVersion = await info<string>(
+            /* npm 11 returns string, npm 12 returns array with a single string */
+            const version = await info<string | [string]>(
                 `${cloneman.template}@${templateVersion}`,
                 {
                     field: "version",
                     env,
                 },
             );
+            packageJsonVersion = Array.isArray(version) ? version[0] : version;
         }
 
         tarballBuffer = await fetchTarball(
