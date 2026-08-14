@@ -28,3 +28,27 @@ jobs:
               run: npm run integration-test --ignore-scripts
             - name: Selftest
               run: node bin/cloneman.mjs --help
+
+    npm:
+        strategy:
+            matrix:
+                npm-version: [11.x, 12.x]
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+            - name: Use Node.js ${{ matrix.node-version }}
+              uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+              with:
+                  node-version: 24.x
+            - name: Install NPM ${{ matrix.np-version }}
+              run: npm install -g npm@${{ matrix.npm-version }}
+            - name: Install dependencies
+              run: npm ci
+            - name: Build
+              run: npm run --if-present build
+            - name: Unit tests
+              run: npm test --ignore-scripts
+            - name: Integration tests
+              run: npm run integration-test --ignore-scripts
+            - name: Selftest
+              run: node bin/cloneman.mjs --help
