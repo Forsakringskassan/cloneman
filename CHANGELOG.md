@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## [1.19.6](https://github.com/Forsakringskassan/cloneman/compare/v1.19.5...v1.19.6) (2026-08-14)
+
+### Bug Fixes
+
+* handle when `npm info .. version` returns array ([4212648](https://github.com/Forsakringskassan/cloneman/commit/42126485fccea2a93a01213127ff14c10840b5c5))
+* handle when `npm pack` returns object ([3ceaed7](https://github.com/Forsakringskassan/cloneman/commit/3ceaed767aef0c607d08ad721636c15507f7b364))
+
 ## [1.19.5](https://github.com/Forsakringskassan/cloneman/compare/v1.19.4...v1.19.5) (2026-07-31)
 
 ### Bug Fixes
