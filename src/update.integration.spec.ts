@@ -42,6 +42,19 @@ async function readJsonFile<T = unknown>(filePath: string): Promise<T> {
     return JSON.parse(await readFile(filePath)) as T;
 }
 
+async function writeExecutableFile(
+    filePath: string,
+    content: string,
+    mode: number,
+): Promise<void> {
+    await fs.mkdir(path.dirname(filePath), { recursive: true });
+    await fs.writeFile(filePath, content);
+    await fs.chmod(filePath, mode);
+
+    const cmdPath = `${filePath}.cmd`;
+    await fs.writeFile(cmdPath, `@node "%~dp0${path.basename(filePath)}" %*\n`);
+}
+
 beforeEach(() => {
     cwd = temporaryDirectory();
     appDir = path.join(cwd, "mock-app");
@@ -132,6 +145,31 @@ describe("update existing project with template from registry", () => {
         });
         expect(applicationPackageJson.keywords).toEqual(["foo", "bar"]);
         expect(applicationPackageJson.repository).toBe("git+package-homepage");
+    });
+
+    it("should run prettier", async () => {
+        expect.assertions(1);
+
+        /* create a mocked prettier binary (with a windows ".cmd" shim) that just creates a dummy file when run */
+        await writeExecutableFile(
+            path.join(appDir, "node_modules", ".bin", "prettier"),
+            [
+                "#!/usr/bin/env node",
+                'require("node:fs").writeFileSync("prettier-ran.txt", "");',
+                "",
+            ].join("\n"),
+            0o755,
+        );
+
+        /* update the application to version 1.0.1 */
+        await update({
+            cwd: appDir,
+            version: "1.0.1",
+            env: userEnv,
+            parameters: new Map(),
+        });
+
+        expect(await readFile("prettier-ran.txt")).toBe("");
     });
 
     it("should set actual version to the resolved version if input version is 'latest'", async () => {

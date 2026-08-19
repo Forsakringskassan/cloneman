@@ -2,6 +2,7 @@ import { randomBytes } from "node:crypto";
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
+import spawn from "nano-spawn";
 import type yoctoSpinner from "yocto-spinner";
 import { InvalidClonemanFieldError, MissingClonemanFieldError } from "./errors";
 import { getStoredFileName } from "./template/utils";
@@ -13,6 +14,7 @@ import {
     createInstallContext,
     fetchTarball,
     filterDependencies,
+    hasBinScript,
     info,
     isClientMetadata,
     isTarball,
@@ -287,6 +289,15 @@ export async function update(options: {
         });
         await runHook("install", hooksDir, context);
     });
+
+    if (hasBinScript("prettier", appDir)) {
+        await text("Formatting files with Prettier...", async () => {
+            await spawn("prettier", ["--write", "."], {
+                cwd: appDir,
+                preferLocal: true,
+            });
+        });
+    }
 
     return { message };
 }

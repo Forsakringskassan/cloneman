@@ -5,6 +5,7 @@ export {
     collectParameters,
 } from "./collect-parameters";
 export { findHookScriptPath } from "./find-hook-script-path";
+export { hasBinScript } from "./has-bin-script";
 export { getApplicationName } from "./get-application-name";
 export { getApplicationSelector } from "./get-application-selector";
 export { getApplicationSlug } from "./get-application-slug";
