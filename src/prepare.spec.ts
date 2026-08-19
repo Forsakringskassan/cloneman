@@ -17,6 +17,7 @@ import {
 const fixtureDir = path.resolve(import.meta.dirname, "../fixtures");
 const baseTemplate = path.join(fixtureDir, "base-template@1.0.0");
 const baseTemplateUpdated = path.join(fixtureDir, "base-template@1.0.1");
+const templateMissingFiles = path.join(fixtureDir, "missing-files-in-build");
 
 let targetDir: string;
 
@@ -437,5 +438,14 @@ describe("parameters", () => {
                 defaultValue: "Awesome project",
             },
         ]);
+    });
+});
+
+describe("missing files in build", () => {
+    it("should throw error if build script tries to copy non-existing files", async () => {
+        expect.assertions(1);
+        await expect(prepare(templateMissingFiles, targetDir)).rejects.toThrow(
+            /Managed file is missing from template/,
+        );
     });
 });

@@ -1,6 +1,7 @@
 export { FetchTarballError } from "./fetch-tarball-error";
 export { HookNoExportedFnError } from "./hook-no-exported-fn-error";
 export { InvalidClonemanFieldError } from "./invalid-cloneman-field-error";
+export { ManagedFileMissingError } from "./managed-file-missing-error";
 export { MissingClonemanFieldError } from "./missing-cloneman-field-error";
 export { NoApplicationFolderError } from "./no-application-folder-error";
 export { ParameterDuplicateKeyError } from "./parameter-duplicate-key-error";

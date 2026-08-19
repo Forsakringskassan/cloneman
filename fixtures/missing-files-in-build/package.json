@@ -1,0 +1,10 @@
+{
+  "name": "@forsakringskassan-missing-files-in-build",
+  "version": "1.0.2",
+  "private": true,
+  "files": [],
+  "dependencies": {},
+  "devDependencies": {
+    "cloneman": "."
+  }
+}

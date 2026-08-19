@@ -6,6 +6,7 @@ import {
     normalizeTemplateConfig,
 } from "../config";
 import {
+    ManagedFileMissingError,
     ParameterDuplicateKeyError,
     ParameterInvalidKeyError,
 } from "../errors";
@@ -149,6 +150,12 @@ export async function buildTemplate(options: {
     `;
 
     const files = await copyFiles(logger, templateDir, filesDir, ignoredFiles);
+
+    for (const file of managedFiles) {
+        if (!files.includes(file)) {
+            throw new ManagedFileMissingError({ templateName: name, file });
+        }
+    }
 
     const hooksDir = path.join(templateDir, ".cloneman");
     await installHook("install", { targetDir, hooksDir });
