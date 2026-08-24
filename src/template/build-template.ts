@@ -25,6 +25,7 @@ import {
     prepareTemplatePackageJson,
     updateRenovateWithIgnoredDeps,
 } from "./utils";
+import { formatWithPrettier } from "./utils/format-with-prettier";
 import { writeFile } from "./write-file";
 
 /**
@@ -333,4 +334,6 @@ async function renovateIgnoreDependencies(
         indent: 4,
         trailer: "\n",
     });
+
+    await formatWithPrettier(renovateFilePath);
 }
