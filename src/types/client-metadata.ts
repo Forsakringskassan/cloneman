@@ -10,4 +10,6 @@ export interface ClientMetadata {
     readonly version: string;
     /** Parameter values collected from the user. */
     readonly parameters?: Record<string, string>;
+    /** Hash of the managed files from the template. */
+    readonly fileHash?: string;
 }

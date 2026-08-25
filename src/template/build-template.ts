@@ -16,6 +16,7 @@ import { installHook } from "./install-hook";
 import { updateJson } from "./update-json";
 import {
     copyFiles,
+    createManagedFilesHash,
     createclonemanPackageJson,
     prepareTemplatePackageJson,
     updateRenovateWithIgnoredDeps,
@@ -157,6 +158,8 @@ export async function buildTemplate(options: {
         }
     }
 
+    const fileHash = await createManagedFilesHash(filesDir, managedFiles);
+
     const hooksDir = path.join(templateDir, ".cloneman");
     await installHook("install", { targetDir, hooksDir });
 
@@ -185,6 +188,7 @@ export async function buildTemplate(options: {
     const massagedTemplatePackageJson = prepareTemplatePackageJson(
         clonemanPackageJson,
         pkg,
+        fileHash,
     );
 
     await writeJsonFile(

@@ -11,5 +11,6 @@ export { ParameterNotDeclaredError } from "./parameter-not-declared-error";
 export { ParameterRequiredError } from "./parameter-required-error";
 export { ParameterValidationError } from "./parameter-validation-error";
 export { TemplateDependencyMissingError } from "./template-dependency-missing-error";
+export { TemplateFileHashMismatchError } from "./template-file-hash-mismatch-error";
 export { TemplateVersionMismatchError } from "./template-version-mismatch-error";
 export { UserError } from "./user-error";

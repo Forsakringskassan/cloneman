@@ -91,6 +91,8 @@ describe("create from base template from npm registry", () => {
                 cloneman: ".",
             },
             cloneman: {
+                fileHash:
+                    "01ad034d724d81e77f2109823091957f56ce2815656a191e1220a070203cf1df",
                 template: "@forsakringskassan/base-template",
                 version: "1.0.0",
                 parameters: {},
@@ -214,6 +216,8 @@ describe("create from local template package", () => {
                 cloneman: ".",
             },
             cloneman: {
+                fileHash:
+                    "01ad034d724d81e77f2109823091957f56ce2815656a191e1220a070203cf1df",
                 template: "@forsakringskassan/base-template",
                 version: "1.0.0",
                 parameters: {},

@@ -16,7 +16,7 @@ describe("prepareTemplatePackageJson", () => {
             version: "2.0.0",
             description: "original description",
         };
-        const result = prepareTemplatePackageJson(template, pkg);
+        const result = prepareTemplatePackageJson(template, pkg, "file-hash");
         expect(result.name).toBe("${name}");
         expect(result.version).toBe("${version}");
         expect(result.description).toBe("${description}");
@@ -29,10 +29,11 @@ describe("prepareTemplatePackageJson", () => {
             name: "app",
             version: "1.0.0",
         };
-        const result = prepareTemplatePackageJson(template, pkg);
+        const result = prepareTemplatePackageJson(template, pkg, "file-hash");
         expect(result.cloneman).toEqual({
             template: "my-template",
             version: "1.0.0",
+            fileHash: "file-hash",
         });
     });
 
@@ -43,7 +44,7 @@ describe("prepareTemplatePackageJson", () => {
             name: "app",
             version: "1.0.0",
         };
-        const result = prepareTemplatePackageJson(template, pkg);
+        const result = prepareTemplatePackageJson(template, pkg, "file-hash");
         expect(result.devDependencies).toEqual(
             expect.objectContaining({
                 "my-template": "1.0.0",

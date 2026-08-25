@@ -80,6 +80,7 @@ describe("prepare base template", () => {
               "url": "https://example.net/base-template/bugs",
             },
             "cloneman": {
+              "fileHash": "01ad034d724d81e77f2109823091957f56ce2815656a191e1220a070203cf1df",
               "template": "@forsakringskassan/base-template",
               "version": "1.0.0",
             },
@@ -241,6 +242,7 @@ describe("prepare base template 1.0.1", () => {
         expect(packageJson).toMatchInlineSnapshot(`
           {
             "cloneman": {
+              "fileHash": "4acec88da12fda76892158971fbbdaee779823b35336f3642b46cfd515f8187b",
               "template": "@forsakringskassan/base-template",
               "version": "1.0.1",
             },

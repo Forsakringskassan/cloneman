@@ -37,9 +37,9 @@ describe("verify", () => {
             },
         });
 
-        await expect(verify({ applicationPath })).rejects.toThrow(
-            TemplateVersionMismatchError,
-        );
+        await expect(
+            verify({ applicationPath, managedFilesOnly: false, env: {} }),
+        ).rejects.toThrow(TemplateVersionMismatchError);
     });
 
     it("should throw an error when template dependency is missing", async () => {
@@ -53,9 +53,9 @@ describe("verify", () => {
             devDependencies: {},
         });
 
-        await expect(verify({ applicationPath })).rejects.toThrow(
-            TemplateDependencyMissingError,
-        );
+        await expect(
+            verify({ applicationPath, managedFilesOnly: false, env: {} }),
+        ).rejects.toThrow(TemplateDependencyMissingError);
     });
 
     it("should not throw an error when application is up-to-date", async () => {
@@ -71,6 +71,8 @@ describe("verify", () => {
             },
         });
 
-        await expect(verify({ applicationPath })).resolves.toBeUndefined();
+        await expect(
+            verify({ applicationPath, managedFilesOnly: false, env: {} }),
+        ).resolves.toBeUndefined();
     });
 });

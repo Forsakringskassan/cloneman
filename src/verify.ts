@@ -3,11 +3,14 @@ import {
     InvalidClonemanFieldError,
     MissingClonemanFieldError,
     TemplateDependencyMissingError,
+    TemplateFileHashMismatchError,
     TemplateVersionMismatchError,
 } from "./errors";
 import {
     type ApplicationPackageJson,
+    fetchTarball,
     isClientMetadata,
+    parseTarball,
     readJsonFile,
 } from "./utils";
 
@@ -18,6 +21,8 @@ import {
 export async function verify(options: {
     /** The path to the user's application. */
     applicationPath: string;
+    managedFilesOnly: boolean;
+    env: Record<string, string>;
 }): Promise<void> {
     const { applicationPath } = options;
     const filePath = path.join(applicationPath, "package.json");
@@ -42,7 +47,31 @@ export async function verify(options: {
         });
     }
 
-    if (dependencyVersion !== templateVersion) {
+    if (options.managedFilesOnly) {
+        const tarball = await fetchTarball(
+            templateName,
+            dependencyVersion,
+            options.env,
+        );
+
+        const { tmplPackageJson } = await parseTarball(tarball);
+
+        if (!isClientMetadata(tmplPackageJson.cloneman)) {
+            throw new InvalidClonemanFieldError(tmplPackageJson.cloneman);
+        }
+
+        const currentFileHash = cloneman.fileHash ?? "";
+        const expectedFileHash = tmplPackageJson.cloneman.fileHash ?? "";
+
+        if (currentFileHash !== expectedFileHash) {
+            throw new TemplateFileHashMismatchError({
+                templateName,
+                templateVersion,
+                currentFileHash,
+                expectedFileHash,
+            });
+        }
+    } else if (dependencyVersion !== templateVersion) {
         throw new TemplateVersionMismatchError({
             templateName,
             templateVersion,

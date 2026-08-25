@@ -61,9 +61,19 @@ Typically used to fail the build when an external tool such as Dependabot or Ren
 
 Exits successfully if the application is up-to-date or with a non-zero status and a detailed instruction if the application needs to be updated.
 
+To only check that managed template files are up-to-date, while ignoring untracked or user-modified files, run:
+
+> `npx cloneman verify --managed-files-only`
+
+This is useful when you want to validate only the files cloneman manages, instead of enforcing that the entire application matches the template exactly.
+
 It is recommended to run this from the `prepare` script in the applications `package.json`:
 
 > `npm pkg set scripts.prepare="cloneman verify"`
+
+If you want to use the managed-files-only mode in the prepare script, use:
+
+> `npm pkg set scripts.prepare="cloneman verify --managed-files-only"`
 
 ### Migrate
 

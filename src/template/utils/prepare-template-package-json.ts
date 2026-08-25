@@ -10,10 +10,12 @@ import { type PackageJson } from "../../utils";
 export function prepareTemplatePackageJson(
     template: PackageJson,
     pkg: PackageJson,
+    fileHash: string,
 ): PackageJson {
     const cloneman: ClientMetadata = {
         template: template.name,
         version: pkg.version,
+        fileHash,
     };
 
     const massaged = {

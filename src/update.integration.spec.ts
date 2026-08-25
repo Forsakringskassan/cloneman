@@ -77,7 +77,7 @@ describe("update existing project with template from registry", () => {
     });
 
     it("should update existing project", async () => {
-        expect.assertions(14);
+        expect.assertions(16);
 
         expect(await readFile("boilerplate.txt")).toMatchInlineSnapshot(
             `boilerplate file at v1.0.0`,
@@ -86,6 +86,16 @@ describe("update existing project with template from registry", () => {
             `managed file at v1.0.0`,
         );
 
+        expect(await readJsonFile("package.json")).toMatchObject({
+            cloneman: {
+                fileHash:
+                    "01ad034d724d81e77f2109823091957f56ce2815656a191e1220a070203cf1df",
+                parameters: {},
+                template: "@forsakringskassan/base-template",
+                version: "1.0.0",
+            },
+        });
+
         /* update the application to version 1.0.1 */
         await update({
             cwd: appDir,
@@ -93,6 +103,17 @@ describe("update existing project with template from registry", () => {
             env: userEnv,
             parameters: new Map(),
         });
+
+        expect(await readJsonFile("package.json")).toMatchObject({
+            cloneman: {
+                fileHash:
+                    "4acec88da12fda76892158971fbbdaee779823b35336f3642b46cfd515f8187b",
+                parameters: {},
+                template: "@forsakringskassan/base-template",
+                version: "1.0.1",
+            },
+        });
+
         expect(await printTree(appDir)).toMatchInlineSnapshot(`
           (root)
               ├── .gitignore
