@@ -1,4 +1,5 @@
 import path from "node:path";
+import isCI from "is-ci";
 import {
     InvalidClonemanFieldError,
     MissingClonemanFieldError,
@@ -43,10 +44,16 @@ export async function verify(options: {
     }
 
     if (dependencyVersion !== templateVersion) {
-        throw new TemplateVersionMismatchError({
+        const error = new TemplateVersionMismatchError({
             templateName,
             templateVersion,
             dependencyVersion,
         });
+
+        if (isCI) {
+            throw error;
+        }
+
+        console.error(error.prettyMessage());
     }
 }

@@ -61,6 +61,7 @@
   "dependencies": {
     "deepmerge": "4.3.1",
     "detect-indent": "7.0.2",
+    "is-ci": "4.1.0",
     "nano-spawn": "2.1.0",
     "sort-package-json": "4.0.0",
     "tar": "7.5.22",
@@ -87,7 +88,6 @@
     "@typescript/native": "npm:typescript@7.0.2",
     "@verdaccio/types": "13.0.6",
     "esbuild": "0.28.2",
-    "is-ci": "4.1.0",
     "memfs": "4.68.1",
     "npm-pkg-lint": "5.2.4",
     "npm-run-all2": "9.0.3",
