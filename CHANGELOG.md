@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## [1.19.7](https://github.com/Forsakringskassan/cloneman/compare/v1.19.6...v1.19.7) (2026-08-26)
+
+### Bug Fixes
+
+* managed files should support sub folders and sub files starting with dot ([32211a3](https://github.com/Forsakringskassan/cloneman/commit/32211a3978895a0d32fe595785c29e49a8f92063))
+* should fail during template generate if managed files not found (fixes [#140](https://github.com/Forsakringskassan/cloneman/issues/140)) ([388399f](https://github.com/Forsakringskassan/cloneman/commit/388399fb207fc9077cc1f338d08a739c4b076fc0))
+* verify should only throw error in ci-env ([660a098](https://github.com/Forsakringskassan/cloneman/commit/660a0983382199f169f707e26cd6576899d1a270))
+
 ## [1.19.6](https://github.com/Forsakringskassan/cloneman/compare/v1.19.5...v1.19.6) (2026-08-14)
 
 ### Bug Fixes
