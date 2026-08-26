@@ -39,7 +39,7 @@ describe("prepare base template", () => {
         const { output } = await prepare(baseTemplate, targetDir);
         expect(output).toMatchInlineSnapshot(`
           "Assembling cloneman template "@forsakringskassan/base-template@1.0.0"
-            8 files copied (3 ignored)
+            9 files copied (3 ignored)
           "
         `);
 
@@ -48,6 +48,7 @@ describe("prepare base template", () => {
               ├── files
               │   ├── _dot
               │   │   ├── _env
+              │   │   ├── _sub.file.txt
               │   │   └── file.txt
               │   ├── _gitignore
               │   ├── _npmrc
@@ -68,7 +69,7 @@ describe("prepare base template", () => {
         const { output } = await prepare(baseTemplate, targetDir);
         expect(output).toMatchInlineSnapshot(`
           "Assembling cloneman template "@forsakringskassan/base-template@1.0.0"
-            8 files copied (3 ignored)
+            9 files copied (3 ignored)
           "
         `);
 
@@ -123,7 +124,7 @@ describe("prepare base template", () => {
         const { output } = await prepare(baseTemplate, targetDir);
         expect(output).toMatchInlineSnapshot(`
           "Assembling cloneman template "@forsakringskassan/base-template@1.0.0"
-            8 files copied (3 ignored)
+            9 files copied (3 ignored)
           "
         `);
 
@@ -175,6 +176,7 @@ describe("prepare base template", () => {
           {
             "boilerplateFiles": [
               ".dot/.env",
+              ".dot/.sub.file.txt",
               ".dot/file.txt",
               ".gitignore",
               ".npmrc",
@@ -189,6 +191,7 @@ describe("prepare base template", () => {
               ".gitignore",
               "renovate.json",
               ".dot/file.txt",
+              ".dot/.sub.file.txt",
               ".dot/.env",
             ],
             "removeFiles": [],
@@ -206,7 +209,7 @@ describe("prepare base template", () => {
         const { output } = await prepare(baseTemplate, targetDir);
         expect(output).toMatchInlineSnapshot(`
           "Assembling cloneman template "@forsakringskassan/base-template@1.0.0"
-            8 files copied (3 ignored)
+            9 files copied (3 ignored)
           "
         `);
 

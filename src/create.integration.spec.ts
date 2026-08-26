@@ -100,6 +100,7 @@ describe("create from base template from npm registry", () => {
           (root)
               ├── .dot
               │   ├── .env
+              │   ├── .sub.file.txt
               │   └── file.txt
               ├── .gitignore
               ├── .npmrc
@@ -226,6 +227,7 @@ describe("create from local template package", () => {
           (root)
               ├── .dot
               │   ├── .env
+              │   ├── .sub.file.txt
               │   └── file.txt
               ├── .gitignore
               ├── .npmrc

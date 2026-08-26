@@ -8,6 +8,7 @@ export default async ({ buildTemplate }: BuildContext): Promise<void> => {
             ".gitignore",
             "renovate.json",
             ".dot/file.txt",
+            ".dot/.sub.file.txt",
             ".dot/.env",
         ],
         ignoredFiles: ["CHANGELOG.md"],
