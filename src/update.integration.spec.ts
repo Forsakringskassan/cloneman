@@ -97,6 +97,7 @@ describe("update existing project with template from registry", () => {
           (root)
               ├── .dot
               │   ├── .env
+              │   ├── .sub.file.txt
               │   └── file.txt
               ├── .gitignore
               ├── .npmrc
@@ -296,6 +297,7 @@ it("should update existing project from local tar", async () => {
       (root)
           ├── .dot
           │   ├── .env
+          │   ├── .sub.file.txt
           │   └── file.txt
           ├── .gitignore
           ├── .npmrc
