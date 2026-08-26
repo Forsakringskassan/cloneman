@@ -95,6 +95,9 @@ describe("update existing project with template from registry", () => {
         });
         expect(await printTree(appDir)).toMatchInlineSnapshot(`
           (root)
+              ├── .dot
+              │   ├── .env
+              │   └── file.txt
               ├── .gitignore
               ├── .npmrc
               ├── boilerplate.txt
@@ -291,6 +294,9 @@ it("should update existing project from local tar", async () => {
     });
     expect(await printTree(appDir)).toMatchInlineSnapshot(`
       (root)
+          ├── .dot
+          │   ├── .env
+          │   └── file.txt
           ├── .gitignore
           ├── .npmrc
           ├── boilerplate.txt

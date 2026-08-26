@@ -30,11 +30,11 @@ export async function copyFiles(
         if (isIgnored(filePath, ignoredFiles)) {
             continue;
         }
-        const { dir, base } = path.parse(filePath);
-        const fileName = getStoredFileName(base);
-        const fileDir = path.join(dstDir, dir);
-        await fs.mkdir(fileDir, { recursive: true });
-        const dst = path.join(dstDir, dir, fileName);
+        const renamedFilePath = getStoredFileName(filePath);
+        const { dir } = path.parse(renamedFilePath);
+
+        await fs.mkdir(path.join(dstDir, dir), { recursive: true });
+        const dst = path.join(dstDir, renamedFilePath);
         if (isIgnored(filePath, protectedFiles)) {
             const { output } = await spawn(
                 "git",
