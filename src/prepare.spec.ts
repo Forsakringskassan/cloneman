@@ -39,13 +39,16 @@ describe("prepare base template", () => {
         const { output } = await prepare(baseTemplate, targetDir);
         expect(output).toMatchInlineSnapshot(`
           "Assembling cloneman template "@forsakringskassan/base-template@1.0.0"
-            6 files copied (3 ignored)
+            8 files copied (3 ignored)
           "
         `);
 
         expect(await printTree(targetDir)).toMatchInlineSnapshot(`
           "(root)
               ├── files
+              │   ├── _dot
+              │   │   ├── _env
+              │   │   └── file.txt
               │   ├── _gitignore
               │   ├── _npmrc
               │   ├── boilerplate.txt
@@ -65,7 +68,7 @@ describe("prepare base template", () => {
         const { output } = await prepare(baseTemplate, targetDir);
         expect(output).toMatchInlineSnapshot(`
           "Assembling cloneman template "@forsakringskassan/base-template@1.0.0"
-            6 files copied (3 ignored)
+            8 files copied (3 ignored)
           "
         `);
 
@@ -120,7 +123,7 @@ describe("prepare base template", () => {
         const { output } = await prepare(baseTemplate, targetDir);
         expect(output).toMatchInlineSnapshot(`
           "Assembling cloneman template "@forsakringskassan/base-template@1.0.0"
-            6 files copied (3 ignored)
+            8 files copied (3 ignored)
           "
         `);
 
@@ -171,6 +174,8 @@ describe("prepare base template", () => {
         expect(cloneman).toMatchInlineSnapshot(`
           {
             "boilerplateFiles": [
+              ".dot/.env",
+              ".dot/file.txt",
               ".gitignore",
               ".npmrc",
               "boilerplate.txt",
@@ -183,6 +188,8 @@ describe("prepare base template", () => {
               "managed.txt",
               ".gitignore",
               "renovate.json",
+              ".dot/file.txt",
+              ".dot/.env",
             ],
             "removeFiles": [],
             "uninstallDependencies": [],
@@ -199,7 +206,7 @@ describe("prepare base template", () => {
         const { output } = await prepare(baseTemplate, targetDir);
         expect(output).toMatchInlineSnapshot(`
           "Assembling cloneman template "@forsakringskassan/base-template@1.0.0"
-            6 files copied (3 ignored)
+            8 files copied (3 ignored)
           "
         `);
 

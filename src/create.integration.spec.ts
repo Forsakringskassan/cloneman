@@ -98,6 +98,9 @@ describe("create from base template from npm registry", () => {
         });
         expect(await printTree(appDir)).toMatchInlineSnapshot(`
           (root)
+              ├── .dot
+              │   ├── .env
+              │   └── file.txt
               ├── .gitignore
               ├── .npmrc
               ├── boilerplate.txt
@@ -221,6 +224,9 @@ describe("create from local template package", () => {
         });
         expect(await printTree(appDir)).toMatchInlineSnapshot(`
           (root)
+              ├── .dot
+              │   ├── .env
+              │   └── file.txt
               ├── .gitignore
               ├── .npmrc
               ├── boilerplate.txt
