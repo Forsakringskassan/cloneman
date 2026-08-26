@@ -72,7 +72,7 @@ export interface BuildTemplateResult {
      * Replacement occurs line-by-line.
      *
      * @public
-     * @since %version%
+     * @since v1.20.0
      * @param filePath - Path relative to application root.
      * @param pattern - Pattern to replace in file.
      * @param replacement - Value to replace pattern with.
@@ -94,7 +94,7 @@ export interface BuildTemplateResult {
      * Replacement occurs line-by-line.
      *
      * @public
-     * @since %version%
+     * @since v1.20.0
      * @param filePath - Path relative to application root.
      * @param matcher - RegExp to match a specific line to perform replacements on.
      * @param pattern - Pattern to replace in file.

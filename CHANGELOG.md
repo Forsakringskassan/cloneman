@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## [1.20.0](https://github.com/Forsakringskassan/cloneman/compare/v1.19.7...v1.20.0) (2026-08-26)
+
+### Features
+
+* add `replaceInFile` in `BuiltContext` ([653aeb3](https://github.com/Forsakringskassan/cloneman/commit/653aeb357d68b5484ab428c508a7939514d8116e))
+
 ## [1.19.7](https://github.com/Forsakringskassan/cloneman/compare/v1.19.6...v1.19.7) (2026-08-26)
 
 ### Bug Fixes
