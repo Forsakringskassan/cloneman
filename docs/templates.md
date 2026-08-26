@@ -8,7 +8,8 @@ A template is required to have:
 .cloneman
 ├── (optional configuration file)
 ├── (optional hooks)
-└── build.{js,cjs,mjs,ts,cts,mts}
+├── build.{js,cjs,mjs,ts,cts,mts}
+└── tsconfig.json
 ```
 
 ## Building
@@ -28,6 +29,9 @@ export async function build(context: BuildContext): Promise<void> {
     await buildTemplate(pkg.name, {/* configuration */});
 }
 ```
+
+> [!NOTE]
+> See the [TypeScript](#using-typescript) below on how to configure typescript support for Cloneman templates.
 
 or with JavaScript (`.cloneman/build.mjs`):
 
@@ -468,3 +472,15 @@ Use `--target` to run the hook against a different application:
 > `npx cloneman run-hook install --target ../my-application`
 
 The `version.oldVersion` passed to the hook context is always `null` (simulating a fresh install), and `version.newVersion` is read from the template's own `package.json`.
+
+## Using TypeScript
+
+To enable TypeScript support for the Cloneman scripts you first need a `.cloneman/tsconfig.json` file:
+
+```json
+{
+    "extends": "cloneman/tsconfig.json"
+}
+```
+
+Optional: if you want to type-check the scripts from a build pipeline either run `tsc -p .cloneman/tsconfig.json` (recommended) or include it with `references` from the main `tsconfig.json `.

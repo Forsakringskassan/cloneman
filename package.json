@@ -21,7 +21,8 @@
     ".": {
       "types": "./dist/index.d.ts",
       "default": "./dist/index.mjs"
-    }
+    },
+    "./tsconfig.json": "./lib/tsconfig-author.json"
   },
   "main": "./dist/index.mjs",
   "bin": {
@@ -29,7 +30,8 @@
   },
   "files": [
     "bin",
-    "dist"
+    "dist",
+    "lib"
   ],
   "scripts": {
     "attw": "npx @arethetypeswrong/cli --profile esm-only --no-emoji --pack .",
