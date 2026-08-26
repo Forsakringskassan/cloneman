@@ -20,6 +20,8 @@ export interface BuildTemplateResult {
     addParameter(key: string, definition?: Partial<Omit<Parameter, "key">>): void;
     readonly files: string[];
     renovateIgnoreDependencies(): Promise<void>;
+    replaceInFile(filePath: string, pattern: string | RegExp, replacement: string): Promise<void>;
+    replaceInFile(filePath: string, matcher: RegExp, pattern: string | RegExp, replacement: string): Promise<void>;
     updateJson(this: void, filePath: string, content: unknown): Promise<void>;
     writeFile(filePath: string, content: string): Promise<void>;
 }

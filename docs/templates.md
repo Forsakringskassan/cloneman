@@ -262,6 +262,42 @@ template.addParameter("repository", {
 });
 ```
 
+### replaceInFile
+
+Replaces content in file.
+Each occurrence of `pattern` is replaced by `replacement`.
+
+If the optional `matcher` parameter is given, only lines matching `matcher` replaces `pattern` with `replacement`.
+
+When passing in a regular expression as pattern, make sure to use the global flag `/g` if you intend to replace multiple matches.
+Default is to replace the first occurrence only.
+
+Replacement occurs line-by-line.
+
+**Syntax**
+
+```js
+replaceInFile(filePath, [matcher], pattern, replacement);
+```
+
+**Parameters**
+
+: `filePath: string`
+Path relative to application root.
+
+: `matcher: RegExp` (optional)
+RegExp to match a specific line to perform replacements on.
+
+: `pattern: string | RegExp`
+Pattern to replace in this file.
+
+: `replacement: string`
+Value to replace pattern with.
+
+**Return value**
+
+A promise resolved when the file has been written.
+
 ### renovateIgnoreDependencies
 
 Append template specific dependencies to the "ignoreDeps" array in the template's "renovate.json".
