@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## [1.21.0](https://github.com/Forsakringskassan/cloneman/compare/v1.20.0...v1.21.0) (2026-08-27)
+
+### Features
+
+* include a tsconfig for template authors ([ab564b1](https://github.com/Forsakringskassan/cloneman/commit/ab564b1c13ee221210db2aa78cba71e4c3967590)), closes [#114](https://github.com/Forsakringskassan/cloneman/issues/114)
+
 ## [1.20.0](https://github.com/Forsakringskassan/cloneman/compare/v1.19.7...v1.20.0) (2026-08-26)
 
 ### Features
