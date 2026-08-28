@@ -1,3 +1,4 @@
+import { input } from "@inquirer/prompts";
 import { afterEach, beforeEach, expect, it, vi } from "vitest";
 import yoctoSpinner from "yocto-spinner";
 import { create } from "../create";
@@ -18,11 +19,16 @@ vi.mock(import("yocto-spinner"), () => ({
     default: vi.fn(() => mockSpinner),
 }));
 
+vi.mock(import("@inquirer/prompts"), () => ({
+    input: vi.fn(),
+}));
+
 beforeEach(() => {
     vi.mocked(create).mockResolvedValue({
         message: mockMessage,
     });
     vi.spyOn(console, "log").mockImplementation(() => undefined);
+    vi.mocked(input).mockResolvedValue("user-typed-application");
 });
 
 afterEach(() => {
@@ -40,6 +46,7 @@ it("create app", async () => {
 
     expect(create).toHaveBeenCalledExactlyOnceWith({
         name: appName,
+        currentDirectory: false,
         templatePackage: templateName,
         cwd: "./new-app",
         parameters: new Map(),
@@ -53,4 +60,23 @@ it("create app", async () => {
         `Application created successfully`,
     );
     expect(vi.mocked(console.log)).toHaveBeenCalledWith(mockMessage);
+});
+
+it("Create an application in current directory", async () => {
+    expect.hasAssertions();
+    const appName = ".";
+    const templateName = "my-template";
+    const parser = createParser({ cwd: "./" }).fail((msg) => {
+        expect.fail(msg);
+    });
+    await parser.parse(["create", appName, templateName]);
+
+    expect(create).toHaveBeenCalledExactlyOnceWith({
+        name: "user-typed-application",
+        templatePackage: templateName,
+        cwd: "./",
+        currentDirectory: true,
+        parameters: new Map(),
+        spinner: mockSpinner,
+    });
 });

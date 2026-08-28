@@ -25,6 +25,7 @@ export async function create(options: {
     cwd: string;
     env?: Record<string, string>;
     parameters: Map<string, string>;
+    currentDirectory?: boolean;
     spinner?: ReturnType<typeof yoctoSpinner>;
 }): Promise<{ message: string }> {
     const {
@@ -42,9 +43,12 @@ export async function create(options: {
         }
     }
 
-    const appPath = path.join(cwd, name);
-    if (existsSync(appPath)) {
-        throw new Error("application dir already exists");
+    let appPath = cwd;
+    if (!options.currentDirectory) {
+        appPath = path.join(cwd, name);
+        if (existsSync(appPath)) {
+            throw new Error("application dir already exists");
+        }
     }
 
     const normalizedTemplatePackage = normalizeTemplatePackage(

@@ -1,3 +1,4 @@
+import { input } from "@inquirer/prompts";
 import { type CommandModule } from "yargs";
 import yoctoSpinner from "yocto-spinner";
 import { create } from "../create";
@@ -14,7 +15,15 @@ async function createHandler(
     context: Context,
     argv: CreateArguments,
 ): Promise<void> {
-    const { name, template, param } = argv;
+    const { template, param } = argv;
+    let { name } = argv;
+    let currentDirectory = false;
+
+    if (name === ".") {
+        currentDirectory = true;
+        name = await input({ message: "Application name" });
+    }
+
     const { cwd } = context;
     const parameters = parseParams(param);
 
@@ -29,6 +38,7 @@ async function createHandler(
             templatePackage: template,
             cwd,
             parameters,
+            currentDirectory,
             spinner,
         });
     } catch (err) {
@@ -55,7 +65,8 @@ export function createCommand(
         builder(yargs) {
             return yargs
                 .positional("name", {
-                    describe: "Name of the application (awesome-app)",
+                    describe:
+                        "Name of the application (awesome-app) | Use . for current directory and you will be prompted for the name in package.json",
                     type: "string",
                     demandOption: true,
                 })

@@ -17,6 +17,7 @@ import { printTree } from "./test-utils";
 import { rmDir } from "./test-utils/rm-dir";
 import { temporaryDirectory } from "./test-utils/temporary-directory";
 import { type ClientMetadata } from "./types";
+import { type ApplicationPackageJson } from "./utils";
 
 /* Increased timeout time since test involves a lot reading & writing to disc, and also fetching data from a local npm registry */
 vi.setConfig({ testTimeout: 30_000 });
@@ -118,6 +119,24 @@ describe("create from base template from npm registry", () => {
         expect(await readFile("managed.txt")).toMatchInlineSnapshot(
             `managed file at v1.0.0`,
         );
+    });
+
+    it("should create new project in current directory", async () => {
+        expect.assertions(1);
+        appDir = cwd;
+
+        await create({
+            name: "mock-app",
+            currentDirectory: true,
+            templatePackage: "@forsakringskassan/base-template@1.0.0",
+            cwd,
+            env: userEnv,
+            parameters: new Map(),
+        });
+
+        const packageJson =
+            await readJsonFile<ApplicationPackageJson>("package.json");
+        expect(packageJson.name).toBe("mock-app");
     });
 
     it("should throw error if directory already exists", async () => {

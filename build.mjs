@@ -7,6 +7,7 @@ async function build() {
     const result = await esbuild.build({
         entryPoints: ["src/index.ts", { in: "src/cli/cli.ts", out: "cli" }],
         bundle: true,
+        external: ["@inquirer/prompts"],
         splitting: true,
         metafile: true,
         sourcemap: true,
