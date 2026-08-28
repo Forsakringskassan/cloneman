@@ -16,10 +16,20 @@ export function prepareTemplatePackageJson(
         version: pkg.version,
     };
 
+    const {
+        description,
+        repository,
+        bugs,
+        homepage,
+        keywords,
+        author,
+        license,
+        ...restPkg
+    } = pkg;
+
     const massaged = {
-        ...pkg,
+        ...restPkg,
         name: "${name}",
-        description: "${description}",
         version: "${version}",
         cloneman,
         dependencies: filterDependencies(pkg.dependencies),

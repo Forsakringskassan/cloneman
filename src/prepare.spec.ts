@@ -79,10 +79,6 @@ describe("prepare base template", () => {
 
         expect(packageJson).toMatchInlineSnapshot(`
           {
-            "author": "Author Name <author.name@example.net>",
-            "bugs": {
-              "url": "https://example.net/base-template/bugs",
-            },
             "cloneman": {
               "template": "@forsakringskassan/base-template",
               "version": "1.0.0",
@@ -91,25 +87,14 @@ describe("prepare base template", () => {
               "@forsakringskassan/api-lib-a": "1.0.0",
               "@forsakringskassan/api-lib-b": "1.0.0",
             },
-            "description": "\${description}",
             "devDependencies": {
               "@forsakringskassan/base-template": "1.0.0",
               "@forsakringskassan/lib-used-by-templates": "1.0.0",
               "cloneman": ".",
             },
             "files": [],
-            "homepage": "https://example.net/base-template",
-            "keywords": [
-              "foo",
-              "bar",
-            ],
-            "license": "MIT",
             "name": "\${name}",
             "private": true,
-            "repository": {
-              "type": "git",
-              "url": "git+https://git.example.net/base-template",
-            },
             "scripts": {
               "a": "foo",
             },
@@ -258,7 +243,6 @@ describe("prepare base template 1.0.1", () => {
               "@forsakringskassan/api-lib-a": "1.1.0",
               "@forsakringskassan/api-lib-b": "1.1.0",
             },
-            "description": "\${description}",
             "devDependencies": {
               "@forsakringskassan/base-template": "1.0.1",
               "@forsakringskassan/lib-used-by-templates": "1.0.0",
