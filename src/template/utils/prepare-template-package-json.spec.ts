@@ -8,8 +8,8 @@ const template: PackageJson = {
 };
 
 describe("prepareTemplatePackageJson", () => {
-    it("should replace name, description, and version with placeholders", () => {
-        expect.hasAssertions();
+    it("should replace name, and version with placeholders", () => {
+        expect.assertions(2);
 
         const pkg: PackageJson = {
             name: "original-name",
@@ -19,11 +19,10 @@ describe("prepareTemplatePackageJson", () => {
         const result = prepareTemplatePackageJson(template, pkg);
         expect(result.name).toBe("${name}");
         expect(result.version).toBe("${version}");
-        expect(result.description).toBe("${description}");
     });
 
     it("should set cloneman field to template metadata", () => {
-        expect.hasAssertions();
+        expect.assertions(1);
 
         const pkg: PackageJson = {
             name: "app",
@@ -37,7 +36,7 @@ describe("prepareTemplatePackageJson", () => {
     });
 
     it("should add template as a devDependency", () => {
-        expect.hasAssertions();
+        expect.assertions(1);
 
         const pkg: PackageJson = {
             name: "app",
@@ -49,5 +48,36 @@ describe("prepareTemplatePackageJson", () => {
                 "my-template": "1.0.0",
             }),
         );
+    });
+
+    it("should remove template specific fields from the package.json", () => {
+        expect.assertions(1);
+
+        const pkg: PackageJson = {
+            name: "app",
+            version: "1.0.0",
+            description: "original description",
+            repository: "some-repo",
+            bugs: "some-bugs",
+            homepage: "some-homepage",
+            keywords: ["keyword1", "keyword2"],
+            author: "author",
+            license: "MIT",
+        };
+        const result = prepareTemplatePackageJson(template, pkg);
+        expect(result).toMatchInlineSnapshot(`
+          {
+            "cloneman": {
+              "template": "my-template",
+              "version": "1.0.0",
+            },
+            "dependencies": {},
+            "devDependencies": {
+              "my-template": "1.0.0",
+            },
+            "name": "\${name}",
+            "version": "\${version}",
+          }
+        `);
     });
 });

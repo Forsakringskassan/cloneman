@@ -68,17 +68,6 @@ describe("create from base template from npm registry", () => {
             version: "0.0.0",
             private: true,
             description: "",
-            keywords: ["foo", "bar"],
-            homepage: "https://example.net/base-template",
-            bugs: {
-                url: "https://example.net/base-template/bugs",
-            },
-            repository: {
-                type: "git",
-                url: "git+https://git.example.net/base-template",
-            },
-            license: "MIT",
-            author: "Author Name <author.name@example.net>",
             files: [],
             scripts: { a: "foo" },
             dependencies: {
@@ -193,17 +182,7 @@ describe("create from local template package", () => {
             version: "0.0.0",
             private: true,
             description: "",
-            keywords: ["foo", "bar"],
-            homepage: "https://example.net/base-template",
-            bugs: {
-                url: "https://example.net/base-template/bugs",
-            },
-            repository: {
-                type: "git",
-                url: "git+https://git.example.net/base-template",
-            },
-            license: "MIT",
-            author: "Author Name <author.name@example.net>",
+
             files: [],
             scripts: { a: "foo" },
             dependencies: {
