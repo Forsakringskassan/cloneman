@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## [1.21.1](https://github.com/Forsakringskassan/cloneman/compare/v1.21.0...v1.21.1) (2026-08-29)
+
+### Bug Fixes
+
+* run prettier on renovate.json when creating the template ([5e5513f](https://github.com/Forsakringskassan/cloneman/commit/5e5513f64fb63db7e21cbf6569cead9034fe2f7e))
+
 ## [1.21.0](https://github.com/Forsakringskassan/cloneman/compare/v1.20.0...v1.21.0) (2026-08-27)
 
 ### Features
