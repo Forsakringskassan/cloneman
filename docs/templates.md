@@ -71,7 +71,7 @@ export async function build(context: BuildContext): Promise<void> {
 }
 ```
 
-See [list of available functions](#function-reference) for details.
+See [list of available functions](./api/build-template-result.md) for details.
 
 The configuration can optionally be stored in a separate JSON file:
 
@@ -92,66 +92,11 @@ export async function build(context: BuildContext): Promise<void> {
 
 ## Configuration
 
-Template configuration.
+See [configuration reference](./api/configuration.md) for a list of configuration options.
 
-```json
-{
-    "managedFiles": ["managed.txt"],
-    "ignoredDependencies": []
-}
-```
+## Functions
 
-**Glob patterns**
-
-Fields that support glob patterns also support negation patterns (prefixed with `!`) to re-include specific entries.
-For example, `["@fkui/*", "!@fkui/vue-config"]` matches all `@fkui` packages except `@fkui/vue-config`.
-
-### managedFiles
-
-- type: `string[]`
-- default: `[]`
-
-List of files owned by the template.
-
-All non-ignored files will be included in the template but only the files included in `managedFiles` are updated when running `cloneman update`.
-When running `cloneman create` all non-ignored files are always copied.
-
-### removeFiles
-
-- type: `string[]`
-- default: `[]`
-
-List of files to be removed from the application during an update.
-Supports exact file names or glob patterns, e.g. `tsconfig.*` to remove all matching files.
-
-Files are removed before copying over the new files from the template.
-If `removeFiles` matches entries also present in `managedFiles` the files (or glob patterns) will be removed before copying over the updated files.
-
-### ignoredFiles
-
-- type: `string[]`
-- default: `[]`
-
-List of files to exclude when creating a template.
-Supports exact file names or glob patterns, e.g. `test/*` to remove all test files.
-
-### ignoredDependencies
-
-- type: `string[]`
-- default: `[]`
-
-List of dependencies to exclude when creating a template.
-Supports exact package names or glob patterns, e.g. `@fkui/*` to remove all dependencies in the `@fkui` scope.
-
-### uninstallDependencies
-
-- type: `string[]`
-- default: `[]`
-
-List of dependencies to remove from the application during an update.
-Useful when a template is migrating between tools, e.g. from Jest to Vitest, to ensure obsolete packages are uninstalled from the application.
-
-Supports exact package names or glob patterns, e.g. `@fkui/*` to remove all dependencies in the `@fkui` scope.
+See [list of available functions](./api/build-template-result.md).
 
 ## Parameters
 
@@ -212,170 +157,6 @@ where:
 
 During `npx cloneman update` fields marked with an asterisk `*` are preserved if present.
 If missing from the application they are written from the template.
-
-## Function reference
-
-### addParameter
-
-Declare a parameter that the template requires from the user.
-
-**Syntax**
-
-```js
-template.addParameter(key, definition);
-```
-
-**Parameters**
-
-: `key: string`
-Unique identifier for the parameter.
-
-: `definition?: object`
-Optional options for the parameter.
-
-: `definition.description?: string`
-Human-readable description shown to the user.
-
-: `definition.help?: string`
-Additional help text shown to the user.
-
-: `definition.required?: boolean`
-When `true`, the user must provide a non-empty value.
-Cloneman throws an error if no value is available.
-
-: `definition.defaultValue?: string`
-Fallback value used when no existing stored value is present and the user does not provide one.
-
-: `definition.pattern?: string`
-Optional regular expression (anchored) used to validate the value.
-Cloneman throws an error if the value does not match.
-
-**Return value**
-
-`void`
-
-**Example:**
-
-```ts
-const template = await buildTemplate(pkg.name);
-
-template.addParameter("repository", {
-    description: "Repository owner and name (e.g. org/my-app)",
-    required: true,
-    pattern: "[a-z-]+/[a-z-]+",
-});
-```
-
-### replaceInFile
-
-Replaces content in file.
-Each occurrence of `pattern` is replaced by `replacement`.
-
-If the optional `matcher` parameter is given, only lines matching `matcher` replaces `pattern` with `replacement`.
-
-When passing in a regular expression as pattern, make sure to use the global flag `/g` if you intend to replace multiple matches.
-Default is to replace the first occurrence only.
-
-Replacement occurs line-by-line.
-
-**Syntax**
-
-```js
-replaceInFile(filePath, [matcher], pattern, replacement);
-```
-
-**Parameters**
-
-: `filePath: string`
-Path relative to application root.
-
-: `matcher: RegExp` (optional)
-RegExp to match a specific line to perform replacements on.
-
-: `pattern: string | RegExp`
-Pattern to replace in this file.
-
-: `replacement: string`
-Value to replace pattern with.
-
-**Return value**
-
-A promise resolved when the file has been written.
-
-### renovateIgnoreDependencies
-
-Append template specific dependencies to the "ignoreDeps" array in the template's "renovate.json".
-
-This makes Renovate ignore dependencies that are managed by the template, while
-still allowing updates for dependencies that are not template managed.
-
-**Syntax**
-
-```js
-renovateIgnoreDependencies();
-```
-
-**Parameters**
-
-This function has no parameters
-
-**Return value**
-
-A promise resolved when the `renovate.json` file has been written.
-
-**Example:**
-
-```js
-const template = await buildTemplate(pkg.name, config);
-await template.renovateIgnoreDependencies();
-```
-
-### updateJson
-
-Update the contents of a JSON file in the template.
-Multiple updates on the same file
-
-**Syntax**
-
-```js
-updateJson(filePath, content);
-```
-
-**Parameters**
-
-: `filePath: string`
-Path relative to the template root.
-
-: `content: unknown`
-Content to add to the existing JSON.
-
-**Return value**
-
-A promise resolved when the updated file has been written.
-
-**Example**
-
-```ts
-const template = await buildTemplate(pkg.name, config);
-
-await template.updateJson("package.json", {
-    release: {
-        extends: ["awesome-preset"],
-    },
-});
-```
-
-### writeFile
-
-Create or modify files in a template
-
-**Example**
-
-```ts
-const template = await buildTemplate(pkg.name, config);
-
-await template.writeFile("foo.txt", "New file");
-```
 
 ## Hooks
 
