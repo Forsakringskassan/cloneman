@@ -15,6 +15,7 @@ async function build() {
         platform: "node",
         target: "node22",
         logLevel: "info",
+        external: ["prettier"],
         outExtension: {
             ".js": ".mjs",
         },
