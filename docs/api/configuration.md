@@ -5,7 +5,7 @@ Template configuration.
 ```json
 {
     "managedFiles": ["managed.txt"],
-    "ignoredDependencies": []
+    "ignoredFiles": ["package-lock.json"]
 }
 ```
 
@@ -23,6 +23,11 @@ List of files owned by the template.
 
 All non-ignored files will be included in the template but only the files included in `managedFiles` are updated when running `cloneman update`.
 When running `cloneman create` all non-ignored files are always copied.
+
+> [!TIP]
+>
+> - `package.json` does not need to be listed explicitly, the file is always considered managed.
+> - `package-lock.json` is not recommended to list as the consumer is expected to have custom dependencies and thus may end up with a very different lockfile than the template project.
 
 ## removeFiles
 
@@ -42,6 +47,10 @@ If `removeFiles` matches entries also present in `managedFiles` the files (or gl
 
 List of files to exclude when creating a template.
 Supports exact file names or glob patterns, e.g. `test/*` to remove all test files.
+
+> [!TIP]
+>
+> `package-lock.json` is recommended to ignore as the consumer is expected to have custom dependencies and thus may end up with a very different lockfile than the template project.
 
 ## ignoredDependencies
 
