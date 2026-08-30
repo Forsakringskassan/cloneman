@@ -29,7 +29,7 @@ export {
     normalizeTemplatePackage,
 } from "./normalize-template-package";
 export { getTemplateInfo } from "./get-template-info";
-export { info } from "./npm";
+export { NpmInfoError, info } from "./npm";
 export { fetchTarball } from "./fetch-tarball";
 export { type TarballContents, parseTarball } from "./parse-tarball";
 export { updateJsonFile } from "./update-json-file";
