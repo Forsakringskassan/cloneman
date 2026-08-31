@@ -5,6 +5,7 @@ import { type Parameter } from "../types";
  * @internal
  */
 export interface TemplateInfo {
+    readonly fileHash: string;
     readonly filesDir: string;
     readonly hooksDir: string | null;
     readonly boilerplateFiles: string[];
@@ -39,6 +40,7 @@ export async function getTemplateInfo(
     }
 
     const templateInfo = JSON.parse(getInfo.stdout) as {
+        fileHash: string;
         filesDir: string;
         hooksDir?: string;
         boilerplateFiles: string[];
@@ -46,9 +48,16 @@ export async function getTemplateInfo(
         parameters?: Parameter[];
     };
 
-    const { filesDir, hooksDir, boilerplateFiles, managedFiles, parameters } =
-        templateInfo;
+    const {
+        fileHash,
+        filesDir,
+        hooksDir,
+        boilerplateFiles,
+        managedFiles,
+        parameters,
+    } = templateInfo;
     return {
+        fileHash,
         filesDir,
         hooksDir: hooksDir ?? null,
         boilerplateFiles,

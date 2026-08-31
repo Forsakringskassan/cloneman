@@ -186,22 +186,6 @@ export async function buildTemplate(options: {
         ".cloneman/**",
     ];
 
-    const indexJs = `
-        import fs from "node:fs/promises";
-        import path from "node:path";
-
-        const packageJsonFile = await fs.readFile(path.join(import.meta.dirname, "package.json"), "utf8");
-        const packageJson = JSON.parse(packageJsonFile);
-
-        const options = {
-            ...packageJson.cloneman,
-            filesDir: path.join(import.meta.dirname, "files"),
-            hooksDir: path.join(import.meta.dirname, "hooks"),
-        }
-
-        export default options;
-    `;
-
     const files = await copyFiles(logger, templateDir, filesDir, ignoredFiles);
     const effectiveManagedFiles = files.filter((it) => {
         return managedFiles.some((pattern) => path.matchesGlob(it, pattern));
@@ -219,8 +203,6 @@ export async function buildTemplate(options: {
 
     const hooksDir = path.join(templateDir, ".cloneman");
     await installHook("install", { targetDir, hooksDir });
-
-    await fs.writeFile(path.join(targetDir, "index.js"), indexJs);
 
     const clonemanPackageJson = await createclonemanPackageJson(
         path.join(targetDir, "package.json"),

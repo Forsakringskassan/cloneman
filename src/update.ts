@@ -2,6 +2,7 @@ import { randomBytes } from "node:crypto";
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
+import { pathToFileURL } from "node:url";
 import type yoctoSpinner from "yocto-spinner";
 import { InvalidClonemanFieldError, MissingClonemanFieldError } from "./errors";
 import { getStoredFileName } from "./template/utils";
@@ -13,6 +14,7 @@ import {
     createInstallContext,
     fetchTarball,
     filterDependencies,
+    getTemplateInfo,
     info,
     isClientMetadata,
     isTarball,
@@ -224,40 +226,59 @@ export async function update(options: {
         ignoredDependencies,
     });
 
-    await writeJsonFile(
-        path.join(appDir, "package.json"),
-        {
-            ...tmplPackageJson,
-            name,
-            version,
-            keywords: appPackageJson.keywords ?? tmplPackageJson.keywords,
-            homepage: appPackageJson.homepage ?? tmplPackageJson.homepage,
-            bugs: appPackageJson.bugs ?? tmplPackageJson.bugs,
-            repository: appPackageJson.repository ?? tmplPackageJson.repository,
-            description,
-            dependencies,
-            devDependencies: {
-                ...devDependencies,
-                [cloneman.template]: packageJsonVersion,
-            },
-            cloneman: {
-                version: tarballPackageJson.version,
-                template: tarballPackageJson.name,
-                parameters: Object.fromEntries(parameters),
-            } satisfies ClientMetadata,
-        },
-        {
-            indent: 2,
-            trailer: "\n",
-        },
-    );
-
     let message = [`Now run:`, ``, `  npm install`].join("\n");
 
     /* create a temporary directory with the hooks we extracted from the tarball
      * and run hooks from there, as the hooks installed in `node_modules` right
      * now would be the old and not the current version */
-    await withTemporaryDirectory(async (hooksDir) => {
+    await withTemporaryDirectory(async (templateDir) => {
+        const indexJs = files.get("package/index.js");
+        const indexJsPath = path.join(templateDir, "index.js");
+        await Promise.all([
+            fs.writeFile(
+                path.join(templateDir, "package.json"),
+                JSON.stringify(tarballPackageJson),
+            ),
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- File exists
+            fs.writeFile(indexJsPath, indexJs!),
+        ]);
+        const { fileHash } = await getTemplateInfo(
+            pathToFileURL(indexJsPath).href,
+            appDir,
+        );
+
+        await writeJsonFile(
+            path.join(appDir, "package.json"),
+            {
+                ...tmplPackageJson,
+                name,
+                version,
+                keywords: appPackageJson.keywords ?? tmplPackageJson.keywords,
+                homepage: appPackageJson.homepage ?? tmplPackageJson.homepage,
+                bugs: appPackageJson.bugs ?? tmplPackageJson.bugs,
+                repository:
+                    appPackageJson.repository ?? tmplPackageJson.repository,
+                description,
+                dependencies,
+                devDependencies: {
+                    ...devDependencies,
+                    [cloneman.template]: packageJsonVersion,
+                },
+                cloneman: {
+                    version: tarballPackageJson.version,
+                    template: tarballPackageJson.name,
+                    parameters: Object.fromEntries(parameters),
+                    fileHash,
+                } satisfies ClientMetadata,
+            },
+            {
+                indent: 2,
+                trailer: "\n",
+            },
+        );
+
+        const hooksDir = path.join(templateDir, "hooks");
+        await fs.mkdir(hooksDir);
         const hooks = Array.from(files.keys())
             .filter((it) => it.startsWith("package/hooks/"))
             .map((filePath) => {

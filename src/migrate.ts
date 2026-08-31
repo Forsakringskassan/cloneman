@@ -62,6 +62,7 @@ export async function migrate(options: {
     packageJson.cloneman = {
         template: templatePackage,
         version: "N/A",
+        fileHash: "N/A",
     } satisfies ClientMetadata;
 
     await writeJsonFile(`${cwd}/package.json`, sortPackageJson(packageJson), {

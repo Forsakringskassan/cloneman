@@ -5,6 +5,7 @@ import { type PackageJson } from "../../utils";
  * @internal
  * @param template - The generated `package.json`  for the template NPM package.
  * @param pkg - The `package.json` content of the template (from the root of the template).
+
  */
 export function prepareTemplatePackageJson(
     template: PackageJson,
@@ -25,6 +26,7 @@ export function prepareTemplatePackageJson(
         ...restPkg,
         name: "${name}",
         version: "${version}",
+
         dependencies: filterDependencies(pkg.dependencies),
         devDependencies: {
             ...filterDependencies(pkg.devDependencies),

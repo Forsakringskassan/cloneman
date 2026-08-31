@@ -2,7 +2,7 @@ import { Console } from "node:console";
 import path from "node:path";
 import { PassThrough } from "node:stream";
 import { text } from "node:stream/consumers";
-import { buildTemplate } from "./template";
+import { buildTemplate, finalizeBuildTemplate } from "./template";
 import { type Parameter } from "./types";
 import {
     getHookScriptPath,
@@ -54,6 +54,8 @@ export async function prepare(
             targetDir,
             logger,
         });
+
+        await finalizeBuildTemplate(targetDir);
         if (parameters.length > 0) {
             const filePath = path.join(targetDir, "package.json");
             await updateJsonFile(filePath, {

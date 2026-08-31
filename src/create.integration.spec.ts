@@ -80,6 +80,7 @@ describe("create from base template from npm registry", () => {
                 cloneman: ".",
             },
             cloneman: {
+                fileHash: expect.any(String),
                 template: "@forsakringskassan/base-template",
                 version: "1.0.0",
                 parameters: {},
@@ -201,6 +202,7 @@ describe("create from local template package", () => {
                 cloneman: ".",
             },
             cloneman: {
+                fileHash: expect.any(String),
                 template: "@forsakringskassan/base-template",
                 version: expect.stringContaining(
                     "forsakringskassan-base-template-1.0.0",

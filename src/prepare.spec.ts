@@ -2,6 +2,7 @@ import fs, { readFile } from "node:fs/promises";
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { prepare } from "./prepare";
+import { createManagedFilesHash } from "./template/utils";
 import {
     printTree,
     rmDir,
@@ -396,6 +397,33 @@ describe("writeFile()", () => {
                 "utf8",
             );
             expect(newFile).toBe("new file");
+        });
+    });
+
+    it("should include writeFile() mutations of managed files in the fileHash", async () => {
+        expect.assertions(1);
+        await withFixture("write-file-template", async (fixture) => {
+            await prepare(fixture, targetDir);
+
+            const filesDir = path.join(targetDir, "files");
+            const templatePackageJson = await readJsonFile<TemplatePackageJson>(
+                path.join(targetDir, "package.json"),
+            );
+            const massagedPackageJson = await readJsonFile<PackageJson>(
+                path.join(filesDir, "package.json"),
+            );
+
+            const expectedHash = await createManagedFilesHash(
+                filesDir,
+                templatePackageJson.cloneman.managedFiles,
+                massagedPackageJson,
+            );
+
+            const { default: templateInfo } = (await import(
+                path.join(targetDir, "index.js")
+            )) as { default: { fileHash: string } };
+
+            expect(templateInfo.fileHash).toBe(expectedHash);
         });
     });
 });

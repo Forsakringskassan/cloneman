@@ -14,15 +14,9 @@ export interface TarballContents {
     tarballPackageJson: TemplatePackageJson;
     /** The parsed `files/package.json` from the tarball (the template for consumer projects). */
     tmplPackageJson: PackageJson;
+
     /** Map of tarball entry paths (e.g. `package/files/managed.txt`) to their file contents. */
     files: Map<string, Buffer>;
-}
-
-function isRelavant(filePath: string): boolean {
-    return (
-        filePath.startsWith("package/files") ||
-        filePath.startsWith("package/hooks")
-    );
 }
 
 /**
@@ -40,19 +34,26 @@ export async function parseTarball(buffer: Buffer): Promise<TarballContents> {
 
     const tarStream = list({
         onReadEntry(entry) {
-            if (entry.path === "package/package.json") {
-                packageJsonPromise = toBuffer(entry);
-            } else if (entry.path === "package/files/package.json") {
-                tmplPackageJsonPromise = toBuffer(entry);
-                const { path } = entry;
-                void tmplPackageJsonPromise.then((data) =>
-                    files.set(path, data),
-                );
-            } else if (isRelavant(entry.path)) {
-                const { path } = entry;
-                void toBuffer(entry).then((data) => files.set(path, data));
-            } else {
-                entry.resume();
+            switch (entry.path) {
+                case "package/package.json": {
+                    packageJsonPromise = toBuffer(entry);
+
+                    break;
+                }
+                case "package/files/package.json": {
+                    tmplPackageJsonPromise = toBuffer(entry);
+                    const { path } = entry;
+                    void tmplPackageJsonPromise.then((data) =>
+                        files.set(path, data),
+                    );
+
+                    break;
+                }
+                default: {
+                    const { path } = entry;
+                    void toBuffer(entry).then((data) => files.set(path, data));
+                    break;
+                }
             }
         },
     });
