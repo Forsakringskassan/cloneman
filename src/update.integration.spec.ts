@@ -77,7 +77,7 @@ describe("update existing project with template from registry", () => {
     });
 
     it("should update existing project", async () => {
-        expect.assertions(14);
+        expect.assertions(16);
 
         expect(await readFile("boilerplate.txt")).toMatchInlineSnapshot(
             `boilerplate file at v1.0.0`,
@@ -85,6 +85,15 @@ describe("update existing project with template from registry", () => {
         expect(await readFile("managed.txt")).toMatchInlineSnapshot(
             `managed file at v1.0.0`,
         );
+
+        expect(await readJsonFile("package.json")).toMatchObject({
+            cloneman: {
+                fileHash: expect.any(String),
+                parameters: {},
+                template: "@forsakringskassan/base-template",
+                version: "1.0.0",
+            },
+        });
 
         /* update the application to version 1.0.1 */
         await update({
@@ -140,6 +149,15 @@ describe("update existing project with template from registry", () => {
         });
         expect(applicationPackageJson.keywords).toEqual(["foo", "bar"]);
         expect(applicationPackageJson.repository).toBe("git+package-homepage");
+
+        expect(await readJsonFile("package.json")).toMatchObject({
+            cloneman: {
+                fileHash: expect.any(String),
+                parameters: {},
+                template: "@forsakringskassan/base-template",
+                version: "1.0.1",
+            },
+        });
     });
 
     it("should set actual version to the resolved version if input version is 'latest'", async () => {
@@ -154,7 +172,7 @@ describe("update existing project with template from registry", () => {
             await readJsonFile<ApplicationPackageJson>("package.json");
         expect(
             packageJson.devDependencies?.["@forsakringskassan/base-template"],
-        ).toBe("1.0.2");
+        ).toBe("1.0.3");
     });
 
     it("should keep dependencies that are not in the template", async () => {
@@ -502,4 +520,29 @@ it("should override existing parameters when updating with overrides", async () 
       repository=git+https://example.net/overridden
       description=
     `);
+});
+
+it("Updating to a new version should keep same filehash if only dependencies change", async () => {
+    expect.assertions(2);
+    await create({
+        name: "mock-app",
+        templatePackage: "@forsakringskassan/base-template@1.0.2",
+        cwd,
+        env: userEnv,
+        parameters: new Map(),
+    });
+    const { cloneman: clonemanBefore } = await readJsonFile<{
+        cloneman?: ClientMetadata;
+    }>("package.json");
+    await update({
+        cwd: appDir,
+        version: "1.0.3",
+        env: userEnv,
+        parameters: new Map(),
+    });
+    const { cloneman: clonemanAfter } = await readJsonFile<{
+        cloneman?: ClientMetadata;
+    }>("package.json");
+    expect(clonemanBefore?.fileHash).toMatch(/^[a-f0-9]{64}$/);
+    expect(clonemanAfter?.fileHash).toBe(clonemanBefore?.fileHash);
 });

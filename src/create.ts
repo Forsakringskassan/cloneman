@@ -106,6 +106,7 @@ export async function create(options: {
         filesDir,
         hooksDir,
         boilerplateFiles,
+        fileHash,
         parameters: parameterDefinitions,
     } = await getTemplateInfo(templatePackageName, appPath);
 
@@ -140,6 +141,7 @@ export async function create(options: {
         version: templatePackageVersion,
         template: templatePackageName,
         parameters: Object.fromEntries(parameters),
+        fileHash,
     } satisfies ClientMetadata;
 
     await fs.writeFile(
