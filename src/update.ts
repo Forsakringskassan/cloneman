@@ -13,11 +13,11 @@ import {
     createInstallContext,
     fetchTarball,
     filterDependencies,
-    info,
     isClientMetadata,
     isTarball,
     parseTarball,
     readJsonFile,
+    resolveVersion,
     runHook,
     writeJsonFile,
 } from "./utils";
@@ -95,7 +95,7 @@ export async function update(options: {
     env: Record<string, string>;
     parameters: Map<string, string>;
     spinner?: ReturnType<typeof yoctoSpinner>;
-}): Promise<{ message: string }> {
+}): Promise<{ message: string; resolvedVersion: string; notice?: string }> {
     const {
         cwd: appDir,
         version: templateVersion,
@@ -135,6 +135,7 @@ export async function update(options: {
      * If the input is a version, the version is set to the input version, or the resolved version if the input is "latest".
      */
     let packageJsonVersion: string;
+    let notice: string | undefined;
 
     await text("Retrieving template files...");
     if (isTarball(templateVersion)) {
@@ -151,19 +152,14 @@ export async function update(options: {
             .relative(appDir, tarPath)
             .replaceAll("\\", "/");
     } else {
-        packageJsonVersion = templateVersion;
-
-        if (templateVersion === "latest") {
-            /* npm 11 returns string, npm 12 returns array with a single string */
-            const version = await info<string | [string]>(
-                `${cloneman.template}@${templateVersion}`,
-                {
-                    field: "version",
-                    env,
-                },
-            );
-            packageJsonVersion = Array.isArray(version) ? version[0] : version;
-        }
+        const resolved = await resolveVersion({
+            template: cloneman.template,
+            currentVersion: cloneman.version,
+            target: templateVersion,
+            env,
+        });
+        packageJsonVersion = resolved.resolvedVersion;
+        notice = resolved.notice;
 
         tarballBuffer = await fetchTarball(
             cloneman.template,
@@ -288,5 +284,9 @@ export async function update(options: {
         await runHook("install", hooksDir, context);
     });
 
-    return { message };
+    return {
+        message,
+        resolvedVersion: packageJsonVersion,
+        ...(notice && { notice }),
+    };
 }
