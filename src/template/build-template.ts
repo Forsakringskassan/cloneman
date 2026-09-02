@@ -227,11 +227,11 @@ export async function buildTemplate(options: {
             repository: pkg.repository,
             license: pkg.license,
             author: pkg.author,
-            boilerplateFiles: files,
+            boilerplateFiles: files.toSorted((a, b) => a.localeCompare(b)),
             removeFiles,
             uninstallDependencies,
             ignoredDependencies: templateIgnoredDependencies,
-            managedFiles,
+            managedFiles: managedFiles.toSorted((a, b) => a.localeCompare(b)),
         },
     );
 
