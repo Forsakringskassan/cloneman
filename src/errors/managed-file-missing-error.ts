@@ -9,7 +9,7 @@ export class ManagedFileMissingError extends UserError {
     private readonly templateName: string;
 
     public constructor(options: { templateName: string; file: string }) {
-        super(`Managed file is missing from template`);
+        super(`Managed file(s) is missing from template`);
         this.name = "ManagedFileMissingError";
         this.templateName = options.templateName;
         this.file = options.file;
@@ -20,10 +20,10 @@ export class ManagedFileMissingError extends UserError {
         return [
             styleText(
                 "red",
-                `ERROR cloneman cannot build template "${templateName}": managed file is missing.`,
+                `ERROR cloneman cannot build template "${templateName}": managed file not found.`,
             ),
             ``,
-            `The file "${file}" is listed in "managedFiles" but does not exist in the template.`,
+            `The file "${file}" is listed in "managedFiles" but does not match any file in the template.`,
             ``,
             `Make sure the file exists or remove it from "managedFiles".`,
         ].join("\n");

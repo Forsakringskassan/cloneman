@@ -94,6 +94,10 @@ describe("create from base template from npm registry", () => {
               ├── .gitignore
               ├── .npmrc
               ├── boilerplate.txt
+              ├── glob
+              │   ├── bar.json
+              │   ├── foo.txt
+              │   └── renovate.json
               ├── managed.txt
               ├── package-lock.json
               ├── package.json
@@ -213,6 +217,10 @@ describe("create from local template package", () => {
               ├── .gitignore
               ├── .npmrc
               ├── boilerplate.txt
+              ├── glob
+              │   ├── bar.json
+              │   ├── foo.txt
+              │   └── renovate.json
               ├── managed.txt
               ├── package-lock.json
               ├── package.json

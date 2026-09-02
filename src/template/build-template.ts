@@ -203,10 +203,17 @@ export async function buildTemplate(options: {
     `;
 
     const files = await copyFiles(logger, templateDir, filesDir, ignoredFiles);
+    const effectiveManagedFiles = files.filter((it) => {
+        return managedFiles.some((pattern) => path.matchesGlob(it, pattern));
+    });
 
-    for (const file of managedFiles) {
-        if (!files.includes(file)) {
-            throw new ManagedFileMissingError({ templateName: name, file });
+    /* verify each pattern in managedFiles matches one or more files */
+    for (const pattern of managedFiles) {
+        if (files.every((it) => !path.matchesGlob(it, pattern))) {
+            throw new ManagedFileMissingError({
+                templateName: name,
+                file: pattern,
+            });
         }
     }
 
@@ -231,7 +238,9 @@ export async function buildTemplate(options: {
             removeFiles,
             uninstallDependencies,
             ignoredDependencies: templateIgnoredDependencies,
-            managedFiles: managedFiles.toSorted((a, b) => a.localeCompare(b)),
+            managedFiles: effectiveManagedFiles.toSorted((a, b) => {
+                return a.localeCompare(b);
+            }),
         },
     );
 

@@ -102,6 +102,10 @@ describe("update existing project with template from registry", () => {
               ├── .gitignore
               ├── .npmrc
               ├── boilerplate.txt
+              ├── glob
+              │   ├── bar.json
+              │   ├── foo.txt
+              │   └── renovate.json
               ├── managed.txt
               ├── package-lock.json
               ├── package.json
@@ -302,6 +306,10 @@ it("should update existing project from local tar", async () => {
           ├── .gitignore
           ├── .npmrc
           ├── boilerplate.txt
+          ├── glob
+          │   ├── bar.json
+          │   ├── foo.txt
+          │   └── renovate.json
           ├── managed.txt
           ├── package-lock.json
           ├── package.json
