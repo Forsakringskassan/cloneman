@@ -39,10 +39,12 @@ const config: ConfigYaml = {
 
 const userEnv = {
     NPM_CONFIG_REGISTRY: "",
+    NPM_CONFIG_MIN_RELEASE_AGE_EXCLUDE: "@forsakringskassan/*",
 };
 
 const authEnv = {
     NPM_CONFIG_REGISTRY: "",
+    NPM_CONFIG_MIN_RELEASE_AGE_EXCLUDE: "@forsakringskassan/*",
     NPM_USERNAME,
     NPM_PASSWORD,
     NPM_EMAIL,
