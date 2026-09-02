@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## [1.22.0](https://github.com/Forsakringskassan/cloneman/compare/v1.21.1...v1.22.0) (2026-09-02)
+
+### Features
+
+* support globs in `managedFiles` ([6d166d2](https://github.com/Forsakringskassan/cloneman/commit/6d166d2478a1f18b5710bc7bf7403696f28e837c))
+
+### Bug Fixes
+
+* remove template specific keys during bundling template ([2fbbadf](https://github.com/Forsakringskassan/cloneman/commit/2fbbadf2cea3c75965eb1ef00114e3dadba4cb18))
+
 ## [1.21.1](https://github.com/Forsakringskassan/cloneman/compare/v1.21.0...v1.21.1) (2026-08-29)
 
 ### Bug Fixes
