@@ -10,7 +10,6 @@ import {
     collectParameters,
     createInstallContext,
     getTemplateInfo,
-    isClientMetadata,
     normalizeTemplatePackage,
     readJsonFile,
     runHook,
@@ -129,13 +128,6 @@ export async function create(options: {
         path.join(filesDir, "package.json"),
     );
 
-    /* sanity-check: ensure template have a proper cloneman field */
-    if (!isClientMetadata(applicationPackageJson.cloneman)) {
-        throw new TypeError(
-            `Template "files/package.json" contains malformed "cloneman" field`,
-        );
-    }
-
     applicationPackageJson.name = name;
     applicationPackageJson.version = "0.0.0";
     applicationPackageJson.description = "";
@@ -145,7 +137,8 @@ export async function create(options: {
         templatePackageVersion;
 
     applicationPackageJson.cloneman = {
-        ...applicationPackageJson.cloneman,
+        version: templatePackageVersion,
+        template: templatePackageName,
         parameters: Object.fromEntries(parameters),
     } satisfies ClientMetadata;
 

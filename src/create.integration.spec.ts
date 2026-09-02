@@ -198,7 +198,9 @@ describe("create from local template package", () => {
             },
             cloneman: {
                 template: "@forsakringskassan/base-template",
-                version: "1.0.0",
+                version: expect.stringContaining(
+                    "forsakringskassan-base-template-1.0.0",
+                ),
                 parameters: {},
             },
         });

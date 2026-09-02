@@ -181,13 +181,6 @@ export async function update(options: {
         );
     }
 
-    /* sanity-check: ensure template have a proper cloneman field */
-    if (!isClientMetadata(tmplPackageJson.cloneman)) {
-        throw new TypeError(
-            `Template "files/package.json" contains malformed "cloneman" field`,
-        );
-    }
-
     const {
         uninstallDependencies,
         ignoredDependencies,
@@ -248,7 +241,8 @@ export async function update(options: {
                 [cloneman.template]: packageJsonVersion,
             },
             cloneman: {
-                ...tmplPackageJson.cloneman,
+                version: tarballPackageJson.version,
+                template: tarballPackageJson.name,
                 parameters: Object.fromEntries(parameters),
             } satisfies ClientMetadata,
         },

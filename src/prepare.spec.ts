@@ -79,10 +79,6 @@ describe("prepare base template", () => {
 
         expect(packageJson).toMatchInlineSnapshot(`
           {
-            "cloneman": {
-              "template": "@forsakringskassan/base-template",
-              "version": "1.0.0",
-            },
             "dependencies": {
               "@forsakringskassan/api-lib-a": "1.0.0",
               "@forsakringskassan/api-lib-b": "1.0.0",
@@ -235,10 +231,6 @@ describe("prepare base template 1.0.1", () => {
 
         expect(packageJson).toMatchInlineSnapshot(`
           {
-            "cloneman": {
-              "template": "@forsakringskassan/base-template",
-              "version": "1.0.1",
-            },
             "dependencies": {
               "@forsakringskassan/api-lib-a": "1.1.0",
               "@forsakringskassan/api-lib-b": "1.1.0",
