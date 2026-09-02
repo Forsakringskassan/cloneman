@@ -21,20 +21,6 @@ describe("prepareTemplatePackageJson", () => {
         expect(result.version).toBe("${version}");
     });
 
-    it("should set cloneman field to template metadata", () => {
-        expect.assertions(1);
-
-        const pkg: PackageJson = {
-            name: "app",
-            version: "1.0.0",
-        };
-        const result = prepareTemplatePackageJson(template, pkg);
-        expect(result.cloneman).toEqual({
-            template: "my-template",
-            version: "1.0.0",
-        });
-    });
-
     it("should add template as a devDependency", () => {
         expect.assertions(1);
 
@@ -67,10 +53,6 @@ describe("prepareTemplatePackageJson", () => {
         const result = prepareTemplatePackageJson(template, pkg);
         expect(result).toMatchInlineSnapshot(`
           {
-            "cloneman": {
-              "template": "my-template",
-              "version": "1.0.0",
-            },
             "dependencies": {},
             "devDependencies": {
               "my-template": "1.0.0",

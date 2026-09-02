@@ -1,5 +1,4 @@
 import { sortPackageJson } from "sort-package-json";
-import { type ClientMetadata } from "../../types";
 import { type PackageJson } from "../../utils";
 
 /**
@@ -11,11 +10,6 @@ export function prepareTemplatePackageJson(
     template: PackageJson,
     pkg: PackageJson,
 ): PackageJson {
-    const cloneman: ClientMetadata = {
-        template: template.name,
-        version: pkg.version,
-    };
-
     const {
         description,
         repository,
@@ -31,9 +25,7 @@ export function prepareTemplatePackageJson(
         ...restPkg,
         name: "${name}",
         version: "${version}",
-        cloneman,
         dependencies: filterDependencies(pkg.dependencies),
-
         devDependencies: {
             ...filterDependencies(pkg.devDependencies),
             [template.name]: template.version,
