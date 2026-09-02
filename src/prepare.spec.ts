@@ -39,7 +39,7 @@ describe("prepare base template", () => {
         const { output } = await prepare(baseTemplate, targetDir);
         expect(output).toMatchInlineSnapshot(`
           "Assembling cloneman template "@forsakringskassan/base-template@1.0.0"
-            9 files copied (3 ignored)
+            12 files copied (3 ignored)
           "
         `);
 
@@ -53,6 +53,10 @@ describe("prepare base template", () => {
               │   ├── _gitignore
               │   ├── _npmrc
               │   ├── boilerplate.txt
+              │   ├── glob
+              │   │   ├── bar.json
+              │   │   ├── foo.txt
+              │   │   └── renovate.json
               │   ├── managed.txt
               │   ├── package.json
               │   ├── renovate.json
@@ -69,7 +73,7 @@ describe("prepare base template", () => {
         const { output } = await prepare(baseTemplate, targetDir);
         expect(output).toMatchInlineSnapshot(`
           "Assembling cloneman template "@forsakringskassan/base-template@1.0.0"
-            9 files copied (3 ignored)
+            12 files copied (3 ignored)
           "
         `);
 
@@ -105,7 +109,7 @@ describe("prepare base template", () => {
         const { output } = await prepare(baseTemplate, targetDir);
         expect(output).toMatchInlineSnapshot(`
           "Assembling cloneman template "@forsakringskassan/base-template@1.0.0"
-            9 files copied (3 ignored)
+            12 files copied (3 ignored)
           "
         `);
 
@@ -162,6 +166,9 @@ describe("prepare base template", () => {
               ".gitignore",
               ".npmrc",
               "boilerplate.txt",
+              "glob/bar.json",
+              "glob/foo.txt",
+              "glob/renovate.json",
               "managed.txt",
               "renovate.json",
               "sub-folder/sub-file.txt",
@@ -172,6 +179,7 @@ describe("prepare base template", () => {
               ".dot/.sub.file.txt",
               ".dot/file.txt",
               ".gitignore",
+              "glob/foo.txt",
               "managed.txt",
               "renovate.json",
             ],
@@ -184,13 +192,55 @@ describe("prepare base template", () => {
         expect(remainder).toEqual({});
     });
 
+    it("should handle globs in managedFiles", async () => {
+        expect.assertions(3);
+
+        await prepare(baseTemplate, targetDir);
+
+        const packageJson = await readJsonFile<TemplatePackageJson>(
+            path.join(targetDir, "package.json"),
+        );
+
+        const { boilerplateFiles, managedFiles } = packageJson.cloneman;
+
+        /* globs should match from root only, in subdirectories */
+        expect(managedFiles).not.toContain("glob/renovate.json");
+        expect(boilerplateFiles).toMatchInlineSnapshot(`
+          [
+            ".dot/.env",
+            ".dot/.sub.file.txt",
+            ".dot/file.txt",
+            ".gitignore",
+            ".npmrc",
+            "boilerplate.txt",
+            "glob/bar.json",
+            "glob/foo.txt",
+            "glob/renovate.json",
+            "managed.txt",
+            "renovate.json",
+            "sub-folder/sub-file.txt",
+          ]
+        `);
+        expect(managedFiles).toMatchInlineSnapshot(`
+          [
+            ".dot/.env",
+            ".dot/.sub.file.txt",
+            ".dot/file.txt",
+            ".gitignore",
+            "glob/foo.txt",
+            "managed.txt",
+            "renovate.json",
+          ]
+        `);
+    });
+
     it("should add packageRules to managed renovate.json", async () => {
         expect.assertions(2);
 
         const { output } = await prepare(baseTemplate, targetDir);
         expect(output).toMatchInlineSnapshot(`
           "Assembling cloneman template "@forsakringskassan/base-template@1.0.0"
-            9 files copied (3 ignored)
+            12 files copied (3 ignored)
           "
         `);
 
@@ -431,7 +481,7 @@ describe("missing files in build", () => {
     it("should throw error if build script tries to copy non-existing files", async () => {
         expect.assertions(1);
         await expect(prepare(templateMissingFiles, targetDir)).rejects.toThrow(
-            /Managed file is missing from template/,
+            /Managed file\(s\) is missing from template/,
         );
     });
 });

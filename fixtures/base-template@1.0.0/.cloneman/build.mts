@@ -6,6 +6,7 @@ export default async ({ buildTemplate }: BuildContext): Promise<void> => {
         managedFiles: [
             "managed.txt",
             ".gitignore",
+            "glob/**/*.txt",
             "renovate.json",
             ".dot/file.txt",
             ".dot/.sub.file.txt",
