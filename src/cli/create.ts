@@ -1,6 +1,8 @@
 import { type CommandModule } from "yargs";
 import yoctoSpinner from "yocto-spinner";
 import { create } from "../create";
+import { CliTemplateNotFoundError } from "../errors";
+import { NpmInfoError } from "../utils";
 import { type Context } from "./context";
 import { parseParams } from "./parse-params";
 
@@ -33,6 +35,16 @@ async function createHandler(
         });
     } catch (err) {
         spinner.stop();
+        if (err instanceof NpmInfoError) {
+            switch (err.code) {
+                case "E404":
+                    throw new CliTemplateNotFoundError({
+                        templateName: template,
+                        summary: err.message,
+                        argv: process.argv.slice(2),
+                    });
+            }
+        }
         throw err;
     }
 
