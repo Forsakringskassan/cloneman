@@ -23,8 +23,8 @@ import { type ApplicationPackageJson, writeJsonFile } from "./utils";
 vi.setConfig({ testTimeout: 30_000 });
 
 expect.addSnapshotSerializer({
-    test() {
-        return true;
+    test(val) {
+        return typeof val === "string";
     },
     serialize: String,
 });
@@ -179,6 +179,36 @@ describe("update existing project with template from registry", () => {
         ).toBe("1.0.3");
     });
 
+    it("should sort package.json entries", async () => {
+        expect.assertions(1);
+        await update({
+            cwd: appDir,
+            version: "latest",
+            env: userEnv,
+            parameters: new Map(),
+        });
+        const packageJson =
+            await readJsonFile<ApplicationPackageJson>("package.json");
+        expect(Object.keys(packageJson)).toMatchInlineSnapshot(`
+          [
+            name,
+            version,
+            private,
+            description,
+            keywords,
+            homepage,
+            bugs,
+            author,
+            files,
+            scripts,
+            dependencies,
+            devDependencies,
+            cloneman,
+            repository,
+          ]
+        `);
+    });
+
     it("should keep dependencies that are not in the template", async () => {
         expect.assertions(1);
 
@@ -310,7 +340,6 @@ it("should update existing project from local tar", async () => {
         targetDir,
         "forsakringskassan-base-template-1.0.1.tgz",
     );
-    const relativeTarballPath = path.relative(appDir, tarballPath);
 
     /* update the application using the local tarball */
     await update({
@@ -341,9 +370,7 @@ it("should update existing project from local tar", async () => {
     `);
     expect(await readJsonFile("package.json")).toMatchObject({
         devDependencies: {
-            "@forsakringskassan/base-template": expect.stringContaining(
-                relativeTarballPath.replaceAll("\\", "/"),
-            ),
+            "@forsakringskassan/base-template": "1.0.1",
             "@forsakringskassan/lib-used-by-templates": "1.0.0",
         },
     });
