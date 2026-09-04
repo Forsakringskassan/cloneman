@@ -6,3 +6,7 @@ export { finalizeBuildTemplate } from "./finalize-build-template";
 export { getStoredFileName } from "./get-stored-file-name";
 export { prepareTemplatePackageJson } from "./prepare-template-package-json";
 export { updateRenovateWithIgnoredDeps } from "./update-renovate-with-ignored-deps";
+export {
+    APPLICATION_OWNED_FIELDS,
+    BUILD_REMOVE_FIELDS,
+} from "../../properties";

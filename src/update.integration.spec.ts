@@ -69,6 +69,8 @@ describe("update existing project with template from registry", () => {
         packageJson.bugs = { url: "package-homepage/bugs" };
         packageJson.keywords = ["foo", "bar"];
         packageJson.repository = "git+package-homepage";
+        packageJson.author = "package-author";
+        packageJson.license = "package-license";
 
         await writeJsonFile(path.join(appDir, "package.json"), packageJson, {
             indent: 2,
@@ -77,7 +79,7 @@ describe("update existing project with template from registry", () => {
     });
 
     it("should update existing project", async () => {
-        expect.assertions(16);
+        expect.assertions(18);
 
         expect(await readFile("boilerplate.txt")).toMatchInlineSnapshot(
             `boilerplate file at v1.0.0`,
@@ -141,6 +143,8 @@ describe("update existing project with template from registry", () => {
         expect(applicationPackageJson.description).toBe("description");
         expect(applicationPackageJson.version).toBe("0.0.1");
         expect(applicationPackageJson.scripts).toEqual({ a: "foo", b: "bar" });
+        expect(applicationPackageJson.author).toBe("package-author");
+        expect(applicationPackageJson.license).toBe("MIT");
 
         /* these fields should be intact, not overwritten */
         expect(applicationPackageJson.homepage).toBe("package-homepage");

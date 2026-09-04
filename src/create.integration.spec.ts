@@ -79,6 +79,13 @@ describe("create from base template from npm registry", () => {
                 "@forsakringskassan/lib-used-by-templates": "1.0.0",
                 cloneman: ".",
             },
+            author: "Author Name <author.name@example.net>",
+            bugs: {
+                url: "https://example.net/base-template/bugs",
+            },
+            homepage: "https://example.net/base-template",
+            keywords: ["foo", "bar"],
+            license: "MIT",
             cloneman: {
                 fileHash: expect.any(String),
                 template: "@forsakringskassan/base-template",
@@ -187,7 +194,9 @@ describe("create from local template package", () => {
             version: "0.0.0",
             private: true,
             description: "",
-
+            homepage: "https://example.net/base-template",
+            keywords: ["foo", "bar"],
+            license: "MIT",
             files: [],
             scripts: { a: "foo" },
             dependencies: {
@@ -200,6 +209,10 @@ describe("create from local template package", () => {
                 ),
                 "@forsakringskassan/lib-used-by-templates": "1.0.0",
                 cloneman: ".",
+            },
+            author: "Author Name <author.name@example.net>",
+            bugs: {
+                url: "https://example.net/base-template/bugs",
             },
             cloneman: {
                 fileHash: expect.any(String),
