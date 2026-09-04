@@ -51,6 +51,8 @@ describe("prepareTemplatePackageJson", () => {
             license: "MIT",
         };
         const result = prepareTemplatePackageJson(template, pkg);
+
+        /* Only to verify content, not the actual order of keys */
         expect(result).toMatchInlineSnapshot(`
           {
             "author": "author",
@@ -68,8 +70,42 @@ describe("prepareTemplatePackageJson", () => {
             ],
             "license": "MIT",
             "name": "\${name}",
+            "repository": "\${repository}",
             "version": "\${version}",
           }
         `);
+    });
+
+    it("should sort keys by sort-package-json", () => {
+        expect.assertions(1);
+
+        /* Intentionally unordered to verify sorting */
+        const pkg: PackageJson = {
+            license: "MIT",
+            description: "original description",
+            version: "1.0.0",
+            author: "author",
+            name: "app",
+            repository: "some-repo",
+            bugs: "some-bugs",
+            homepage: "some-homepage",
+            keywords: ["keyword1", "keyword2"],
+        };
+
+        const result = prepareTemplatePackageJson(template, pkg);
+        expect(Object.keys(result)).toStrictEqual([
+            "name",
+            "version",
+            "description",
+            "keywords",
+            "homepage",
+            "bugs",
+            "repository",
+            "license",
+            "author",
+            "dependencies",
+            "devDependencies",
+            "cloneman",
+        ]);
     });
 });

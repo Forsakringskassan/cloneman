@@ -47,6 +47,19 @@ Values can also be supplied non-interactively using `--param key=value`:
 
 The `--param` flag can be used multiple times.
 
+#### package.json
+
+Following fields are marked as application owned and wont be modified during an update:
+
+- name
+- version
+- description
+- author
+- keywords
+- bugs
+- homepage
+- repository
+
 #### Local tarball
 
 As with the create command, you can also point to a local tarball:
