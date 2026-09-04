@@ -33,3 +33,4 @@ export { info } from "./npm";
 export { fetchTarball } from "./fetch-tarball";
 export { type TarballContents, parseTarball } from "./parse-tarball";
 export { updateJsonFile } from "./update-json-file";
+export { withTemporaryTarBallDirectory } from "./with-temporary-tarball-directory";

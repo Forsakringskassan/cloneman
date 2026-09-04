@@ -32,26 +32,27 @@ export async function parseTarball(buffer: Buffer): Promise<TarballContents> {
     let packageJsonPromise: Promise<Buffer> | undefined;
     let tmplPackageJsonPromise: Promise<Buffer> | undefined;
 
+    function readEntry(
+        entry: Parameters<typeof toBuffer>[0] & { path: string },
+    ): Promise<Buffer> {
+        const content = toBuffer(entry);
+        void content.then((data) => files.set(entry.path, data));
+        return content;
+    }
+
     const tarStream = list({
         onReadEntry(entry) {
             switch (entry.path) {
                 case "package/package.json": {
-                    packageJsonPromise = toBuffer(entry);
-
+                    packageJsonPromise = readEntry(entry);
                     break;
                 }
                 case "package/files/package.json": {
-                    tmplPackageJsonPromise = toBuffer(entry);
-                    const { path } = entry;
-                    void tmplPackageJsonPromise.then((data) =>
-                        files.set(path, data),
-                    );
-
+                    tmplPackageJsonPromise = readEntry(entry);
                     break;
                 }
                 default: {
-                    const { path } = entry;
-                    void toBuffer(entry).then((data) => files.set(path, data));
+                    void readEntry(entry);
                     break;
                 }
             }

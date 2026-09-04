@@ -1,8 +1,5 @@
-import { randomBytes } from "node:crypto";
 import fs from "node:fs/promises";
-import os from "node:os";
 import path from "node:path";
-import { pathToFileURL } from "node:url";
 import type yoctoSpinner from "yocto-spinner";
 import { InvalidClonemanFieldError, MissingClonemanFieldError } from "./errors";
 import { APPLICATION_OWNED_FIELDS, getStoredFileName } from "./template/utils";
@@ -21,21 +18,9 @@ import {
     parseTarball,
     readJsonFile,
     runHook,
+    withTemporaryTarBallDirectory,
     writeJsonFile,
 } from "./utils";
-
-async function withTemporaryDirectory(
-    cb: (dir: string) => void | Promise<void>,
-): Promise<void> {
-    const tempdir = await fs.realpath(os.tmpdir());
-    const dir = path.join(tempdir, randomBytes(16).toString("hex"));
-    await fs.mkdir(dir);
-    try {
-        await cb(dir);
-    } finally {
-        await fs.rm(dir, { recursive: true, force: true, maxRetries: 3 });
-    }
-}
 
 async function removeFiles(
     cloneman: Partial<TemplatePackageJson["cloneman"]>,
@@ -228,79 +213,59 @@ export async function update(options: {
 
     let message = [`Now run:`, ``, `  npm install`].join("\n");
 
-    /* create a temporary directory with the hooks we extracted from the tarball
-     * and run hooks from there, as the hooks installed in `node_modules` right
-     * now would be the old and not the current version */
-    await withTemporaryDirectory(async (templateDir) => {
-        const indexJs = files.get("package/index.js");
-        const indexJsPath = path.join(templateDir, "index.js");
-        await Promise.all([
-            fs.writeFile(
-                path.join(templateDir, "package.json"),
-                JSON.stringify(tarballPackageJson),
-            ),
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- File exists
-            fs.writeFile(indexJsPath, indexJs!),
-        ]);
-        const { fileHash } = await getTemplateInfo(
-            pathToFileURL(indexJsPath).href,
-            appDir,
-        );
+    await withTemporaryTarBallDirectory(
+        async (templateDir, index) => {
+            const { fileHash } = await getTemplateInfo(index, appDir);
 
-        const finalPackageJson: PackageJson = {
-            ...tmplPackageJson,
-            dependencies,
-            devDependencies: {
-                ...devDependencies,
-                [cloneman.template]: packageJsonVersion,
-            },
-            cloneman: {
-                version: tarballPackageJson.version,
-                template: tarballPackageJson.name,
-                parameters: Object.fromEntries(parameters),
-                fileHash,
-            } satisfies ClientMetadata,
-        };
+            const finalPackageJson: PackageJson = {
+                ...tmplPackageJson,
+                dependencies,
+                devDependencies: {
+                    ...devDependencies,
+                    [cloneman.template]: packageJsonVersion,
+                },
+                cloneman: {
+                    version: tarballPackageJson.version,
+                    template: tarballPackageJson.name,
+                    parameters: Object.fromEntries(parameters),
+                    fileHash,
+                } satisfies ClientMetadata,
+            };
 
-        for (const field of APPLICATION_OWNED_FIELDS) {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment -- no user input
-            finalPackageJson[field] = appPackageJson[field] as any;
-        }
+            for (const field of APPLICATION_OWNED_FIELDS) {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment -- no user input
+                finalPackageJson[field] = appPackageJson[field] as any;
+            }
 
-        await writeJsonFile(
-            path.join(appDir, "package.json"),
-            finalPackageJson,
-            {
-                indent: 2,
-                trailer: "\n",
-            },
-        );
+            await writeJsonFile(
+                path.join(appDir, "package.json"),
+                finalPackageJson,
+                {
+                    indent: 2,
+                    trailer: "\n",
+                },
+            );
 
-        const hooksDir = path.join(templateDir, "hooks");
-        await fs.mkdir(hooksDir);
-        const hooks = Array.from(files.keys())
-            .filter((it) => it.startsWith("package/hooks/"))
-            .map((filePath) => {
-                const dst = path.join(hooksDir, path.basename(filePath));
-                const content = files.get(filePath)!; // eslint-disable-line @typescript-eslint/no-non-null-assertion -- we know it will exist as we are looping over existing entries (let it crash if this assumption is false) */
-                return fs.writeFile(dst, content);
+            const hooksDir = path.join(templateDir, "hooks");
+            const context = createInstallContext({
+                command: "update",
+                targetDir: appDir,
+                name,
+                parameters,
+                version: {
+                    oldVersion: cloneman.version,
+                    newVersion: tmplPackageJson.version,
+                },
+                setMessage(text) {
+                    message = text;
+                },
             });
-        await Promise.all(hooks);
-        const context = createInstallContext({
-            command: "update",
-            targetDir: appDir,
-            name,
-            parameters,
-            version: {
-                oldVersion: cloneman.version,
-                newVersion: tmplPackageJson.version,
-            },
-            setMessage(text) {
-                message = text;
-            },
-        });
-        await runHook("install", hooksDir, context);
-    });
+            await runHook("install", hooksDir, context);
+        },
+        {
+            files,
+        },
+    );
 
     return { message };
 }
