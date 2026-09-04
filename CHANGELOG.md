@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## [1.23.0](https://github.com/Forsakringskassan/cloneman/compare/v1.22.0...v1.23.0) (2026-09-04)
+
+### Features
+
+* generate filehash fingerprint based on managed files ([17e6662](https://github.com/Forsakringskassan/cloneman/commit/17e6662decfc44ddab59cee558e4f26d289e20d7))
+
 ## [1.22.0](https://github.com/Forsakringskassan/cloneman/compare/v1.21.1...v1.22.0) (2026-09-02)
 
 ### Features
