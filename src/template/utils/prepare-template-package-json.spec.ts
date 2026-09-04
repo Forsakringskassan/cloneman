@@ -55,6 +55,7 @@ describe("prepareTemplatePackageJson", () => {
           {
             "author": "author",
             "bugs": "some-bugs",
+            "cloneman": {},
             "dependencies": {},
             "description": "original description",
             "devDependencies": {

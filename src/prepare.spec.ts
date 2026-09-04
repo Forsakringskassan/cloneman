@@ -88,6 +88,7 @@ describe("prepare base template", () => {
             "bugs": {
               "url": "https://example.net/base-template/bugs",
             },
+            "cloneman": {},
             "dependencies": {
               "@forsakringskassan/api-lib-a": "1.0.0",
               "@forsakringskassan/api-lib-b": "1.0.0",
@@ -293,6 +294,7 @@ describe("prepare base template 1.0.1", () => {
 
         expect(packageJson).toMatchInlineSnapshot(`
           {
+            "cloneman": {},
             "dependencies": {
               "@forsakringskassan/api-lib-a": "1.1.0",
               "@forsakringskassan/api-lib-b": "1.1.0",

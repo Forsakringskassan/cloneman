@@ -18,10 +18,21 @@ export function prepareTemplatePackageJson(
         delete shallowCopy[field as keyof PackageJson];
     }
 
+    /* 
+        This object previously contained version and name fields
+        but they have been removed in the current version.
+        It is kept only for backward compatibility.
+
+        The logic was changed here:
+        https://github.com/Forsakringskassan/cloneman/pull/158
+    */
+    const clonemanField = {};
+
     const massaged = {
         ...shallowCopy,
         name: "${name}",
         version: "${version}",
+        cloneman: clonemanField,
 
         dependencies: filterDependencies(shallowCopy.dependencies),
         devDependencies: {
