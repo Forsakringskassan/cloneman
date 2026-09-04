@@ -179,7 +179,7 @@ describe("create from local template package", () => {
             name: "mock-app",
             templatePackage: tarballPath,
             cwd,
-            env: {},
+            env: userEnv,
             parameters: new Map(),
         });
         expect(await readJsonFile("package.json")).toEqual({
