@@ -53,10 +53,19 @@ describe("prepareTemplatePackageJson", () => {
         const result = prepareTemplatePackageJson(template, pkg);
         expect(result).toMatchInlineSnapshot(`
           {
+            "author": "author",
+            "bugs": "some-bugs",
             "dependencies": {},
+            "description": "original description",
             "devDependencies": {
               "my-template": "1.0.0",
             },
+            "homepage": "some-homepage",
+            "keywords": [
+              "keyword1",
+              "keyword2",
+            ],
+            "license": "MIT",
             "name": "\${name}",
             "version": "\${version}",
           }

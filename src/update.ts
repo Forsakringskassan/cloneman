@@ -5,7 +5,7 @@ import path from "node:path";
 import { pathToFileURL } from "node:url";
 import type yoctoSpinner from "yocto-spinner";
 import { InvalidClonemanFieldError, MissingClonemanFieldError } from "./errors";
-import { getStoredFileName } from "./template/utils";
+import { APPLICATION_OWNED_FIELDS, getStoredFileName } from "./template/utils";
 import { type ClientMetadata } from "./types";
 import {
     type PackageJson,
@@ -122,7 +122,7 @@ export async function update(options: {
         path.join(appDir, "package.json"),
     );
 
-    const { cloneman, name, version, description } = appPackageJson;
+    const { cloneman, name } = appPackageJson;
     if (cloneman === undefined) {
         throw new MissingClonemanFieldError();
     }
@@ -247,30 +247,29 @@ export async function update(options: {
             appDir,
         );
 
+        const finalPackageJson: PackageJson = {
+            ...tmplPackageJson,
+            dependencies,
+            devDependencies: {
+                ...devDependencies,
+                [cloneman.template]: packageJsonVersion,
+            },
+            cloneman: {
+                version: tarballPackageJson.version,
+                template: tarballPackageJson.name,
+                parameters: Object.fromEntries(parameters),
+                fileHash,
+            } satisfies ClientMetadata,
+        };
+
+        for (const field of APPLICATION_OWNED_FIELDS) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment -- no user input
+            finalPackageJson[field] = appPackageJson[field] as any;
+        }
+
         await writeJsonFile(
             path.join(appDir, "package.json"),
-            {
-                ...tmplPackageJson,
-                name,
-                version,
-                keywords: appPackageJson.keywords ?? tmplPackageJson.keywords,
-                homepage: appPackageJson.homepage ?? tmplPackageJson.homepage,
-                bugs: appPackageJson.bugs ?? tmplPackageJson.bugs,
-                repository:
-                    appPackageJson.repository ?? tmplPackageJson.repository,
-                description,
-                dependencies,
-                devDependencies: {
-                    ...devDependencies,
-                    [cloneman.template]: packageJsonVersion,
-                },
-                cloneman: {
-                    version: tarballPackageJson.version,
-                    template: tarballPackageJson.name,
-                    parameters: Object.fromEntries(parameters),
-                    fileHash,
-                } satisfies ClientMetadata,
-            },
+            finalPackageJson,
             {
                 indent: 2,
                 trailer: "\n",

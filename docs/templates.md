@@ -144,7 +144,7 @@ The fields from the template `package.json` will be used by:
 | `keywords`    | ✓           | ✓      | \*     |
 | `homepage`    | ✓           | ✓      | \*     |
 | `bugs`        | ✓           | ✓      | \*     |
-| `repository`  | ✓           | ✓      | \*     |
+| `repository`  | ✓           | X      | \*     |
 | `license`     | ✓           | ✓      | ✓      |
 | `author`      | ✓           | ✓      | ✓      |
 | \*            |             | ✓      | ✓      |

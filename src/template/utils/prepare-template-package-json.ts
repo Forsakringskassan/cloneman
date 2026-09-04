@@ -1,4 +1,5 @@
 import { sortPackageJson } from "sort-package-json";
+import { BUILD_REMOVE_FIELDS } from "../../properties";
 import { type PackageJson } from "../../utils";
 
 /**
@@ -11,25 +12,20 @@ export function prepareTemplatePackageJson(
     template: PackageJson,
     pkg: PackageJson,
 ): PackageJson {
-    const {
-        description,
-        repository,
-        bugs,
-        homepage,
-        keywords,
-        author,
-        license,
-        ...restPkg
-    } = pkg;
+    const shallowCopy = { ...pkg };
+    for (const field of BUILD_REMOVE_FIELDS) {
+        // eslint-disable-next-line @typescript-eslint/no-dynamic-delete -- Not user input
+        delete shallowCopy[field as keyof PackageJson];
+    }
 
     const massaged = {
-        ...restPkg,
+        ...shallowCopy,
         name: "${name}",
         version: "${version}",
 
-        dependencies: filterDependencies(pkg.dependencies),
+        dependencies: filterDependencies(shallowCopy.dependencies),
         devDependencies: {
-            ...filterDependencies(pkg.devDependencies),
+            ...filterDependencies(shallowCopy.devDependencies),
             [template.name]: template.version,
         },
     } satisfies PackageJson;

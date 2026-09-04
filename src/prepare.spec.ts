@@ -84,16 +84,27 @@ describe("prepare base template", () => {
 
         expect(packageJson).toMatchInlineSnapshot(`
           {
+            "author": "Author Name <author.name@example.net>",
+            "bugs": {
+              "url": "https://example.net/base-template/bugs",
+            },
             "dependencies": {
               "@forsakringskassan/api-lib-a": "1.0.0",
               "@forsakringskassan/api-lib-b": "1.0.0",
             },
+            "description": "base template description",
             "devDependencies": {
               "@forsakringskassan/base-template": "1.0.0",
               "@forsakringskassan/lib-used-by-templates": "1.0.0",
               "cloneman": ".",
             },
             "files": [],
+            "homepage": "https://example.net/base-template",
+            "keywords": [
+              "foo",
+              "bar",
+            ],
+            "license": "MIT",
             "name": "\${name}",
             "private": true,
             "scripts": {
@@ -292,6 +303,7 @@ describe("prepare base template 1.0.1", () => {
               "cloneman": ".",
             },
             "files": [],
+            "license": "MIT",
             "name": "\${name}",
             "private": true,
             "scripts": {
