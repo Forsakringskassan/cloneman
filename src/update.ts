@@ -2,13 +2,13 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import type yoctoSpinner from "yocto-spinner";
 import { InvalidClonemanFieldError, MissingClonemanFieldError } from "./errors";
-import { APPLICATION_OWNED_FIELDS, getStoredFileName } from "./template/utils";
-import { type ClientMetadata } from "./types";
+import { getStoredFileName } from "./template/utils";
 import {
     type PackageJson,
     type TemplatePackageJson,
     collectParameters,
     createInstallContext,
+    createUpdatedPackageJson,
     fetchTarball,
     filterDependencies,
     getTemplateInfo,
@@ -217,25 +217,16 @@ export async function update(options: {
         async (templateDir, index) => {
             const { fileHash } = await getTemplateInfo(index, appDir);
 
-            const finalPackageJson: PackageJson = {
-                ...tmplPackageJson,
+            const finalPackageJson = createUpdatedPackageJson({
+                currentPackageJson: appPackageJson,
+                templatePackageJson: tmplPackageJson,
+                tarballPackageJson,
+                version: packageJsonVersion,
                 dependencies,
-                devDependencies: {
-                    ...devDependencies,
-                    [cloneman.template]: packageJsonVersion,
-                },
-                cloneman: {
-                    version: tarballPackageJson.version,
-                    template: tarballPackageJson.name,
-                    parameters: Object.fromEntries(parameters),
-                    fileHash,
-                } satisfies ClientMetadata,
-            };
-
-            for (const field of APPLICATION_OWNED_FIELDS) {
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment -- no user input
-                finalPackageJson[field] = appPackageJson[field] as any;
-            }
+                devDependencies,
+                parameters,
+                fileHash,
+            });
 
             await writeJsonFile(
                 path.join(appDir, "package.json"),
