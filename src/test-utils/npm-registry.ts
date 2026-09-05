@@ -45,6 +45,7 @@ const userEnv = {
 const authEnv = {
     NPM_CONFIG_REGISTRY: "",
     NPM_CONFIG_MIN_RELEASE_AGE_EXCLUDE: "@forsakringskassan/*",
+    NPM_CONFIG_PROVENANCE: "false",
     NPM_USERNAME,
     NPM_PASSWORD,
     NPM_EMAIL,
