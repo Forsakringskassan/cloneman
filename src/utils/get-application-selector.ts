@@ -1,4 +1,4 @@
-import { getApplicationSlug } from "./get-application-slug";
+import { getApplicationSlug } from "@forsakringskassan/get-application-slug";
 
 /**
  * Returns a CSS class selector derived from the application name.
