@@ -61,6 +61,7 @@
     "extends": "@forsakringskassan/semantic-release-config"
   },
   "dependencies": {
+    "@forsakringskassan/get-application-slug": "1.0.0",
     "deepmerge": "4.3.1",
     "detect-indent": "7.0.2",
     "is-ci": "4.1.0",
