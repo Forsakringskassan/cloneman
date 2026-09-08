@@ -108,6 +108,7 @@ describe("prepare base template", () => {
             "license": "MIT",
             "name": "\${name}",
             "private": true,
+            "repository": "\${repository}",
             "scripts": {
               "a": "foo",
             },
@@ -308,6 +309,7 @@ describe("prepare base template 1.0.1", () => {
             "license": "MIT",
             "name": "\${name}",
             "private": true,
+            "repository": "\${repository}",
             "scripts": {
               "a": "foo",
               "b": "bar",

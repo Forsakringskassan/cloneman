@@ -13,11 +13,12 @@ const baselinePackageJson: PackageJson = {
 };
 
 describe("createUpdatedPackageJson", () => {
-    it("should sort keys based on current package.json", () => {
+    it("should sort keys based on template package.json", () => {
         expect.assertions(2);
 
         const currentPackageJson: PackageJson = {
             name: "implementation",
+            scripts: { foo: "bar" }, // Either modified by the user or inherited from the original template
             version: "1.0.0",
             license: "implementation",
             author: "implementation",
@@ -31,6 +32,7 @@ describe("createUpdatedPackageJson", () => {
             version: "${version}",
             license: "template",
             keywords: ["template"],
+            scripts: { foo: "bar" }, // Latest version of the template, just for testing purpose
         };
 
         const result = createUpdatedPackageJson({
@@ -64,22 +66,28 @@ describe("createUpdatedPackageJson", () => {
             "license": "template",
             "name": "implementation",
             "repository": "implementation",
+            "scripts": {
+              "foo": "bar",
+            },
             "version": "1.0.0",
           }
         `);
 
-        expect(Object.keys(result)).toStrictEqual([
+        expect(Object.keys(result)).toMatchInlineSnapshot(`
+          [
             "name",
             "version",
+            "description",
+            "keywords",
+            "repository",
             "license",
             "author",
-            "description",
-            "repository",
-            "keywords",
+            "scripts",
             "dependencies",
             "devDependencies",
             "cloneman",
-        ]);
+          ]
+        `);
     });
 
     it("should not add application owned fields if not present in current package.json", () => {
@@ -116,7 +124,7 @@ describe("createUpdatedPackageJson", () => {
         ]);
     });
 
-    it("shoukd keep application owned fields if present in current package.json", () => {
+    it("should keep application owned fields if present in current package.json", () => {
         expect.assertions(1);
 
         const currentPackageJson: PackageJson = {
@@ -258,5 +266,86 @@ describe("createUpdatedPackageJson", () => {
             "@forsakringskassan/template": "1.2.3",
             provided: "provided",
         });
+    });
+
+    it("application owned fields should not be re added if user has removed them", () => {
+        expect.assertions(4);
+
+        const currentPackageJson: PackageJson = {
+            ...baselinePackageJson,
+        };
+
+        const templatePackageJson: PackageJson = {
+            ...baselinePackageJson,
+            repository: "foo",
+            author: "foo",
+        };
+
+        const result = createUpdatedPackageJson({
+            currentPackageJson,
+            templatePackageJson,
+            dependencies: {},
+            devDependencies: {},
+            tarballPackageJson,
+            version: "1.2.3",
+            parameters: new Map(),
+            fileHash: "hash",
+        });
+        expect(result.repository).toBeUndefined();
+        expect(result.author).toBeUndefined();
+        expect(Object.keys(result)).not.toContain("repository");
+        expect(Object.keys(result)).not.toContain("author");
+    });
+
+    it("non owned fields should be added if not present in template", () => {
+        expect.assertions(2);
+
+        const currentPackageJson: PackageJson = {
+            ...baselinePackageJson,
+        };
+
+        const templatePackageJson: PackageJson = {
+            ...baselinePackageJson,
+            scripts: { foo: "bar" },
+        };
+
+        const result = createUpdatedPackageJson({
+            currentPackageJson,
+            templatePackageJson,
+            dependencies: {},
+            devDependencies: {},
+            tarballPackageJson,
+            version: "1.2.3",
+            parameters: new Map(),
+            fileHash: "hash",
+        });
+        expect(result.scripts).toEqual({ foo: "bar" });
+        expect(Object.keys(result)).toContain("scripts");
+    });
+
+    it("non owned fields should be removed if not present in template", () => {
+        expect.assertions(2);
+
+        const currentPackageJson: PackageJson = {
+            ...baselinePackageJson,
+            scripts: { foo: "bar" },
+        };
+
+        const templatePackageJson: PackageJson = {
+            ...baselinePackageJson,
+        };
+
+        const result = createUpdatedPackageJson({
+            currentPackageJson,
+            templatePackageJson,
+            dependencies: {},
+            devDependencies: {},
+            tarballPackageJson,
+            version: "1.2.3",
+            parameters: new Map(),
+            fileHash: "hash",
+        });
+        expect(result.scripts).toBeUndefined();
+        expect(Object.keys(result)).not.toContain("scripts");
     });
 });

@@ -70,6 +70,7 @@ describe("prepareTemplatePackageJson", () => {
             ],
             "license": "MIT",
             "name": "\${name}",
+            "repository": "\${repository}",
             "version": "\${version}",
           }
         `);
@@ -99,6 +100,7 @@ describe("prepareTemplatePackageJson", () => {
             "keywords",
             "homepage",
             "bugs",
+            "repository",
             "license",
             "author",
             "dependencies",

@@ -1,29 +1,12 @@
+import { sortPackageJson } from "sort-package-json";
 import { APPLICATION_OWNED_FIELDS } from "../properties";
 import { type ClientMetadata } from "../types";
 
 import { type PackageJson } from "./package-json";
 
-function sort(packageJson: PackageJson, reference: PackageJson): PackageJson {
-    const fields = new Set([
-        ...Object.keys(reference),
-        ...Object.keys(packageJson),
-    ]);
-
-    const sorted: Record<string, unknown> = {};
-
-    for (const field of fields) {
-        const value = packageJson[field as keyof PackageJson];
-        if (Object.hasOwn(packageJson, field) && value !== undefined) {
-            sorted[field] = value;
-        }
-    }
-
-    return sorted as unknown as PackageJson;
-}
 /**
  * @internal
  */
-
 export interface CreateUpdatedPackageJsonOptions {
     /** package.json in application before updating */
     currentPackageJson: PackageJson;
@@ -82,9 +65,14 @@ export function createUpdatedPackageJson(
     };
 
     for (const field of APPLICATION_OWNED_FIELDS) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment -- no user input
-        packageJson[field] = currentPackageJson[field] as any;
+        if (Object.hasOwn(currentPackageJson, field)) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment -- no user input
+            packageJson[field] = currentPackageJson[field] as any;
+        } else {
+            // eslint-disable-next-line @typescript-eslint/no-dynamic-delete -- no user input
+            delete packageJson[field as keyof PackageJson];
+        }
     }
 
-    return sort(packageJson, currentPackageJson);
+    return sortPackageJson(packageJson);
 }
