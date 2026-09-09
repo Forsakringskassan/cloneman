@@ -3,10 +3,11 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import spawn from "nano-spawn";
 import { type default as yoctoSpinner } from "yocto-spinner";
-import { getStoredFileName } from "./template/utils";
+import { BUILD_REMOVE_FIELDS, getStoredFileName } from "./template/utils";
 import { type ClientMetadata } from "./types";
 import {
     type ApplicationPackageJson,
+    type PackageJson,
     collectParameters,
     createInstallContext,
     getTemplateInfo,
@@ -128,6 +129,11 @@ export async function create(options: {
     const applicationPackageJson = await readJsonFile<ApplicationPackageJson>(
         path.join(filesDir, "package.json"),
     );
+
+    for (const field of BUILD_REMOVE_FIELDS) {
+        // eslint-disable-next-line @typescript-eslint/no-dynamic-delete -- Not user input
+        delete applicationPackageJson[field as keyof PackageJson];
+    }
 
     applicationPackageJson.name = name;
     applicationPackageJson.version = "0.0.0";

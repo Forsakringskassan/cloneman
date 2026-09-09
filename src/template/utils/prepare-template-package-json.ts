@@ -14,8 +14,7 @@ export function prepareTemplatePackageJson(
 ): PackageJson {
     const shallowCopy = { ...pkg };
     for (const field of BUILD_REMOVE_FIELDS) {
-        // eslint-disable-next-line @typescript-eslint/no-dynamic-delete -- Not user input
-        delete shallowCopy[field as keyof PackageJson];
+        shallowCopy[field] = `\${${field}}`;
     }
 
     /* 
