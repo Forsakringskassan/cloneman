@@ -1,11 +1,13 @@
 import { type Console } from "node:console";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { getApplicationSlug } from "@forsakringskassan/get-application-slug";
+import {
+    getApplicationSelector,
+    getApplicationSlug,
+} from "@forsakringskassan/get-application-slug";
 import { ParameterNotDeclaredError } from "../errors";
 import { type InstallContext } from "../hooks";
 import { getApplicationName } from "./get-application-name";
-import { getApplicationSelector } from "./get-application-selector";
 import { readJsonFile } from "./read-json-file";
 import { replaceInFile } from "./replace-in-file";
 import { updateJsonFile } from "./update-json-file";
