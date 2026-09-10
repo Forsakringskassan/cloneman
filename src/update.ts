@@ -16,6 +16,7 @@ import {
     isClientMetadata,
     isTarball,
     parseTarball,
+    patchPartiallyManagedFile,
     readJsonFile,
     runHook,
     withTemporaryTarBallDirectory,
@@ -69,6 +70,24 @@ async function copyFiles(
             const dest = path.join(cwd, filename);
             await fs.mkdir(path.dirname(dest), { recursive: true });
             await fs.writeFile(dest, content);
+        }),
+    );
+}
+
+async function patchPartiallyManagedFiles(
+    cloneman: Partial<TemplatePackageJson["cloneman"]>,
+    { cwd }: { cwd: string },
+): Promise<void> {
+    const { partiallyManagedFiles } = cloneman;
+    if (!partiallyManagedFiles) {
+        return;
+    }
+    await Promise.all(
+        partiallyManagedFiles.map(async (partial) => {
+            const tarPath = `package/files/${getStoredFileName(partial.name)}`;
+            const destPath = path.join(cwd, partial.name);
+
+            await patchPartiallyManagedFile(partial, tarPath, destPath);
         }),
     );
 }
@@ -195,6 +214,12 @@ export async function update(options: {
 
     await text("Copying managed files", () => {
         return copyFiles(files, tarballPackageJson.cloneman, { cwd: appDir });
+    });
+
+    await text("Updating partially managed files", () => {
+        return patchPartiallyManagedFiles(tarballPackageJson.cloneman, {
+            cwd: appDir,
+        });
     });
 
     const dependencies = filterDependencies({

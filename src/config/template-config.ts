@@ -1,3 +1,5 @@
+import { type PartiallyManagedFile } from "../utils/package-json";
+
 /**
  * cloneman template configuration.
  *
@@ -7,6 +9,8 @@
 export interface TemplateConfig {
     /** list of files managed by this template */
     managedFiles?: string[];
+    /** list of files partially managed by this template. */
+    partiallyManagedFiles?: PartiallyManagedFile[];
     /** list of files ignored by this template */
     ignoredFiles?: string[];
     /**
@@ -44,6 +48,8 @@ export interface NormalizedTemplateConfig {
     [normalizedConfig]: true;
     /** list of files managed by this template */
     managedFiles: string[];
+    /** list of files partially managed by this template. */
+    partiallyManagedFiles: PartiallyManagedFile[];
     /** list of files ignored by this template */
     ignoredFiles: string[];
     /** list of files (or glob patterns) to remove from the application */

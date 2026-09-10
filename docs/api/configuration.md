@@ -5,7 +5,15 @@ Template configuration.
 ```json
 {
     "managedFiles": ["managed.txt"],
-    "ignoredFiles": ["package-lock.json"]
+    "ignoredFiles": ["package-lock.json"],
+    "partiallyManagedFiles": [
+        {
+            "name": ".gitignore",
+            "include": {
+                "above": "# lines above are managed by cloneman"
+            }
+        }
+    ]
 }
 ```
 
@@ -53,6 +61,28 @@ Supports exact file names or glob patterns, e.g. `test/*` to remove all test fil
 > [!TIP]
 >
 > `package-lock.json` is recommended to ignore as the consumer is expected to have custom dependencies and thus may end up with a very different lockfile than the template project.
+
+## partiallyManagedFiles
+
+- type: `Array<{ name: string; include: Markers }>`
+- default: `[]`
+
+List of files that are partially managed by the template. These files allow the template to maintain specific sections while preserving user modifications outside those sections.
+
+Each partially managed file has:
+
+- `name`: The file path relative to the template root
+- `include`: Specifies which parts of the file to manage using markers
+
+The `include` field can be one of:
+
+- `{ above: string }`: Manage content above the specified marker
+- `{ below: string }`: Manage content below the specified marker
+- `{ block: { begin: string; end: string } }`: Manage content between begin and end markers
+
+When running `cloneman create`, the entire template file is copied and markers are added if not already included.
+
+When running `cloneman update`, only the specified sections are updated, preserving user content outside those sections. This is useful for configuration files where users may want to add custom settings while keeping template-maintained sections up to date.
 
 ## ignoredDependencies
 

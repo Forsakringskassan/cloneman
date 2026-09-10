@@ -13,6 +13,7 @@ import {
 import { type Parameter } from "../types";
 import {
     type PackageJson,
+    preparePartiallyManagedFile,
     readJsonFile,
     replaceInFile,
     writeJsonFile,
@@ -22,6 +23,7 @@ import { updateJson } from "./update-json";
 import {
     copyFiles,
     createclonemanPackageJson,
+    getStoredFileName,
     prepareTemplatePackageJson,
     updateRenovateWithIgnoredDeps,
 } from "./utils";
@@ -178,6 +180,7 @@ export async function buildTemplate(options: {
         removeFiles, // eslint-disable-line unicorn/no-non-function-verb-prefix -- cannot be changed until next major
         ignoredDependencies: templateIgnoredDependencies,
         uninstallDependencies,
+        partiallyManagedFiles,
     } = templateConfig;
 
     const ignoredFiles = [
@@ -199,6 +202,22 @@ export async function buildTemplate(options: {
                 file: pattern,
             });
         }
+    }
+
+    for (const partiallyManagedFile of partiallyManagedFiles) {
+        /* verify file exists  */
+        if (!files.includes(partiallyManagedFile.name)) {
+            throw new ManagedFileMissingError({
+                templateName: name,
+                file: partiallyManagedFile.name,
+            });
+        }
+
+        /* ensure markers are added */
+        await preparePartiallyManagedFile(
+            partiallyManagedFile,
+            path.join(filesDir, getStoredFileName(partiallyManagedFile.name)),
+        );
     }
 
     const hooksDir = path.join(templateDir, ".cloneman");
@@ -223,6 +242,7 @@ export async function buildTemplate(options: {
             managedFiles: effectiveManagedFiles.toSorted((a, b) => {
                 return a.localeCompare(b);
             }),
+            partiallyManagedFiles,
         },
     );
 

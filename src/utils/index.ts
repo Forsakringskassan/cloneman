@@ -16,6 +16,8 @@ export {
     type PackageJson,
     type TemplatePackageJson,
 } from "./package-json";
+export { patchPartiallyManagedFile } from "./patch-partially-managed-file";
+export { preparePartiallyManagedFile } from "./prepare-partially-managed-file";
 export { readJsonFile } from "./read-json-file";
 export { readPackageJson } from "./read-package-json";
 export { readPackageJsonFromTarball } from "./read-package-json-from-tarball";

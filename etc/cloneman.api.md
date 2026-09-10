@@ -59,6 +59,8 @@ export interface NormalizedTemplateConfig {
     ignoredDependencies: string[];
     ignoredFiles: string[];
     managedFiles: string[];
+    // Warning: (ae-forgotten-export) The symbol "PartiallyManagedFile" needs to be exported by the entry point index.d.ts
+    partiallyManagedFiles: PartiallyManagedFile[];
     removeFiles: string[];
     uninstallDependencies: string[];
 }
@@ -150,6 +152,7 @@ export interface TemplateConfig {
     ignoredDependencies?: string[];
     ignoredFiles?: string[];
     managedFiles?: string[];
+    partiallyManagedFiles?: PartiallyManagedFile[];
     removeFiles?: string[];
     uninstallDependencies?: string[];
 }

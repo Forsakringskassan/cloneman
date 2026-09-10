@@ -97,6 +97,12 @@ describe("update existing project with template from registry", () => {
             },
         });
 
+        await fs.appendFile(
+            path.join(appDir, ".gitignore"),
+            "line-added-by-target",
+            { encoding: "utf8" },
+        );
+
         /* update the application to version 1.0.1 */
         await update({
             cwd: appDir,
@@ -162,6 +168,8 @@ describe("update existing project with template from registry", () => {
                 version: "1.0.1",
             },
         });
+
+        expect(await readJsonFile(".gitignore")).toMatchInlineSnapshot();
     });
 
     it("should set actual version to the resolved version if input version is 'latest'", async () => {
