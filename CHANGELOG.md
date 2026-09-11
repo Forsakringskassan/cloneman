@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## [1.23.1](https://github.com/Forsakringskassan/cloneman/compare/v1.23.0...v1.23.1) (2026-09-11)
+
+### Bug Fixes
+
+* **deps:** update dependency @forsakringskassan/get-application-slug to v1.1.0 ([e011d85](https://github.com/Forsakringskassan/cloneman/commit/e011d8535b6416f9dbb0492434cc9af2cc5addf6))
+* for backward compatibility save cloneman field in template (fixes [#162](https://github.com/Forsakringskassan/cloneman/issues/162)) ([e34904a](https://github.com/Forsakringskassan/cloneman/commit/e34904a2b3b4a51be0feb653e9b601c03a0b1fcb))
+* keep template properties in generated package.json ([66409d2](https://github.com/Forsakringskassan/cloneman/commit/66409d2df971196cf5bbbc006d924cce3dbb7048))
+
 ## [1.23.0](https://github.com/Forsakringskassan/cloneman/compare/v1.22.0...v1.23.0) (2026-09-04)
 
 ### Features
