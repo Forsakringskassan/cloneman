@@ -4,6 +4,8 @@ export { createManagedFilesHash } from "./create-managed-files-hash";
 export { formatWithPrettier } from "./format-with-prettier";
 export { finalizeBuildTemplate } from "./finalize-build-template";
 export { getStoredFileName } from "./get-stored-file-name";
+export { hasValidMarkers } from "./has-valid-markers";
+export { patchPartiallyManagedFile } from "./patch-partially-managed-file";
 export { prepareTemplatePackageJson } from "./prepare-template-package-json";
 export { updateRenovateWithIgnoredDeps } from "./update-renovate-with-ignored-deps";
 export {
