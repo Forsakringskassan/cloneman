@@ -13,6 +13,7 @@ import {
 import { type Parameter } from "../types";
 import {
     type PackageJson,
+    assertPartiallyManagedFiles,
     readJsonFile,
     replaceInFile,
     writeJsonFile,
@@ -186,6 +187,7 @@ export async function buildTemplate(options: {
         removeFiles, // eslint-disable-line unicorn/no-non-function-verb-prefix -- cannot be changed until next major
         ignoredDependencies: templateIgnoredDependencies,
         uninstallDependencies,
+        partiallyManagedFiles,
     } = templateConfig;
 
     const ignoredFiles = [
@@ -209,6 +211,14 @@ export async function buildTemplate(options: {
         }
     }
 
+    await assertPartiallyManagedFiles({
+        files,
+        managedFiles,
+        partiallyManagedFiles,
+        templateName: name,
+        filesDir,
+    });
+
     const hooksDir = path.join(templateDir, ".cloneman");
     await installHook("install", { targetDir, hooksDir });
 
@@ -231,6 +241,7 @@ export async function buildTemplate(options: {
             managedFiles: effectiveManagedFiles.toSorted((a, b) => {
                 return a.localeCompare(b);
             }),
+            partiallyManagedFiles,
         },
     );
 

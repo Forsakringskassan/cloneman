@@ -168,6 +168,75 @@ describe("update existing project with template from registry", () => {
         });
     });
 
+    it("should preserve target content in a partially managed file", async () => {
+        expect.assertions(1);
+
+        appDir = path.join(cwd, "partially-managed-app");
+        await create({
+            name: "partially-managed-app",
+            templatePackage:
+                "@forsakringskassan/with-partially-managed-file@1.0.0",
+            cwd,
+            env: userEnv,
+            parameters: new Map(),
+        });
+        await fs.appendFile(
+            path.join(appDir, ".gitignore"),
+            "line-added-by-target",
+            { encoding: "utf8" },
+        );
+
+        await update({
+            cwd: appDir,
+            version: "1.0.1",
+            env: userEnv,
+            parameters: new Map(),
+        });
+
+        expect(await readFile(".gitignore")).toMatchInlineSnapshot(`
+          node_modules/
+          additional-ignore-in-template
+
+          # template above
+          line-added-by-target
+        `);
+    });
+
+    it("should reject duplicate markers in the target of a partially managed file", async () => {
+        expect.assertions(1);
+
+        appDir = path.join(cwd, "partially-managed-app");
+        await create({
+            name: "partially-managed-app",
+            templatePackage:
+                "@forsakringskassan/with-partially-managed-file@1.0.0",
+            cwd,
+            env: userEnv,
+            parameters: new Map(),
+        });
+        await fs.appendFile(
+            path.join(appDir, ".gitignore"),
+            "\n# template above",
+            {
+                encoding: "utf8",
+            },
+        );
+
+        await update({
+            cwd: appDir,
+            version: "1.0.1",
+            env: userEnv,
+            parameters: new Map(),
+        });
+
+        expect(await readFile(".gitignore")).toMatchInlineSnapshot(`
+          node_modules/
+          additional-ignore-in-template
+
+          # template above
+        `);
+    });
+
     it("should set actual version to the resolved version if input version is 'latest'", async () => {
         expect.assertions(1);
         await update({

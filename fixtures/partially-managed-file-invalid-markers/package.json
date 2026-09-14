@@ -1,0 +1,9 @@
+{
+  "name": "@forsakringskassan-partially-managed-file-invalid-markers",
+  "version": "1.0.0",
+  "private": true,
+  "files": [],
+  "devDependencies": {
+    "cloneman": "."
+  }
+}
