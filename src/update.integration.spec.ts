@@ -79,7 +79,7 @@ describe("update existing project with template from registry", () => {
     });
 
     it("should update existing project", async () => {
-        expect.assertions(18);
+        expect.assertions(19);
 
         expect(await readFile("boilerplate.txt")).toMatchInlineSnapshot(
             `boilerplate file at v1.0.0`,
@@ -96,6 +96,12 @@ describe("update existing project with template from registry", () => {
                 version: "1.0.0",
             },
         });
+
+        await fs.appendFile(
+            path.join(appDir, ".gitignore"),
+            "line-added-by-target",
+            { encoding: "utf8" },
+        );
 
         /* update the application to version 1.0.1 */
         await update({
@@ -162,6 +168,14 @@ describe("update existing project with template from registry", () => {
                 version: "1.0.1",
             },
         });
+
+        expect(await readFile(".gitignore")).toMatchInlineSnapshot(`
+          node_modules/
+          additional-ignore-in-template
+
+          # template above
+          line-added-by-target
+        `);
     });
 
     it("should set actual version to the resolved version if input version is 'latest'", async () => {

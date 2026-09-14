@@ -13,9 +13,13 @@ export { isTemplateFolder } from "./is-template";
 export { matchesPatterns } from "./matches-patterns";
 export {
     type ApplicationPackageJson,
+    type Block,
+    type Markers,
     type PackageJson,
+    type PartiallyManagedFile,
     type TemplatePackageJson,
 } from "./package-json";
+export { patchPartiallyManagedFile } from "./patch-partially-managed-file";
 export { readJsonFile } from "./read-json-file";
 export { readPackageJson } from "./read-package-json";
 export { readPackageJsonFromTarball } from "./read-package-json-from-tarball";

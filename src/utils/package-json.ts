@@ -35,6 +35,33 @@ export interface PackageJson {
 }
 
 /**
+ * Typings for block marker.
+ *
+ * @public
+ */
+export interface Block {
+    begin: string;
+    end: string;
+}
+
+/**
+ * Typings for different kind of markers.
+ *
+ * @public
+ */
+export type Markers = { above: string } | { below: string } | { block: Block };
+
+/**
+ * Typings for a partially managed file. It specifies name and include markers.
+ *
+ * @public
+ */
+export interface PartiallyManagedFile {
+    name: string;
+    include: Markers;
+}
+
+/**
  * Typings for the `package.json` file in the template package.
  *
  * This extends the standard `PackageJson` with additional fields used by cloneman.
@@ -45,6 +72,7 @@ export interface TemplatePackageJson extends PackageJson {
     cloneman: {
         boilerplateFiles: string[];
         managedFiles: string[];
+        partiallyManagedFiles?: PartiallyManagedFile[];
         removeFiles: string[];
         uninstallDependencies: string[];
         ignoredDependencies: string[];
