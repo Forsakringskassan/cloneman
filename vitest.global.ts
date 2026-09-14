@@ -108,6 +108,8 @@ export async function setup(project: TestProject): Promise<void> {
         await publishFixture("with-install-hook@1.0.0", authEnv);
         await publishFixture("with-install-hook@1.0.1", authEnv);
         await publishFixture("with-parameters@1.0.0", authEnv);
+        await publishFixture("with-partially-managed-file@1.0.0", authEnv);
+        await publishFixture("with-partially-managed-file@1.0.1", authEnv);
         await publishFixture("with-removed-files@1.0.0", authEnv);
         await publishFixture("with-removed-files@1.0.1", authEnv);
         await publishFixture("sub-package-json@1.0.0", authEnv);

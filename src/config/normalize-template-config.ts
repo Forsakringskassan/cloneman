@@ -24,6 +24,7 @@ export function normalizeTemplateConfig(
     return {
         [normalizedConfig]: true,
         managedFiles: config.managedFiles ?? [],
+        partiallyManagedFiles: config.partiallyManagedFiles ?? [],
         ignoredFiles: config.ignoredFiles ?? [],
         removeFiles: config.removeFiles ?? [],
         ignoredDependencies: config.ignoredDependencies ?? [],

@@ -20,6 +20,7 @@ import {
     parseTarball,
     readJsonFile,
     runHook,
+    updatePartiallyManagedFiles,
     withTemporaryTarBallDirectory,
     writeJsonFile,
 } from "./utils";
@@ -226,6 +227,12 @@ export async function update(options: {
 
     await text("Copying managed files", () => {
         return copyFiles(files, tarballPackageJson.cloneman, { cwd: appDir });
+    });
+
+    await text("Updating partially managed files", () => {
+        return updatePartiallyManagedFiles(files, tarballPackageJson.cloneman, {
+            cwd: appDir,
+        });
     });
 
     const dependencies = filterDependencies({

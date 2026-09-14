@@ -197,6 +197,7 @@ describe("prepare base template", () => {
               "managed.txt",
               "renovate.json",
             ],
+            "partiallyManagedFiles": [],
             "removeFiles": [],
             "uninstallDependencies": [],
           }
@@ -527,5 +528,50 @@ describe("missing files in build", () => {
         await expect(prepare(templateMissingFiles, targetDir)).rejects.toThrow(
             /Managed file\(s\) is missing from template/,
         );
+    });
+
+    it("should throw error if a partially managed file is also managed", async () => {
+        expect.assertions(1);
+        await withFixture(
+            "partially-managed-file-also-managed",
+            async (fixture) => {
+                await expect(prepare(fixture, targetDir)).rejects.toThrow(
+                    /partially managed file "\.gitignore" is also listed in managedFiles/i,
+                );
+            },
+        );
+    });
+
+    it("should throw error if a partially managed file has invalid markers", async () => {
+        expect.assertions(1);
+        await withFixture(
+            "partially-managed-file-invalid-markers",
+            async (fixture) => {
+                await expect(prepare(fixture, targetDir)).rejects.toThrow(
+                    /partially managed file "\.gitignore" does not contain valid matching markers/i,
+                );
+            },
+        );
+    });
+
+    it("should throw error if a partially managed file has duplicate markers", async () => {
+        expect.assertions(1);
+        await withFixture(
+            "partially-managed-file-duplicate-markers",
+            async (fixture) => {
+                await expect(prepare(fixture, targetDir)).rejects.toThrow(
+                    /partially managed file "\.gitignore" does not contain valid matching markers/i,
+                );
+            },
+        );
+    });
+
+    it("should throw error if a partially managed file is missing", async () => {
+        expect.assertions(1);
+        await withFixture("partially-managed-file-missing", async (fixture) => {
+            await expect(prepare(fixture, targetDir)).rejects.toThrow(
+                /Managed file\(s\) is missing from template/,
+            );
+        });
     });
 });
