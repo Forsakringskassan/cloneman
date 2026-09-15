@@ -3,6 +3,7 @@ import {
     type TemplatePackageJson,
     writeJsonFile,
 } from "../../utils";
+import { type PartiallyManagedFile } from "../../utils/package-json";
 
 export async function createclonemanPackageJson(
     dst: string,
@@ -20,6 +21,7 @@ export async function createclonemanPackageJson(
     > & {
         boilerplateFiles: string[];
         managedFiles: string[];
+        partiallyManagedFiles: PartiallyManagedFile[];
         removeFiles: string[];
         uninstallDependencies: string[];
         ignoredDependencies: string[];
@@ -37,6 +39,7 @@ export async function createclonemanPackageJson(
         author,
         boilerplateFiles,
         managedFiles,
+        partiallyManagedFiles,
         removeFiles, // eslint-disable-line unicorn/no-non-function-verb-prefix -- cannot be changed until next major
         ignoredDependencies,
         uninstallDependencies,
@@ -58,6 +61,7 @@ export async function createclonemanPackageJson(
         cloneman: {
             boilerplateFiles,
             managedFiles,
+            partiallyManagedFiles,
             removeFiles,
             uninstallDependencies,
             ignoredDependencies,

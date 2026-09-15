@@ -8,6 +8,9 @@ export default async (context) => {
     const template = await buildTemplate(pkg.name, {
         managedFiles: ["managed.txt"],
         ignoredDependencies: ["@forsakringskassan/lib-used-by-templates"],
+        partiallyManagedFiles: [
+            { name: ".gitignore", include: { above: "# template above" } },
+        ],
     });
     await template.renovateIgnoreDependencies();
 };

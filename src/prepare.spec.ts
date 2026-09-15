@@ -191,10 +191,17 @@ describe("prepare base template", () => {
               ".dot/.env",
               ".dot/.sub.file.txt",
               ".dot/file.txt",
-              ".gitignore",
               "glob/foo.txt",
               "managed.txt",
               "renovate.json",
+            ],
+            "partiallyManagedFiles": [
+              {
+                "include": {
+                  "above": "# template above",
+                },
+                "name": ".gitignore",
+              },
             ],
             "removeFiles": [],
             "uninstallDependencies": [],
@@ -239,11 +246,26 @@ describe("prepare base template", () => {
             ".dot/.env",
             ".dot/.sub.file.txt",
             ".dot/file.txt",
-            ".gitignore",
             "glob/foo.txt",
             "managed.txt",
             "renovate.json",
           ]
+        `);
+    });
+
+    it("should ensure markers in partiallyManagedFiles", async () => {
+        expect.assertions(1);
+
+        await prepare(baseTemplate, targetDir);
+        const gitIgnore = await readFile(
+            path.join(targetDir, "files", "_gitignore"),
+            { encoding: "utf8" },
+        );
+        expect(gitIgnore).toMatchInlineSnapshot(`
+          "node_modules/
+
+          # template above
+          "
         `);
     });
 
@@ -284,7 +306,7 @@ describe("prepare base template 1.0.1", () => {
         const { output } = await prepare(baseTemplateUpdated, targetDir);
         expect(output).toMatchInlineSnapshot(`
           "Assembling cloneman template "@forsakringskassan/base-template@1.0.1"
-            2 files copied (2 ignored)
+            3 files copied (2 ignored)
           "
         `);
 

@@ -7,6 +7,14 @@
 import { Console as Console_2 } from 'node:console';
 
 // @public
+export interface Block {
+    // (undocumented)
+    begin: string;
+    // (undocumented)
+    end: string;
+}
+
+// @public
 export interface BuildContext {
     buildTemplate(this: void, name: string, config?: TemplateConfig): Promise<BuildTemplateResult>;
     buildTemplate(this: void, name: string, config: NormalizedTemplateConfig): Promise<BuildTemplateResult>;
@@ -54,11 +62,21 @@ export interface InstallContext {
 }
 
 // @public
+export type Markers = {
+    above: string;
+} | {
+    below: string;
+} | {
+    block: Block;
+};
+
+// @public
 export interface NormalizedTemplateConfig {
     [normalizedConfig]: true;
     ignoredDependencies: string[];
     ignoredFiles: string[];
     managedFiles: string[];
+    partiallyManagedFiles: PartiallyManagedFile[];
     removeFiles: string[];
     uninstallDependencies: string[];
 }
@@ -125,6 +143,14 @@ export interface Parameter {
 }
 
 // @public
+export interface PartiallyManagedFile {
+    // (undocumented)
+    include: Markers;
+    // (undocumented)
+    name: string;
+}
+
+// @public
 export function prepare(templateDir: string, targetDir: string): Promise<{
     output: string;
 }>;
@@ -150,6 +176,7 @@ export interface TemplateConfig {
     ignoredDependencies?: string[];
     ignoredFiles?: string[];
     managedFiles?: string[];
+    partiallyManagedFiles?: PartiallyManagedFile[];
     removeFiles?: string[];
     uninstallDependencies?: string[];
 }

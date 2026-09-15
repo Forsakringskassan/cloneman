@@ -1,4 +1,4 @@
-import fs from "node:fs/promises";
+import fs, { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import type yoctoSpinner from "yocto-spinner";
 import { InvalidClonemanFieldError, MissingClonemanFieldError } from "./errors";
@@ -16,6 +16,7 @@ import {
     isClientMetadata,
     isTarball,
     parseTarball,
+    patchPartiallyManagedFile,
     readJsonFile,
     runHook,
     withTemporaryTarBallDirectory,
@@ -69,6 +70,43 @@ async function copyFiles(
             const dest = path.join(cwd, filename);
             await fs.mkdir(path.dirname(dest), { recursive: true });
             await fs.writeFile(dest, content);
+        }),
+    );
+}
+
+async function patchPartiallyManagedFiles(
+    files: Map<string, Buffer>,
+    cloneman: Partial<TemplatePackageJson["cloneman"]>,
+    { cwd }: { cwd: string },
+): Promise<void> {
+    const { partiallyManagedFiles } = cloneman;
+    if (!partiallyManagedFiles) {
+        return;
+    }
+    await Promise.all(
+        partiallyManagedFiles.map(async (partial) => {
+            const tarEntryPath = `package/files/${getStoredFileName(partial.name)}`;
+            const tarContent = files.get(tarEntryPath);
+            if (tarContent === undefined) {
+                throw new Error(
+                    `Managed file "${partial.name}" not found in tarball`,
+                );
+            }
+
+            const destPath = path.join(cwd, partial.name);
+            let destContent: string | undefined = undefined;
+            try {
+                destContent = await readFile(destPath, "utf8");
+            } catch {
+                // missing file
+            }
+
+            const patchedContent = await patchPartiallyManagedFile(
+                partial,
+                tarContent.toString("utf8"),
+                destContent,
+            );
+            await writeFile(destPath, patchedContent, { encoding: "utf8" });
         }),
     );
 }
@@ -195,6 +233,12 @@ export async function update(options: {
 
     await text("Copying managed files", () => {
         return copyFiles(files, tarballPackageJson.cloneman, { cwd: appDir });
+    });
+
+    await text("Updating partially managed files", () => {
+        return patchPartiallyManagedFiles(files, tarballPackageJson.cloneman, {
+            cwd: appDir,
+        });
     });
 
     const dependencies = filterDependencies({
