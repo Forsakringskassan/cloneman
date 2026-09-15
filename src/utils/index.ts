@@ -1,4 +1,5 @@
 export { createInstallContext } from "./create-install-context";
+export { createUpdatedPackageJson } from "./create-updated-package-json";
 export { filterDependencies } from "./filter-dependencies";
 export {
     type CollectParametersOptions,
