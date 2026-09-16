@@ -155,6 +155,10 @@ where:
 - "create" refers to the `package.json` in the application after running `npx cloneman create`.
 - "update" refers to the `package.json` in the application after running `npx cloneman update`.
 
+### Sorting
+
+Cloneman automatically sorts `package.json` (with [sort-package-json](https://www.npmjs.com/package/sort-package-json)) both when building a template and when a consumer runs the `update` command. Template maintainers cannot customize or disable this sorting.
+
 ### Update
 
 During `npx cloneman update` fields marked with an asterisk `*` are copied from the application's current `package.json` if present there.

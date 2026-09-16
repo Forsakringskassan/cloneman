@@ -194,17 +194,17 @@ describe("update existing project with template from registry", () => {
             name,
             version,
             private,
+            description,
+            keywords,
+            homepage,
+            bugs,
             repository,
+            author,
             files,
             scripts,
             dependencies,
             devDependencies,
             cloneman,
-            description,
-            author,
-            keywords,
-            bugs,
-            homepage,
           ]
         `);
     });

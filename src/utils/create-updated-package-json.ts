@@ -1,3 +1,4 @@
+import { sortPackageJson } from "sort-package-json";
 import { APPLICATION_OWNED_FIELDS } from "../properties";
 import { type ClientMetadata } from "../types";
 
@@ -73,5 +74,5 @@ export function createUpdatedPackageJson(
         }
     }
 
-    return packageJson;
+    return sortPackageJson(packageJson);
 }

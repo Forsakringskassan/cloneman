@@ -50,10 +50,13 @@ describe("createUpdatedPackageJson", () => {
           "{
             "name": "implementation",
             "version": "1.0.0",
-            "license": "template",
+            "description": "implementation",
             "keywords": [
               "implementation"
             ],
+            "repository": "implementation",
+            "license": "template",
+            "author": "implementation",
             "scripts": {
               "foo": "bar"
             },
@@ -66,10 +69,7 @@ describe("createUpdatedPackageJson", () => {
               "template": "@forsakringskassan/template",
               "parameters": {},
               "fileHash": "hash"
-            },
-            "description": "implementation",
-            "author": "implementation",
-            "repository": "implementation"
+            }
           }"
         `);
     });
