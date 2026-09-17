@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## [1.24.0](https://github.com/Forsakringskassan/cloneman/compare/v1.23.1...v1.24.0) (2026-09-17)
+
+### Features
+
+* support using capture groups when using `replaceInFile()` ([12fea0b](https://github.com/Forsakringskassan/cloneman/commit/12fea0bbd4c442789fb3556c8a2967ae9f9d1333))
+
+### Bug Fixes
+
+* update comand should keep application owned fields (fixes [#163](https://github.com/Forsakringskassan/cloneman/issues/163)) ([2f018bd](https://github.com/Forsakringskassan/cloneman/commit/2f018bd53b4e8530f03630ba9b5e59ea9710bf7a))
+
 ## [1.23.1](https://github.com/Forsakringskassan/cloneman/compare/v1.23.0...v1.23.1) (2026-09-11)
 
 ### Bug Fixes

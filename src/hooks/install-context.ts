@@ -138,7 +138,7 @@ export interface InstallContext {
      *
      * Replacement occurs line-by-line.
      *
-     * Since %version%, the `replacement` parameter can be a function which in
+     * Since v1.24.0, the `replacement` parameter can be a function which in
      * addition to the matched `pattern` also receives each regular expression
      * capture group.
      *
@@ -164,7 +164,7 @@ export interface InstallContext {
      *
      * Replacement occurs line-by-line.
      *
-     * Since %version%, the `replacement` parameter can be a function which in
+     * Since v1.24.0, the `replacement` parameter can be a function which in
      * addition to the matched `pattern` also receives each regular expression
      * capture group.
      *
