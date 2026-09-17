@@ -61,11 +61,18 @@ export function createInstallContext(options: {
         replaceInFile(
             filePath: string,
             ...args:
-                | [pattern: string | RegExp, replacement: string]
+                | [
+                      pattern: string | RegExp,
+                      replacement:
+                          | string
+                          | ((match: string, ...args: string[]) => string),
+                  ]
                 | [
                       matcher: RegExp,
                       pattern: string | RegExp,
-                      replacement: string,
+                      replacement:
+                          | string
+                          | ((match: string, ...args: string[]) => string),
                   ]
         ) {
             const [match, pattern, replacement] =

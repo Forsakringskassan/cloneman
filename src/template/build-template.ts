@@ -72,6 +72,10 @@ export interface BuildTemplateResult {
      *
      * Replacement occurs line-by-line.
      *
+     * Since %version%, the `replacement` parameter can be a function which in
+     * addition to the matched `pattern` also receives each regular expression
+     * capture group.
+     *
      * @public
      * @since v1.20.0
      * @param filePath - Path relative to application root.
@@ -82,7 +86,7 @@ export interface BuildTemplateResult {
     replaceInFile(
         filePath: string,
         pattern: string | RegExp,
-        replacement: string,
+        replacement: string | ((match: string, ...args: string[]) => string),
     ): Promise<void>;
 
     /**
@@ -93,6 +97,10 @@ export interface BuildTemplateResult {
      * global flag `/g`.
      *
      * Replacement occurs line-by-line.
+     *
+     * Since %version%, the `replacement` parameter can be a function which in
+     * addition to the matched `pattern` also receives each regular expression
+     * capture group.
      *
      * @public
      * @since v1.20.0
@@ -106,7 +114,7 @@ export interface BuildTemplateResult {
         filePath: string,
         matcher: RegExp,
         pattern: string | RegExp,
-        replacement: string,
+        replacement: string | ((match: string, ...args: string[]) => string),
     ): Promise<void>;
 
     /**
@@ -261,11 +269,18 @@ export async function buildTemplate(options: {
         replaceInFile(
             filePath: string,
             ...args:
-                | [pattern: string | RegExp, replacement: string]
+                | [
+                      pattern: string | RegExp,
+                      replacement:
+                          | string
+                          | ((match: string, ...args: string[]) => string),
+                  ]
                 | [
                       matcher: RegExp,
                       pattern: string | RegExp,
-                      replacement: string,
+                      replacement:
+                          | string
+                          | ((match: string, ...args: string[]) => string),
                   ]
         ) {
             const [match, pattern, replacement] =

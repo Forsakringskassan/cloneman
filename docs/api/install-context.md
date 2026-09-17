@@ -22,13 +22,13 @@ interface InstallContext {
     replaceInFile(
         filePath: string,
         pattern: string | RegExp,
-        replacement: string,
+        replacement: string | ((match: string, ...args: string[]) => string),
     ): Promise<void>;
     replaceInFile(
         filePath: string,
         matcher: RegExp,
         pattern: string | RegExp,
-        replacement: string,
+        replacement: string | ((match: string, ...args: string[]) => string),
     ): Promise<void>;
     setMessage(text: string | string[], delimiter?: string): void;
     updateJsonFile(filePath: string, content: object): Promise<void>;
@@ -338,8 +338,8 @@ Regular expression that identifies lines where replacements are made.
 : `pattern: string | RegExp`
 Pattern to replace in the file.
 
-: `replacement: string`
-Replacement value.
+: `replacement: string | ((match: string, ...args: string[]) => string)`
+Replacement value. When using a function it receives the matched `pattern` as well as each regular expression capture group.
 
 **Return value**
 

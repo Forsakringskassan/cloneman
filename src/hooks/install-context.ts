@@ -138,6 +138,10 @@ export interface InstallContext {
      *
      * Replacement occurs line-by-line.
      *
+     * Since %version%, the `replacement` parameter can be a function which in
+     * addition to the matched `pattern` also receives each regular expression
+     * capture group.
+     *
      * @public
      * @since v1.16.0
      * @param filePath - Path relative to application root.
@@ -148,7 +152,7 @@ export interface InstallContext {
     replaceInFile(
         filePath: string,
         pattern: string | RegExp,
-        replacement: string,
+        replacement: string | ((match: string, ...args: string[]) => string),
     ): Promise<void>;
 
     /**
@@ -159,6 +163,10 @@ export interface InstallContext {
      * global flag `/g`.
      *
      * Replacement occurs line-by-line.
+     *
+     * Since %version%, the `replacement` parameter can be a function which in
+     * addition to the matched `pattern` also receives each regular expression
+     * capture group.
      *
      * @public
      * @since v1.16.0
@@ -172,7 +180,7 @@ export interface InstallContext {
         filePath: string,
         matcher: RegExp,
         pattern: string | RegExp,
-        replacement: string,
+        replacement: string | ((match: string, ...args: string[]) => string),
     ): Promise<void>;
 
     /**
