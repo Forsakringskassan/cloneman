@@ -138,3 +138,22 @@ it("should handle global flag for matcher", async () => {
       something: foo
     `);
 });
+
+it("should handle capture groups", async () => {
+    expect.assertions(1);
+    vol.fromJSON({
+        "/path/to/file.txt": ["foo", "bar", "baz"].join("\n"),
+    });
+    await replaceInFile("/path/to/file.txt", {
+        pattern: /b(.*)/g,
+        replacement(_, suffix) {
+            return `B${suffix}`;
+        },
+    });
+    const content = await fs.promises.readFile("/path/to/file.txt", "utf8");
+    expect(content).toMatchInlineSnapshot(`
+      foo
+      Bar
+      Baz
+    `);
+});
