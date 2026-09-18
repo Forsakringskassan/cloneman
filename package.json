@@ -99,7 +99,7 @@
     "stream-buffers": "3.0.3",
     "typescript": "npm:@typescript/typescript6@6.0.2",
     "verdaccio": "6.10.3",
-    "vitest": "5.0.0"
+    "vitest": "5.0.1"
   },
   "peerDependencies": {
     "prettier": "^3.0.0"
