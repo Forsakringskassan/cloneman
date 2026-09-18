@@ -110,6 +110,8 @@ export async function setup(project: TestProject): Promise<void> {
         await publishFixture("with-parameters@1.0.0", authEnv);
         await publishFixture("with-removed-files@1.0.0", authEnv);
         await publishFixture("with-removed-files@1.0.1", authEnv);
+        await publishFixture("sub-package-json@1.0.0", authEnv);
+        await publishFixture("sub-package-json@1.1.0", authEnv);
 
         await publishPackage("non-template-package", authEnv);
 

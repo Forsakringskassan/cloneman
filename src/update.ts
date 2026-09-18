@@ -4,6 +4,7 @@ import type yoctoSpinner from "yocto-spinner";
 import { InvalidClonemanFieldError, MissingClonemanFieldError } from "./errors";
 import { getStoredFileName } from "./template/utils";
 import {
+    type FindNestedPackageJsonResult,
     type PackageJson,
     type TemplatePackageJson,
     collectParameters,
@@ -11,6 +12,7 @@ import {
     createUpdatedPackageJson,
     fetchTarball,
     filterDependencies,
+    findPackageJson,
     getTemplateInfo,
     info,
     isClientMetadata,
@@ -59,6 +61,10 @@ async function copyFiles(
     }
     await Promise.all(
         managedFiles.map(async (filename) => {
+            /* Managed package.json will be handled separately */
+            if (filename.includes("package.json")) {
+                return;
+            }
             const tarEntryPath = `package/files/${getStoredFileName(filename)}`;
             const content = files.get(tarEntryPath);
             if (content === undefined) {
@@ -71,6 +77,31 @@ async function copyFiles(
             await fs.writeFile(dest, content);
         }),
     );
+}
+
+function updateNestedPackageJson(
+    nestedPackageJson: FindNestedPackageJsonResult,
+    currentSubPackageJson: PackageJson,
+    uninstallDependencies: string[],
+    ignoredDependencies: string[],
+): PackageJson {
+    const massagedSubPackageJson = { ...nestedPackageJson.packageJson };
+
+    massagedSubPackageJson.dependencies = filterDependencies({
+        appDependencies: currentSubPackageJson.dependencies,
+        templateDependencies: nestedPackageJson.packageJson.dependencies,
+        uninstallDependencies,
+        ignoredDependencies,
+    });
+
+    massagedSubPackageJson.devDependencies = filterDependencies({
+        appDependencies: currentSubPackageJson.devDependencies,
+        templateDependencies: nestedPackageJson.packageJson.devDependencies,
+        uninstallDependencies,
+        ignoredDependencies,
+    });
+
+    return massagedSubPackageJson;
 }
 
 /**
@@ -214,8 +245,31 @@ export async function update(options: {
     let message = [`Now run:`, ``, `  npm install`].join("\n");
 
     await withTemporaryTarBallDirectory(
-        async (templateDir, index) => {
+        async (templateDir, filesDir, index) => {
             const { fileHash } = await getTemplateInfo(index, appDir);
+
+            const nestedPackageJsons = await findPackageJson(filesDir);
+            for (const templatePackageJson of nestedPackageJsons) {
+                const currentPackageJson = await readJsonFile<PackageJson>(
+                    path.join(appDir, templatePackageJson.path),
+                );
+
+                const packageJson = updateNestedPackageJson(
+                    templatePackageJson,
+                    currentPackageJson,
+                    uninstallDependencies,
+                    ignoredDependencies,
+                );
+
+                await writeJsonFile(
+                    path.join(appDir, templatePackageJson.path),
+                    packageJson,
+                    {
+                        indent: 2,
+                        trailer: "\n",
+                    },
+                );
+            }
 
             const finalPackageJson = createUpdatedPackageJson({
                 currentPackageJson: appPackageJson,

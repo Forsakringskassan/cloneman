@@ -28,6 +28,7 @@ When running `cloneman create` all non-ignored files are always copied.
 >
 > - `package.json` does not need to be listed explicitly, the file is always considered managed.
 > - `package-lock.json` is not recommended to list as the consumer is expected to have custom dependencies and thus may end up with a very different lockfile than the template project.
+> - Nested `package.json` files must be listed as a managed file. Their dependencies are treated the same as the root `package.json`.
 
 It is considered an error if a file or file glob pattern does not match any files in the template.
 

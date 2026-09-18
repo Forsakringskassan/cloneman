@@ -1,0 +1,33 @@
+{
+  "name": "docs",
+  "version": "1.1.0",
+  "private": true,
+  "description": "mono-repo template description",
+  "keywords": [
+    "foo",
+    "bar"
+  ],
+  "homepage": "https://example.net/mono-repo",
+  "bugs": {
+    "url": "https://example.net/mono-repo/bugs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://git.example.net/mono-repo",
+    "directory": "sub-package"
+  },
+  "license": "MIT",
+  "author": "Author Name <author.name@example.net>",
+  "files": [],
+  "scripts": {
+    "a": "foo"
+  },
+  "dependencies": {
+    "@forsakringskassan/api-lib-a": "1.1.0",
+    "@forsakringskassan/api-lib-b": "1.1.0"
+  },
+  "devDependencies": {
+    "@forsakringskassan/application-owned": "1.1.0",
+    "@forsakringskassan/template-owned": "1.1.0"
+  }
+}

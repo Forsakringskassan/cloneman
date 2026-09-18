@@ -12,7 +12,7 @@ import { pathToFileURL } from "node:url";
  * @internal
  */
 export async function withTemporaryTarBallDirectory(
-    cb: (dir: string, index: string) => void | Promise<void>,
+    cb: (dir: string, filesDir: string, index: string) => void | Promise<void>,
     options: {
         files: Map<string, Buffer>;
     },
@@ -30,7 +30,11 @@ export async function withTemporaryTarBallDirectory(
                 await fs.writeFile(dest, content);
             }),
         );
-        await cb(dir, pathToFileURL(path.join(dir, "index.js")).href);
+        await cb(
+            dir,
+            path.join(dir, "files"),
+            pathToFileURL(path.join(dir, "index.js")).href,
+        );
     } finally {
         await fs.rm(dir, { recursive: true, force: true, maxRetries: 3 });
     }
