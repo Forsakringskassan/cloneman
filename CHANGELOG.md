@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## [1.24.1](https://github.com/Forsakringskassan/cloneman/compare/v1.24.0...v1.24.1) (2026-09-18)
+
+### Bug Fixes
+
+* enforce package json sorting (fixes 163) ([8d3edf0](https://github.com/Forsakringskassan/cloneman/commit/8d3edf06c1acaa147a2bdbb72474a20723b9da30))
+
 ## [1.24.0](https://github.com/Forsakringskassan/cloneman/compare/v1.23.1...v1.24.0) (2026-09-17)
 
 ### Features
