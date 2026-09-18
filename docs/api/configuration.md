@@ -55,6 +55,49 @@ Supports exact file names or glob patterns, e.g. `test/*` to remove all test fil
 >
 > `package-lock.json` is recommended to ignore as the consumer is expected to have custom dependencies and thus may end up with a very different lockfile than the template project.
 
+## partiallyManagedFiles
+
+- type: `Array<{ filename: string; include: Marker }>`
+- default: `[]`
+
+List of files that are partially managed by the template. These files allow the template to maintain specific sections while preserving user modifications outside those sections.
+
+Each partially managed file has:
+
+- `filename`: The file path relative to the template root
+- `include`: Specifies which parts of the file to manage using marker
+
+The `include` field can be one of:
+
+- `{ above: string }`: Manage content above the specified marker
+- `{ below: string }`: Manage content below the specified marker
+- `{ block: { begin: string; end: string } }`: Manage content between begin and end markers
+
+A partially managed file must contain a line where the marker specified in the `include` occurs.
+It must occur exactly _once_.
+
+Configuration example.
+
+```json
+{
+    "partiallyManagedFiles": [
+        {
+            "name": ".gitignore",
+            "include": {
+                "above": "# lines above are managed by cloneman"
+            }
+        }
+    ]
+}
+```
+
+When running `cloneman update`, only the specified sections are updated, preserving user content outside those sections.
+This is useful for configuration files where users may want to add custom settings while keeping template-maintained sections up to date.
+
+> [!IMPORTANT]  
+> Use only when no other means of importing partial files are available.
+> For instance, for javascript simply importing a user-controlled file from a template-controlled is ususally simpler and yields better results.
+
 ## ignoredDependencies
 
 - type: `string[]`

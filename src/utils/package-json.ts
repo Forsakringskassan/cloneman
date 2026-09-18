@@ -1,4 +1,5 @@
 import { type Parameter } from "../types";
+import { type PartiallyManagedFile } from "./partially-managed-file";
 
 /**
  * Typings for the `package.json` exports field
@@ -45,6 +46,7 @@ export interface TemplatePackageJson extends PackageJson {
     cloneman: {
         boilerplateFiles: string[];
         managedFiles: string[];
+        partiallyManagedFiles?: PartiallyManagedFile[];
         removeFiles: string[];
         uninstallDependencies: string[];
         ignoredDependencies: string[];

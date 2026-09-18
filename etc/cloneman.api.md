@@ -54,11 +54,24 @@ export interface InstallContext {
 }
 
 // @public
+export type Marker = {
+    above: string;
+} | {
+    below: string;
+} | {
+    block: {
+        begin: string;
+        end: string;
+    };
+};
+
+// @public
 export interface NormalizedTemplateConfig {
     [normalizedConfig]: true;
     ignoredDependencies: string[];
     ignoredFiles: string[];
     managedFiles: string[];
+    partiallyManagedFiles: PartiallyManagedFile[];
     removeFiles: string[];
     uninstallDependencies: string[];
 }
@@ -125,6 +138,14 @@ export interface Parameter {
 }
 
 // @public
+export interface PartiallyManagedFile {
+    // (undocumented)
+    filename: string;
+    // (undocumented)
+    include: Marker;
+}
+
+// @public
 export function prepare(templateDir: string, targetDir: string): Promise<{
     output: string;
 }>;
@@ -150,6 +171,7 @@ export interface TemplateConfig {
     ignoredDependencies?: string[];
     ignoredFiles?: string[];
     managedFiles?: string[];
+    partiallyManagedFiles?: PartiallyManagedFile[];
     removeFiles?: string[];
     uninstallDependencies?: string[];
 }

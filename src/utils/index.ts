@@ -1,3 +1,4 @@
+export { assertPartiallyManagedFiles } from "./assert-partially-managed-files";
 export { createInstallContext } from "./create-install-context";
 export { createUpdatedPackageJson } from "./create-updated-package-json";
 export { filterDependencies } from "./filter-dependencies";
@@ -17,11 +18,16 @@ export {
     type PackageJson,
     type TemplatePackageJson,
 } from "./package-json";
+export {
+    type Marker,
+    type PartiallyManagedFile,
+} from "./partially-managed-file";
 export { readJsonFile } from "./read-json-file";
 export { readPackageJson } from "./read-package-json";
 export { readPackageJsonFromTarball } from "./read-package-json-from-tarball";
 export { replaceInFile } from "./replace-in-file";
 export { runHook } from "./run-hook";
+export { updatePartiallyManagedFiles } from "./update-partially-managed-files";
 export { writeJsonFile } from "./write-json-file";
 export {
     isTarball,
