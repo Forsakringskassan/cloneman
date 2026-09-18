@@ -33,3 +33,7 @@ export { fetchTarball } from "./fetch-tarball";
 export { type TarballContents, parseTarball } from "./parse-tarball";
 export { updateJsonFile } from "./update-json-file";
 export { withTemporaryTarBallDirectory } from "./with-temporary-tarball-directory";
+export {
+    type FindPackageJsonResult as FindNestedPackageJsonResult,
+    findPackageJson,
+} from "./find-package-json";

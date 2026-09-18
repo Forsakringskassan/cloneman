@@ -17,7 +17,11 @@ import { rmDir } from "./test-utils/rm-dir";
 import { temporaryDirectory } from "./test-utils/temporary-directory";
 import { type ClientMetadata } from "./types";
 import { update } from "./update";
-import { type ApplicationPackageJson, writeJsonFile } from "./utils";
+import {
+    type ApplicationPackageJson,
+    type PackageJson,
+    writeJsonFile,
+} from "./utils";
 
 /* Increased timeout time since test involves a lot reading & writing to disc, and also fetching data from a local npm registry */
 vi.setConfig({ testTimeout: 30_000 });
@@ -580,4 +584,65 @@ it("Updating to a new version should keep same filehash if only dependencies cha
     }>("package.json");
     expect(clonemanBefore?.fileHash).toMatch(/^[a-f0-9]{64}$/);
     expect(clonemanAfter?.fileHash).toBe(clonemanBefore?.fileHash);
+});
+
+describe("update with sub-package.json files", () => {
+    beforeEach(async () => {
+        await create({
+            name: "mock-app",
+            templatePackage: "@forsakringskassan/sub-package-json@1.0.0",
+            cwd,
+            env: userEnv,
+            parameters: new Map(),
+        });
+    });
+
+    it("should copy sub package.json if managed file", async () => {
+        expect.assertions(1);
+
+        expect(await printTree(appDir)).toMatchInlineSnapshot(`
+          (root)
+              ├── docs
+              │   └── package.json
+              ├── package-lock.json
+              └── package.json
+        `);
+    });
+
+    it("should keep application owned package versions intact", async () => {
+        expect.assertions(1);
+
+        const packageJson =
+            await readJsonFile<ApplicationPackageJson>("docs/package.json");
+        packageJson.devDependencies = {
+            "@forsakringskassan/application-owned": "1.2.3", // Should be kept
+            "@forsakringskassan/template-owned": "1.2.3", // Should be updated by the template
+        };
+        await writeJsonFile(
+            path.join(appDir, "docs", "package.json"),
+            packageJson,
+            {
+                indent: 2,
+                trailer: "",
+            },
+        );
+
+        /* update the application */
+        await update({
+            cwd: appDir,
+            version: "1.1.0",
+            env: userEnv,
+            parameters: new Map(),
+        });
+
+        const docsPackageJson =
+            await readJsonFile<PackageJson>("docs/package.json");
+
+        expect(docsPackageJson.devDependencies).toMatchInlineSnapshot(`
+          {
+            @forsakringskassan/application-owned: 1.2.3,
+            @forsakringskassan/template-owned: 1.1.0,
+          }
+        `);
+    });
 });
