@@ -1,0 +1,39 @@
+name: CI
+
+on: [push, pull_request]
+
+permissions:
+    contents: read
+    checks: write # so the bundle can publish test results
+
+jobs:
+    ci:
+        uses: Forsakringskassan/.github/.github/workflows/bundle-npm-lib-ci.yaml@0f4c6fbfd3e8e8af3cac01133a5675b27cffb45d # main
+
+    # Specific to this repository: cloneman shells out to npm, so it has to keep
+    # working whether or not the user has upgraded. Not something the shared
+    # bundle should carry.
+    npm:
+        strategy:
+            fail-fast: false
+            matrix:
+                npm-version: [11.x, 12.x]
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+            - name: Use Node.js 24.x
+              uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+              with:
+                  node-version: 24.x
+            - name: Install NPM ${{ matrix.npm-version }}
+              run: npm install -g npm@${{ matrix.npm-version }}
+            - name: Install dependencies
+              run: npm ci
+            - name: Build
+              run: npm run --if-present build
+            - name: Unit tests
+              run: npm test --ignore-scripts
+            - name: Integration tests
+              run: npm run integration-test --ignore-scripts
+            - name: Selftest
+              run: node bin/cloneman.mjs --help
