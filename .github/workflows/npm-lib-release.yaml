@@ -1,0 +1,18 @@
+name: Release
+concurrency: release-${{ github.ref }}
+
+on:
+    workflow_dispatch:
+    schedule:
+        - cron: "0 0 * * 5"
+
+permissions:
+    contents: write
+    issues: write
+    pull-requests: write
+    id-token: write
+
+jobs:
+    release:
+        uses: Forsakringskassan/.github/.github/workflows/bundle-npm-lib-release.yaml@0f4c6fbfd3e8e8af3cac01133a5675b27cffb45d # main
+        secrets: inherit
