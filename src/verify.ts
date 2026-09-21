@@ -43,6 +43,7 @@ export async function verify(options: {
         });
     }
 
+    /* eslint-disable-next-line unicorn/prefer-early-return -- Technical Debt */
     if (dependencyVersion !== templateVersion) {
         const error = new TemplateVersionMismatchError({
             templateName,

@@ -31,6 +31,7 @@ export async function printTree(rootPath: string): Promise<string> {
         }
 
         const stats = await fs.stat(currentPath);
+        /* eslint-disable-next-line unicorn/prefer-early-return -- Technical Debt */
         if (stats.isDirectory()) {
             const entries = await fs.readdir(currentPath);
             const filteredEntries = entries.filter(
