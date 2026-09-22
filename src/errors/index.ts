@@ -1,3 +1,4 @@
+export { CliTemplateNotFoundError } from "./cli-template-not-found-error";
 export { FetchTarballError } from "./fetch-tarball-error";
 export { HookNoExportedFnError } from "./hook-no-exported-fn-error";
 export { InvalidClonemanFieldError } from "./invalid-cloneman-field-error";
