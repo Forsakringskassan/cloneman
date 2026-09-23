@@ -47,6 +47,12 @@ Values can also be supplied non-interactively using `--param key=value`:
 
 The `--param` flag can be used multiple times.
 
+### --if-same-filehash
+
+If this option is enabled, the update task will fail if the before and after filehash differ.
+
+A common use case for this feature is within a Renovate postUpgradeTask, where you only want the update to proceed if no managed files are modified.
+
 #### package.json
 
 Following fields are marked as application owned and wont be modified during an update:

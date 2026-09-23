@@ -1,7 +1,11 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import type yoctoSpinner from "yocto-spinner";
-import { InvalidClonemanFieldError, MissingClonemanFieldError } from "./errors";
+import {
+    InvalidClonemanFieldError,
+    MissingClonemanFieldError,
+    UpdateFilehashMismatchError,
+} from "./errors";
 import { getStoredFileName } from "./template/utils";
 import {
     type FindNestedPackageJsonResult,
@@ -114,6 +118,7 @@ export async function update(options: {
     env: Record<string, string>;
     parameters: Map<string, string>;
     spinner?: ReturnType<typeof yoctoSpinner>;
+    ifSameFilehash: boolean;
 }): Promise<{ message: string }> {
     const {
         cwd: appDir,
@@ -121,6 +126,7 @@ export async function update(options: {
         env,
         parameters: cliParameters,
         spinner,
+        ifSameFilehash,
     } = options;
 
     async function text(
@@ -221,20 +227,6 @@ export async function update(options: {
         spinner.start();
     }
 
-    await text("Removing obsolete files", () => {
-        return removeFiles(tarballPackageJson.cloneman, { cwd: appDir });
-    });
-
-    await text("Copying managed files", () => {
-        return copyFiles(files, tarballPackageJson.cloneman, { cwd: appDir });
-    });
-
-    await text("Updating partially managed files", () => {
-        return updatePartiallyManagedFiles(files, tarballPackageJson.cloneman, {
-            cwd: appDir,
-        });
-    });
-
     const dependencies = filterDependencies({
         appDependencies: appPackageJson.dependencies,
         templateDependencies: tmplPackageJson.dependencies,
@@ -254,6 +246,35 @@ export async function update(options: {
     await withTemporaryTarBallDirectory(
         async (templateDir, filesDir, index) => {
             const { fileHash } = await getTemplateInfo(index, appDir);
+
+            if (ifSameFilehash && fileHash !== cloneman.fileHash) {
+                throw new UpdateFilehashMismatchError({
+                    oldHash: cloneman.fileHash,
+                    newHash: fileHash,
+                });
+            }
+
+            await text("Removing obsolete files", () => {
+                return removeFiles(tarballPackageJson.cloneman, {
+                    cwd: appDir,
+                });
+            });
+
+            await text("Copying managed files", () => {
+                return copyFiles(files, tarballPackageJson.cloneman, {
+                    cwd: appDir,
+                });
+            });
+
+            await text("Updating partially managed files", () => {
+                return updatePartiallyManagedFiles(
+                    files,
+                    tarballPackageJson.cloneman,
+                    {
+                        cwd: appDir,
+                    },
+                );
+            });
 
             const nestedPackageJsons = await findPackageJson(filesDir);
             for (const templatePackageJson of nestedPackageJsons) {
@@ -297,6 +318,10 @@ export async function update(options: {
                     trailer: "\n",
                 },
             );
+
+            if (ifSameFilehash) {
+                return;
+            }
 
             const hooksDir = path.join(templateDir, "hooks");
             const context = createInstallContext({
