@@ -58,3 +58,31 @@ it("should update application to exact version", async () => {
     expect(mockSuccess).toHaveBeenCalledWith(expect.stringContaining("1.2.3"));
     expect(vi.mocked(console.log)).toHaveBeenCalledWith(mockMessage);
 });
+
+it("should not pass if-same-filehash if param omitted", async () => {
+    expect.hasAssertions();
+    const parser = createParser({ cwd: "./my-app" }).fail((msg) => {
+        expect.fail(msg);
+    });
+    await parser.parse(["update"]);
+
+    expect(update).toHaveBeenCalledExactlyOnceWith(
+        expect.objectContaining({
+            ifSameFilehash: false,
+        }),
+    );
+});
+
+it("should pass with --if-same-filehash", async () => {
+    expect.hasAssertions();
+    const parser = createParser({ cwd: "./my-app" }).fail((msg) => {
+        expect.fail(msg);
+    });
+    await parser.parse(["update", "--if-same-filehash"]);
+
+    expect(update).toHaveBeenCalledExactlyOnceWith(
+        expect.objectContaining({
+            ifSameFilehash: true,
+        }),
+    );
+});

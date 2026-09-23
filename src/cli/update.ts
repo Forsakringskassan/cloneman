@@ -7,13 +7,14 @@ import { parseParams } from "./parse-params";
 interface UpdateArguments {
     target: string | undefined;
     param: string[];
+    "if-same-filehash": boolean;
 }
 
 async function updateHandler(
     context: Context,
     argv: UpdateArguments,
 ): Promise<void> {
-    const { target, param } = argv;
+    const { target, param, "if-same-filehash": ifSameFilehash } = argv;
     const { cwd } = context;
 
     const version = target ?? "latest";
@@ -31,6 +32,7 @@ async function updateHandler(
             env: {},
             parameters,
             spinner,
+            ifSameFilehash,
         });
     } catch (err) {
         spinner.stop();
@@ -60,6 +62,13 @@ export function updateCommand(
                     describe: "Version to update to",
                     type: "string",
                     demandOption: false,
+                })
+                .option("if-same-filehash", {
+                    describe:
+                        "Only update if thefile hash match between versions.\n" +
+                        "A matching filehash means the managed files are unchanged between versions and only dependencies are updated.",
+                    type: "boolean",
+                    default: false,
                 })
                 .option("param", {
                     describe: "Override a template parameter (key=value)",

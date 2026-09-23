@@ -13,3 +13,4 @@ export { ParameterValidationError } from "./parameter-validation-error";
 export { TemplateDependencyMissingError } from "./template-dependency-missing-error";
 export { TemplateVersionMismatchError } from "./template-version-mismatch-error";
 export { UserError } from "./user-error";
+export { UpdateFilehashMismatchError } from "./update-filehash-mismatch-error";

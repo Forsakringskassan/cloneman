@@ -23,6 +23,8 @@ import {
     writeJsonFile,
 } from "./utils";
 
+import * as utils from "./utils";
+
 /* Increased timeout time since test involves a lot reading & writing to disc, and also fetching data from a local npm registry */
 vi.setConfig({ testTimeout: 30_000 });
 
@@ -52,6 +54,8 @@ beforeEach(() => {
 });
 
 afterEach(async () => {
+    vi.restoreAllMocks();
+
     await rmDir(cwd);
 });
 
@@ -107,6 +111,7 @@ describe("update existing project with template from registry", () => {
             version: "1.0.1",
             env: userEnv,
             parameters: new Map(),
+            ifSameFilehash: false,
         });
         expect(await printTree(appDir)).toMatchInlineSnapshot(`
           (root)
@@ -190,6 +195,7 @@ describe("update existing project with template from registry", () => {
             cwd: appDir,
             version: "1.0.1",
             env: userEnv,
+            ifSameFilehash: false,
             parameters: new Map(),
         });
 
@@ -226,6 +232,7 @@ describe("update existing project with template from registry", () => {
             cwd: appDir,
             version: "1.0.1",
             env: userEnv,
+            ifSameFilehash: false,
             parameters: new Map(),
         });
 
@@ -244,6 +251,7 @@ describe("update existing project with template from registry", () => {
             version: "latest",
             env: userEnv,
             parameters: new Map(),
+            ifSameFilehash: false,
         });
         const packageJson =
             await readJsonFile<ApplicationPackageJson>("package.json");
@@ -259,6 +267,7 @@ describe("update existing project with template from registry", () => {
             version: "latest",
             env: userEnv,
             parameters: new Map(),
+            ifSameFilehash: false,
         });
         const packageJson =
             await readJsonFile<ApplicationPackageJson>("package.json");
@@ -300,6 +309,7 @@ describe("update existing project with template from registry", () => {
             version: "1.0.1",
             env: userEnv,
             parameters: new Map(),
+            ifSameFilehash: false,
         });
         const updatedPackageJson =
             await readJsonFile<ApplicationPackageJson>("package.json");
@@ -329,6 +339,7 @@ describe("update existing project with template from registry", () => {
             version: "1.0.1",
             env: userEnv,
             parameters: new Map(),
+            ifSameFilehash: false,
         });
 
         const updatedPackageJson =
@@ -367,6 +378,7 @@ describe("update existing project with template from registry", () => {
             version: "1.0.2",
             env: userEnv,
             parameters: new Map(),
+            ifSameFilehash: false,
         });
 
         const updatedPackageJson =
@@ -422,6 +434,7 @@ it("should update existing project from local tar", async () => {
         version: tarballPath,
         env: userEnv,
         parameters: new Map(),
+        ifSameFilehash: false,
     });
     expect(await printTree(appDir)).toMatchInlineSnapshot(`
       (root)
@@ -479,6 +492,7 @@ it("should crash if invalid tar path", async () => {
             version: invalidTarPath,
             env: userEnv,
             parameters: new Map(),
+            ifSameFilehash: false,
         }),
     ).rejects.toThrow(`Tarball not found at path`);
 });
@@ -505,6 +519,7 @@ it("should remove files set in removeFiles", async () => {
         version: "1.0.1",
         env: userEnv,
         parameters: new Map(),
+        ifSameFilehash: false,
     });
     /* should have renamed file.js to file.mts, while keeping file.json */
     expect(await printTree(appDir)).toMatchInlineSnapshot(`
@@ -530,6 +545,7 @@ it("should return a default instructions message", async () => {
         version: "1.0.1",
         env: userEnv,
         parameters: new Map(),
+        ifSameFilehash: false,
     });
     expect(message).toMatchInlineSnapshot(`
       Now run:
@@ -539,7 +555,7 @@ it("should return a default instructions message", async () => {
 });
 
 it("should run install hook if present", async () => {
-    expect.assertions(3);
+    expect.assertions(4);
     await create({
         name: "mock-app",
         templatePackage: "@forsakringskassan/with-install-hook@1.0.0",
@@ -547,12 +563,19 @@ it("should run install hook if present", async () => {
         env: userEnv,
         parameters: new Map(),
     });
+
+    const runHookSpy = vi.spyOn(utils, "runHook");
+
     const { message } = await update({
         cwd: appDir,
         version: "1.0.1",
         env: userEnv,
         parameters: new Map(),
+        ifSameFilehash: false,
     });
+
+    expect(runHookSpy).toHaveBeenCalledOnce();
+
     expect(await printTree(appDir)).toMatchInlineSnapshot(`
       (root)
           ├── install.txt
@@ -582,6 +605,7 @@ it("should keep existing parameters when updating without overrides", async () =
         version: "1.0.0",
         env: userEnv,
         parameters: new Map(),
+        ifSameFilehash: false,
     });
     const { cloneman } = await readJsonFile<{ cloneman?: ClientMetadata }>(
         "package.json",
@@ -612,6 +636,7 @@ it("should override existing parameters when updating with overrides", async () 
         cwd: appDir,
         version: "1.0.0",
         env: userEnv,
+        ifSameFilehash: false,
         parameters: new Map([
             ["repository", "git+https://example.net/overridden"],
             ["description", ""],
@@ -647,6 +672,7 @@ it("Updating to a new version should keep same filehash if only dependencies cha
         version: "1.0.3",
         env: userEnv,
         parameters: new Map(),
+        ifSameFilehash: false,
     });
     const { cloneman: clonemanAfter } = await readJsonFile<{
         cloneman?: ClientMetadata;
@@ -702,6 +728,7 @@ describe("update with sub-package.json files", () => {
             version: "1.1.0",
             env: userEnv,
             parameters: new Map(),
+            ifSameFilehash: false,
         });
 
         const docsPackageJson =
@@ -713,5 +740,75 @@ describe("update with sub-package.json files", () => {
             @forsakringskassan/template-owned: 1.1.0,
           }
         `);
+    });
+});
+
+describe("IfSameFilehash option", () => {
+    it("should fail if the file hash does not match the expected value", async () => {
+        expect.assertions(2);
+        await create({
+            name: "mock-app",
+            templatePackage: "@forsakringskassan/base-template@1.0.0",
+            cwd,
+            env: userEnv,
+            parameters: new Map(),
+        });
+        await expect(
+            update({
+                cwd: appDir,
+                version: "latest",
+                env: userEnv,
+                parameters: new Map(),
+                ifSameFilehash: true,
+            }),
+        ).rejects.toThrow("does not match the expected old hash");
+
+        const { cloneman } = await readJsonFile<{ cloneman?: ClientMetadata }>(
+            "package.json",
+        );
+        expect(cloneman?.version).toBe("1.0.0");
+    });
+
+    it("should succeed if the file hash matches the expected value", async () => {
+        expect.assertions(1);
+        await create({
+            name: "mock-app",
+            templatePackage: "@forsakringskassan/base-template@1.0.2",
+            cwd,
+            env: userEnv,
+            parameters: new Map(),
+        });
+
+        await expect(
+            update({
+                cwd: appDir,
+                version: "1.0.3",
+                env: userEnv,
+                parameters: new Map(),
+                ifSameFilehash: true,
+            }),
+        ).resolves.not.toThrow();
+    });
+
+    it("hooks should not be called", async () => {
+        expect.assertions(1);
+        await create({
+            name: "mock-app",
+            templatePackage: "@forsakringskassan/base-template@1.0.2",
+            cwd,
+            env: userEnv,
+            parameters: new Map(),
+        });
+
+        const runHookSpy = vi.spyOn(utils, "runHook");
+
+        await update({
+            cwd: appDir,
+            version: "1.0.3",
+            env: userEnv,
+            parameters: new Map(),
+            ifSameFilehash: true,
+        });
+        expect(runHookSpy).not.toHaveBeenCalled();
     });
 });
