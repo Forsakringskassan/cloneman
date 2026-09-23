@@ -101,23 +101,33 @@ export async function setup(project: TestProject): Promise<void> {
 
     try {
         const authEnv = await start();
-        await publishFixture("base-template@1.0.0", authEnv);
-        await publishFixture("base-template@1.0.1", authEnv);
-        await publishFixture("base-template@1.0.2", authEnv);
-        await publishFixture("base-template@1.0.3", authEnv);
-        await publishFixture("with-install-hook@1.0.0", authEnv);
-        await publishFixture("with-install-hook@1.0.1", authEnv);
-        await publishFixture("with-parameters@1.0.0", authEnv);
-        await publishFixture("with-partially-managed-file@1.0.0", authEnv);
-        await publishFixture("with-partially-managed-file@1.0.1", authEnv);
-        await publishFixture("with-removed-files@1.0.0", authEnv);
-        await publishFixture("with-removed-files@1.0.1", authEnv);
-        await publishFixture("sub-package-json@1.0.0", authEnv);
-        await publishFixture("sub-package-json@1.1.0", authEnv);
+        await Promise.all([
+            (async () => {
+                await publishFixture("base-template@1.0.0", authEnv);
+                await publishFixture("base-template@1.0.1", authEnv);
+                await publishFixture("base-template@1.0.2", authEnv);
+                await publishFixture("base-template@1.0.3", authEnv);
+                await publishFixture("with-install-hook@1.0.0", authEnv);
+                await publishFixture("with-install-hook@1.0.1", authEnv);
+                await publishFixture("with-parameters@1.0.0", authEnv);
+                await publishFixture(
+                    "with-partially-managed-file@1.0.0",
+                    authEnv,
+                );
+                await publishFixture(
+                    "with-partially-managed-file@1.0.1",
+                    authEnv,
+                );
+                await publishFixture("with-removed-files@1.0.0", authEnv);
+                await publishFixture("with-removed-files@1.0.1", authEnv);
+                await publishFixture("sub-package-json@1.0.0", authEnv);
+                await publishFixture("sub-package-json@1.1.0", authEnv);
 
-        await publishPackage("non-template-package", authEnv);
+                await publishPackage("non-template-package", authEnv);
+            })(),
 
-        await publishCloneman(authEnv);
+            publishCloneman(authEnv),
+        ]);
     } catch (error) {
         await stop();
         throw error;
