@@ -4,6 +4,7 @@ import { UserError } from "../errors";
 import { buildCommand } from "./build";
 import { type Context } from "./context";
 import { createCommand } from "./create";
+import { getParamsCommand } from "./get-params";
 import { migrateCommand } from "./migrate";
 import { packCommand } from "./pack";
 import { publishCommand } from "./publish";
@@ -19,6 +20,7 @@ export function createParser(context: Context): ReturnType<typeof yargs> {
         .scriptName(name)
         .command(buildCommand(context))
         .command(createCommand(context))
+        .command(getParamsCommand())
         .command(packCommand(context))
         .command(publishCommand(context))
         .command(runHookCommand(context))
