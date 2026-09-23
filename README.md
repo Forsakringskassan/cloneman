@@ -72,6 +72,12 @@ After migrating, run update to apply the template files:
 
 Note: the migration won't modify any files other than `package.json`, which connects your application to a specific template. It is up to the update command to actually modify the repository.
 
+## Get Template Parameters
+
+Get a list of parameters for a specific template:
+
+`npx cloneman@latest get-params <template-package-name> [--json]`
+
 ## Creating and managing templates
 
 See [docs/templates.md](docs/templates.md) for more information.
