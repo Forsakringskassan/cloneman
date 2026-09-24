@@ -32,8 +32,6 @@ The `--param` flag can be used multiple times.
 
 ### Update your application
 
-> Note: You can only update your application using the same template it was created with.
-
 To the latest version:
 `npx cloneman@latest update`
 
@@ -47,29 +45,7 @@ Values can also be supplied non-interactively using `--param key=value`:
 
 The `--param` flag can be used multiple times.
 
-### --if-same-filehash
-
-If this option is enabled, the update task will fail if the before and after filehash differ.
-
-A common use case for this feature is within a Renovate postUpgradeTask, where you only want the update to proceed if no managed files are modified.
-
-#### package.json
-
-Following fields are marked as application owned and wont be modified during an update:
-
-- name
-- version
-- description
-- author
-- keywords
-- bugs
-- homepage
-- repository
-
-#### Local tarball
-
-As with the create command, you can also point to a local tarball:
-`npx cloneman@latest update ../directory/template.tgz`
+See [docs/update.md](docs/update.md) for more information.
 
 ### Verify
 
