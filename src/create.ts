@@ -27,6 +27,7 @@ export async function create(options: {
     env?: Record<string, string>;
     parameters: Map<string, string>;
     spinner?: ReturnType<typeof yoctoSpinner>;
+    output?: string;
 }): Promise<{ message: string }> {
     const {
         name,
@@ -35,6 +36,7 @@ export async function create(options: {
         env = {},
         parameters: cliParameters,
         spinner,
+        output,
     } = options;
 
     function text(newText: string): void {
@@ -43,9 +45,13 @@ export async function create(options: {
         }
     }
 
-    const appPath = path.join(cwd, name);
-    if (existsSync(appPath)) {
-        throw new Error("application dir already exists");
+    let appPath = path.join(cwd, name);
+    if (output) {
+        appPath = path.resolve(cwd, output);
+    } else {
+        if (existsSync(appPath)) {
+            throw new Error("application dir already exists");
+        }
     }
 
     const normalizedTemplatePackage = normalizeTemplatePackage(
@@ -158,7 +164,11 @@ export async function create(options: {
         }),
     );
 
-    let message = [`Now run:`, ``, `  cd ${name}`, `  npm install`].join("\n");
+    const outputPath = output ?? name;
+
+    let message = [`Now run:`, ``, `  cd ${outputPath}`, `  npm install`].join(
+        "\n",
+    );
 
     if (hooksDir) {
         const context = createInstallContext({
