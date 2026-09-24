@@ -8,13 +8,14 @@ interface CreateArguments {
     name: string;
     template: string;
     param: string[];
+    output: string;
 }
 
 async function createHandler(
     context: Context,
     argv: CreateArguments,
 ): Promise<void> {
-    const { name, template, param } = argv;
+    const { name, template, param, output } = argv;
     const { cwd } = context;
     const parameters = parseParams(param);
 
@@ -30,6 +31,7 @@ async function createHandler(
             cwd,
             parameters,
             spinner,
+            output,
         });
     } catch (err) {
         spinner.stop();
@@ -69,6 +71,13 @@ export function createCommand(
                     type: "string",
                     array: true,
                     default: [],
+                })
+                .option("output", {
+                    describe: "Output directory for the created application",
+                    description:
+                        "Use directory when creating the application. Default is to use application name as directory name.",
+                    type: "string",
+                    default: "",
                 });
         },
         async handler(argv) {

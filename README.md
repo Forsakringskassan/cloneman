@@ -30,6 +30,15 @@ Values can also be supplied non-interactively using `--param key=value`:
 
 The `--param` flag can be used multiple times.
 
+### Custom output directory
+
+By default, Cloneman creates a sub-folder with the same name as the application. To override this behavior and specify a different target directory, use the `--output` option.
+
+**Examples:**
+
+- `--output .` -> Generates the files in the current directory.
+- `--output custom` -> Creates a new folder named `custom`.
+
 ### Update your application
 
 > Note: You can only update your application using the same template it was created with.
