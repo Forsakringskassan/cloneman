@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## [1.25.0](https://github.com/Forsakringskassan/cloneman/compare/v1.24.1...v1.25.0) (2026-09-24)
+
+### Features
+
+* partially managed files ([1214312](https://github.com/Forsakringskassan/cloneman/commit/12143125b0f9444edb4637a259a391a36c0b9bac))
+* sync dependencies in nested package.json files during update ([d214a01](https://github.com/Forsakringskassan/cloneman/commit/d214a01443312f6ca39e392006f4597e1903f93d))
+* update --if-same-filehash ([ff94cec](https://github.com/Forsakringskassan/cloneman/commit/ff94cec13b3fab6e9669ad83da6d91cca145885a))
+
+### Bug Fixes
+
+* **deps:** update dependency @forsakringskassan/get-application-slug to v1.2.0 ([#181](https://github.com/Forsakringskassan/cloneman/issues/181)) ([d5c7048](https://github.com/Forsakringskassan/cloneman/commit/d5c7048434fc6e7f0af609defcf381029b094e38))
+
 ## [1.24.1](https://github.com/Forsakringskassan/cloneman/compare/v1.24.0...v1.24.1) (2026-09-18)
 
 ### Bug Fixes
