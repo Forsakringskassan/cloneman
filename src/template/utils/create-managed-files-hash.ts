@@ -7,9 +7,6 @@ import { getStoredFileName } from "./get-stored-file-name";
 /**
  * Creates a SHA-256 hash from the contents of all managed template files.
  *
- * Line endings are normalized to LF before hashing so the resulting hash is
- * identical regardless of whether files were checked out with CRLF (e.g. on
- * Windows with `core.autocrlf`) or LF (e.g. on Linux/macOS) line endings.
  *
  * The template's `package.json` is included with `dependencies`,
  * `devDependencies` and `version` stripped, since those are expected to
