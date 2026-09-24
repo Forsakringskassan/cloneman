@@ -4,9 +4,16 @@
  * @public
  */
 export type Marker =
-    | { above: string }
-    | { below: string }
     | {
+          /** Manage content above the specified marker. */
+          above: string;
+      }
+    | {
+          /** Manage content below the specified marker. */
+          below: string;
+      }
+    | {
+          /** Manage content between begin and end markers. */
           block: {
               begin: string;
               end: string;
@@ -19,6 +26,8 @@ export type Marker =
  * @public
  */
 export interface PartiallyManagedFile {
+    /** The file path relative to the template root. */
     filename: string;
+    /** Specifies which parts of the file to manage using marker. */
     include: Marker;
 }

@@ -139,9 +139,7 @@ export interface Parameter {
 
 // @public
 export interface PartiallyManagedFile {
-    // (undocumented)
     filename: string;
-    // (undocumented)
     include: Marker;
 }
 

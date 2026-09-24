@@ -9,8 +9,45 @@ import { type PartiallyManagedFile } from "../utils/partially-managed-file";
 export interface TemplateConfig {
     /** list of files managed by this template */
     managedFiles?: string[];
-    /** list of files partially managed by this template. */
+
+    /**
+     * List of files that are partially managed by the template. These files
+     * allow the template to maintain specific sections while preserving user
+     * modifications outside those sections.
+     *
+     * Each partially managed file has:
+     *
+     * - `filename`: The file path relative to the template root.
+     * - `include`: Specifies which parts of the file to manage using marker.
+     *
+     * The `include` field can be one of:
+     *
+     * - `{ above: string }`: Manage content above the specified marker.
+     * - `{ below: string }`: Manage content below the specified marker.
+     * - `{ block: { begin: string; end: string } }`: Manage content between begin and end markers.
+     *
+     * A partially managed file must contain a line where the marker specified
+     * in the include occurs. It must occur exactly once.
+     *
+     * @example
+     *
+     * ```ts
+     * {
+     *     "partiallyManagedFiles": [
+     *         {
+     *             "name": ".gitignore",
+     *             "include": {
+     *                 "above": "# lines above are managed by cloneman"
+     *             }
+     *         }
+     *     ]
+     * }
+     * ```
+     *
+     * @see https://github.com/Forsakringskassan/cloneman/blob/main/docs/api/configuration.md#partiallymanagedfiles
+     */
     partiallyManagedFiles?: PartiallyManagedFile[];
+
     /** list of files ignored by this template */
     ignoredFiles?: string[];
     /**
