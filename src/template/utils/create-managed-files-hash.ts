@@ -16,11 +16,11 @@ import { getStoredFileName } from "./get-stored-file-name";
  */
 export async function createManagedFilesHash(
     filesDir: string,
-    managedFiles: string[],
+    fileList: string[],
     pkg: PackageJson,
 ): Promise<string> {
     const ignoredFiles = new Set(["package.json"]);
-    const hashedFiles = managedFiles.filter((file) => !ignoredFiles.has(file));
+    const hashedFiles = fileList.filter((file) => !ignoredFiles.has(file));
     const contents = await Promise.all([
         Promise.resolve(hashPackageJson(pkg)),
         ...hashedFiles.map((file) => readManagedFile(filesDir, file)),

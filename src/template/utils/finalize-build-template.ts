@@ -19,9 +19,13 @@ export async function finalizeBuildTemplate(targetDir: string): Promise<void> {
         path.join(filesDir, "package.json"),
     );
 
+    const partiallyManagedFiles: string[] = (
+        cloneman.partiallyManagedFiles ?? []
+    ).map((file) => file.filename);
+
     const fileHash = await createManagedFilesHash(
         filesDir,
-        cloneman.managedFiles,
+        [...cloneman.managedFiles, ...partiallyManagedFiles],
         packageJson,
     );
 
