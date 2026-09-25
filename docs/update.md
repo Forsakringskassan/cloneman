@@ -36,11 +36,6 @@ Following fields wont be modified during an update:
 - homepage
 - repository
 
-## Local tarball
-
-As with the create command, you can also point to a local tarball:
-`npx cloneman@latest update ../directory/template.tgz`
-
 ## Cannot change template
 
 You can only update your application using the same template it was created with.

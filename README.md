@@ -20,9 +20,6 @@ Keep in mind that `template-package-name` needs to be published to the npm regis
 The latest version of the template is installed by default. To install a specific version, specify it using the `@version` suffix:
 `npx cloneman@latest create my-new-application template-package-name@1.2.3`
 
-You can also refer to a local template file:
-`npx cloneman@latest create my-new-application ../directory/template.tgz`
-
 If the template declares parameters, cloneman will prompt for their values when the terminal is interactive.
 Values can also be supplied non-interactively using `--param key=value`:
 
@@ -81,3 +78,7 @@ Get a list of parameters for a specific template:
 ## Creating and managing templates
 
 See [docs/templates.md](docs/templates.md) for more information.
+
+## Working with Cloneman & Debug templates
+
+See [docs/development.md].
