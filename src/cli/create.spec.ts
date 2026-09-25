@@ -40,6 +40,7 @@ it("create app", async () => {
 
     expect(create).toHaveBeenCalledExactlyOnceWith({
         name: appName,
+        output: "",
         templatePackage: templateName,
         cwd: "./new-app",
         parameters: new Map(),
