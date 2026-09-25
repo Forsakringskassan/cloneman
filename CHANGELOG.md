@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## [1.25.1](https://github.com/Forsakringskassan/cloneman/compare/v1.25.0...v1.25.1) (2026-09-25)
+
+### Bug Fixes
+
+* include partiallyManagedFiles in filehash calculation ([db90433](https://github.com/Forsakringskassan/cloneman/commit/db90433f6fbb58fc91c39e49213ac91fa0dc18bf))
+
 ## [1.25.0](https://github.com/Forsakringskassan/cloneman/compare/v1.24.1...v1.25.0) (2026-09-24)
 
 ### Features
