@@ -32,7 +32,7 @@ The files included in the template.
 
 **Value**
 
-```js
+```ts
 files: string[];
 ```
 
@@ -52,7 +52,7 @@ Parameters are collected during `create` and `update`, interactively or through 
 
 **Syntax**
 
-```js
+```ts
 template.addParameter(key, [definition]);
 ```
 
@@ -102,7 +102,7 @@ Appends template-specific dependencies to the `ignoreDeps` array in the template
 
 **Syntax**
 
-```js
+```ts
 template.renovateIgnoreDependencies();
 ```
 
@@ -133,7 +133,7 @@ Replacements happen line by line.
 
 **Syntax**
 
-```js
+```ts
 template.replaceInFile(filePath, [matcher], pattern, replacement);
 ```
 
@@ -172,7 +172,7 @@ Existing indentation and a trailing newline are preserved when present.
 
 **Syntax**
 
-```js
+```ts
 template.updateJson(filePath, content);
 ```
 
@@ -206,7 +206,7 @@ Writes a file to the template's file directory.
 
 **Syntax**
 
-```js
+```ts
 template.writeFile(filePath, content);
 ```
 

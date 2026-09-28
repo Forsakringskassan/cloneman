@@ -35,7 +35,7 @@ export async function build(context: BuildContext): Promise<void> {
 
 or with JavaScript (`.cloneman/build.mjs`):
 
-```js
+```ts
 import pkg from "../package.json" with { type: "json" };
 
 /**
@@ -216,7 +216,7 @@ Use `cloneman run-hook install` to run the hook locally from inside your templat
 The hook is resolved from `.cloneman/` in the current directory.
 Pass `--target` to specify the application directory the hook should act on (defaults to the current directory):
 
-```sh
+```bash
 npx cloneman run-hook install --target ../my-application
 ```
 

@@ -4,7 +4,7 @@ ${description}
 
 **Value**
 
-```js
+```ts
 ${prototype};
 ```
 

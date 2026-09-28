@@ -43,7 +43,7 @@ The command being issued by the user.
 
 **Value**
 
-```js
+```ts
 command: "create" | "update";
 ```
 
@@ -64,7 +64,7 @@ A console instance to use for logging.
 
 **Value**
 
-```js
+```ts
 logger: Console;
 ```
 
@@ -80,7 +80,7 @@ The application directory, relative to the current working directory.
 
 **Value**
 
-```js
+```ts
 relativeTargetDir: string;
 ```
 
@@ -96,7 +96,7 @@ The application directory being created or updated.
 
 **Value**
 
-```js
+```ts
 targetDir: string;
 ```
 
@@ -113,7 +113,7 @@ The template version.
 
 **Value**
 
-```js
+```ts
 version: {
     oldVersion: string | null;
     newVersion: string;
@@ -137,7 +137,7 @@ Gets the application name, such as the `name` field in `package.json`.
 
 **Syntax**
 
-```js
+```ts
 context.getApplicationName([options]);
 ```
 
@@ -173,7 +173,7 @@ Returns a CSS class selector derived from the application name.
 
 **Syntax**
 
-```js
+```ts
 context.getApplicationSelector();
 ```
 
@@ -204,7 +204,7 @@ Returns a slug derived from the application name.
 
 **Syntax**
 
-```js
+```ts
 context.getApplicationSlug();
 ```
 
@@ -231,7 +231,7 @@ The key must have been declared with `addParameter` in the build hook.
 
 **Syntax**
 
-```js
+```ts
 context.getParameter(key);
 ```
 
@@ -265,7 +265,7 @@ Reads file content.
 
 **Syntax**
 
-```js
+```ts
 context.readFile(filePath);
 ```
 
@@ -291,7 +291,7 @@ Reads and parses a JSON file.
 
 **Syntax**
 
-```js
+```ts
 context.readJsonFile(filePath);
 ```
 
@@ -323,7 +323,7 @@ Replacements happen line by line.
 
 **Syntax**
 
-```js
+```ts
 context.replaceInFile(filePath, [matcher], pattern, replacement);
 ```
 
@@ -357,7 +357,7 @@ Overrides the default message shown after the application is created or updated.
 
 **Syntax**
 
-```js
+```ts
 context.setMessage(text, [delimiter]);
 ```
 
@@ -390,7 +390,7 @@ Objects are updated recursively, keys set to `undefined` are removed, and arrays
 
 **Syntax**
 
-```js
+```ts
 context.updateJsonFile(filePath, content);
 ```
 
@@ -422,7 +422,7 @@ Writes content to a file.
 
 **Syntax**
 
-```js
+```ts
 context.writeFile(filePath, content);
 ```
 
@@ -450,7 +450,7 @@ Serializes JSON and writes it to a file.
 
 **Syntax**
 
-```js
+```ts
 context.writeJsonFile(filePath, content);
 ```
 

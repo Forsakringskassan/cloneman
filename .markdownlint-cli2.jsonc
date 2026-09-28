@@ -16,13 +16,15 @@
         "extends": "markdownlint/style/prettier",
 
         /* customizations */
+        "fenced-code-language": {
+            "allowed_languages": ["bash", "diff", "json", "plaintext", "ts"],
+        },
         "heading-style": { "style": "atx" },
         "line-length": false,
         "no-duplicate-heading": { "siblings_only": true },
         "no-hard-tabs": { "spaces_per_tab": 4 },
 
         /* technical debt */
-        "fenced-code-language": false,
         "max-one-sentence-per-line": false,
         "no-emphasis-as-heading": false,
         "no-space-in-code": false,

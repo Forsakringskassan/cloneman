@@ -29,7 +29,7 @@ A console instance to use for logging.
 
 **Value**
 
-```js
+```ts
 logger: Console;
 ```
 
@@ -45,7 +45,7 @@ The output directory where files are written.
 
 **Value**
 
-```js
+```ts
 targetDir: string;
 ```
 
@@ -61,7 +61,7 @@ The template directory, typically the root of the template repository.
 
 **Value**
 
-```js
+```ts
 templateDir: string;
 ```
 
@@ -77,7 +77,7 @@ Builds a cloneman template.
 
 **Syntax**
 
-```js
+```ts
 buildTemplate(name, [config]);
 ```
 

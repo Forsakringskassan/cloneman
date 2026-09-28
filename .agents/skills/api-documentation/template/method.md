@@ -4,7 +4,7 @@ ${description}
 
 **Syntax**
 
-```js
+```ts
 ${prototype};
 ```
 
