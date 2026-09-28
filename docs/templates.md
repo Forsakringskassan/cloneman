@@ -272,4 +272,4 @@ To enable TypeScript support for the Cloneman scripts you first need a `.clonema
 }
 ```
 
-Optional: if you want to type-check the scripts from a build pipeline either run `tsc -p .cloneman/tsconfig.json` (recommended) or include it with `references` from the main `tsconfig.json `.
+Optional: if you want to type-check the scripts from a build pipeline either run `tsc -p .cloneman/tsconfig.json` (recommended) or include it with `references` from the main `tsconfig.json`.
