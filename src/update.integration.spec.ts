@@ -747,6 +747,42 @@ describe("update with sub-package.json files", () => {
           }
         `);
     });
+
+    it("Should reset other parts of the package.json", async () => {
+        expect.assertions(1);
+
+        const packageJson =
+            await readJsonFile<ApplicationPackageJson>("docs/package.json");
+        packageJson.scripts = {
+            modified: "by user",
+        };
+        await writeJsonFile(
+            path.join(appDir, "docs", "package.json"),
+            packageJson,
+            {
+                indent: 2,
+                trailer: "",
+            },
+        );
+
+        /* update the application */
+        await update({
+            cwd: appDir,
+            version: "1.1.0",
+            env: userEnv,
+            parameters: new Map(),
+            ifSameFilehash: false,
+        });
+
+        const docsPackageJson =
+            await readJsonFile<PackageJson>("docs/package.json");
+
+        expect(docsPackageJson.scripts).toMatchInlineSnapshot(`
+          {
+            a: foo,
+          }
+        `);
+    });
 });
 
 describe("IfSameFilehash option", () => {
@@ -909,6 +945,95 @@ describe("IfSameFilehash option", () => {
                 ifSameFilehash: true,
             });
             expect(runHookSpy).not.toHaveBeenCalled();
+        });
+    });
+
+    describe("with sub-package-json@1.0.0", () => {
+        beforeEach(async () => {
+            await create({
+                name: "mock-app",
+                templatePackage: "@forsakringskassan/sub-package-json@1.0.0",
+                cwd,
+                env: userEnv,
+                parameters: new Map(),
+            });
+        });
+
+        it("should succeed since only dependencies are updated", async () => {
+            expect.assertions(1);
+
+            await expect(
+                update({
+                    cwd: appDir,
+                    version: "1.1.0",
+                    env: userEnv,
+                    parameters: new Map(),
+                    ifSameFilehash: true,
+                }),
+            ).resolves.not.toThrow();
+        });
+
+        it("should update the nested package.json dependencies and devDependencies", async () => {
+            expect.assertions(2);
+
+            await update({
+                cwd: appDir,
+                version: "1.1.0",
+                env: userEnv,
+                parameters: new Map(),
+                ifSameFilehash: false,
+            });
+
+            const docsPackageJson =
+                await readJsonFile<PackageJson>("docs/package.json");
+
+            expect(docsPackageJson.devDependencies).toMatchInlineSnapshot(`
+              {
+                @forsakringskassan/application-owned: 1.0.0,
+                @forsakringskassan/template-owned: 1.1.0,
+              }
+            `);
+            expect(docsPackageJson.dependencies).toMatchInlineSnapshot(`
+              {
+                @forsakringskassan/api-lib-a: 1.1.0,
+                @forsakringskassan/api-lib-b: 1.1.0,
+              }
+            `);
+        });
+
+        it("should not modify other fields in nested package.json", async () => {
+            expect.assertions(1);
+
+            const packageJson =
+                await readJsonFile<ApplicationPackageJson>("docs/package.json");
+            packageJson.scripts = {
+                modified: "by user",
+            };
+            await writeJsonFile(
+                path.join(appDir, "docs", "package.json"),
+                packageJson,
+                {
+                    indent: 2,
+                    trailer: "",
+                },
+            );
+
+            await update({
+                cwd: appDir,
+                version: "1.1.0",
+                env: userEnv,
+                parameters: new Map(),
+                ifSameFilehash: true,
+            });
+
+            const docsPackageJson =
+                await readJsonFile<PackageJson>("docs/package.json");
+
+            expect(docsPackageJson.scripts).toMatchInlineSnapshot(`
+              {
+                modified: by user,
+              }
+            `);
         });
     });
 });

@@ -1,16 +1,15 @@
 import { createHash } from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { type PackageJson } from "../../utils";
+import { type PackageJson, readJsonFile } from "../../utils";
 import { getStoredFileName } from "./get-stored-file-name";
 
 /**
  * Creates a SHA-256 hash from the contents of all managed template files.
  *
- *
- * The template's `package.json` is included with `dependencies`,
- * `devDependencies` and `version` stripped, since those are expected to
- * change without requiring a rebuild.
+ * All `package.json` files found (both root and in subdirectories) are included with
+ * `dependencies`, `devDependencies` and `version` stripped, since those are
+ * expected to change without requiring a rebuild.
  *
  * @internal
  */
@@ -39,5 +38,10 @@ async function readManagedFile(
 ): Promise<Buffer> {
     const filePath = path.join(filesDir, getStoredFileName(file));
     const raw = await fs.readFile(filePath);
+
+    if (path.basename(file) === "package.json") {
+        return hashPackageJson(await readJsonFile<PackageJson>(filePath));
+    }
+
     return raw;
 }
