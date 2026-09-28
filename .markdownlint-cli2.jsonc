@@ -1,0 +1,40 @@
+{
+    "gitignore": true,
+    "globs": ["**/*.md"],
+    "ignores": [
+        "**/node_modules/**",
+        "etc/*.api.md",
+        "etc/docs-manifest.md",
+        "fixtures/**/*.md",
+    ],
+    "customRules": ["markdownlint-rule-max-one-sentence-per-line"],
+    "config": {
+        /* enable all rules by default */
+        "default": true,
+
+        /* disable rules overlapping with prettier */
+        "extends": "markdownlint/style/prettier",
+
+        /* customizations */
+        "heading-style": { "style": "atx" },
+        "line-length": false,
+        "no-duplicate-heading": { "siblings_only": true },
+        "no-hard-tabs": { "spaces_per_tab": 4 },
+
+        /* technical debt */
+        "fenced-code-language": false,
+        "max-one-sentence-per-line": false,
+        "no-emphasis-as-heading": false,
+        "no-space-in-code": false,
+    },
+    "overrides": [
+        {
+            "filter": [".agents/**/template/*.md"],
+            "combine": "merge",
+            "config": {
+                /* these are partial documents */
+                "first-line-h1": false,
+            },
+        },
+    ],
+}

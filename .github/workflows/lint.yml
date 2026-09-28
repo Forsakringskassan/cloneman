@@ -23,6 +23,9 @@ jobs:
             - name: ESLint
               if: success() || failure()
               run: npm run eslint -- --max-warnings 0
+            - name: Markdownlint
+              if: success() || failure()
+              run: npm run markdownlint
 
     npm-pkg-lint:
         runs-on: ubuntu-latest
