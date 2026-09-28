@@ -834,6 +834,47 @@ describe("IfSameFilehash option", () => {
             await expect(readFile("managed.txt")).rejects.toThrow();
         });
 
+        it("should only modify dependencies", async () => {
+            expect.assertions(3);
+
+            const packageJson =
+                await readJsonFile<ApplicationPackageJson>("package.json");
+
+            packageJson.scripts = { modified: "by user" };
+
+            await writeJsonFile(
+                path.join(appDir, "package.json"),
+                packageJson,
+                {
+                    indent: 2,
+                    trailer: "",
+                },
+            );
+
+            await update({
+                cwd: appDir,
+                version: "1.0.3",
+                env: userEnv,
+                parameters: new Map(),
+                ifSameFilehash: true,
+            });
+
+            const newPackageJson =
+                await readJsonFile<ApplicationPackageJson>("package.json");
+
+            expect(newPackageJson.scripts).toEqual({ modified: "by user" });
+
+            expect(newPackageJson.devDependencies).toEqual({
+                "@forsakringskassan/base-template": "1.0.3",
+                "@forsakringskassan/lib-used-by-templates": "1.0.0",
+                cloneman: ".",
+            });
+            expect(newPackageJson.dependencies).toEqual({
+                "@forsakringskassan/api-lib-a": "2.0.0",
+                "@forsakringskassan/api-lib-b": "2.0.0",
+            });
+        });
+
         it("hooks should not be called", async () => {
             expect.assertions(1);
 
