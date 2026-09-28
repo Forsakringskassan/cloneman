@@ -8,13 +8,19 @@ interface UpdateArguments {
     target: string | undefined;
     param: string[];
     "if-same-filehash": boolean;
+    "only-dependencies": boolean;
 }
 
 async function updateHandler(
     context: Context,
     argv: UpdateArguments,
 ): Promise<void> {
-    const { target, param, "if-same-filehash": ifSameFilehash } = argv;
+    const {
+        target,
+        param,
+        "if-same-filehash": ifSameFilehash,
+        "only-dependencies": onlyDependencies,
+    } = argv;
     const { cwd } = context;
 
     const version = target ?? "latest";
@@ -32,7 +38,7 @@ async function updateHandler(
             env: {},
             parameters,
             spinner,
-            ifSameFilehash,
+            ifSameFilehash: ifSameFilehash || onlyDependencies,
         });
     } catch (err) {
         spinner.stop();
@@ -66,7 +72,16 @@ export function updateCommand(
                 .option("if-same-filehash", {
                     describe:
                         "Only update if thefile hash match between versions.\n" +
-                        "A matching filehash means the managed files are unchanged between versions and only dependencies are updated.",
+                        "A matching filehash means the managed files are unchanged between versions and only dependencies are updated.\n" +
+                        "This option is deprecated and replaced by --only-dependencies.",
+                    type: "boolean",
+                    deprecated: true,
+                    default: false,
+                })
+                .option("only-dependencies", {
+                    describe:
+                        "Only update the dependencies & devDependencies for the application, leaving other managed files untouched.\n" +
+                        "This option only works if the content of managed files has not changed between versions. If the list has changed, the command will fail and you must perform a full update.",
                     type: "boolean",
                     default: false,
                 })

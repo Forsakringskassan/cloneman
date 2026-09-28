@@ -17,9 +17,12 @@ Values can also be supplied non-interactively using `--param key=value`:
 
 The `--param` flag can be used multiple times.
 
-### --if-same-filehash
+### --only-dependencies
 
-If this option is enabled, the update task will fail if the before and after filehash differ.
+Updates only the dependencies and devDependencies without modifying other files.
+
+**Important limitation**:
+The content of managed files must remain unchanged between versions. If the file list has changed, an error is thrown and a full update is required.
 
 A common use case for this feature is within a Renovate postUpgradeTask, where you only want the update to proceed if no managed files are modified.
 
