@@ -39,6 +39,12 @@ let cwd: string;
 let appDir: string;
 
 const userEnv = inject("userEnv");
+function deleteFile(filePath: string): Promise<void> {
+    return fs.rm(path.join(appDir, filePath));
+}
+function writeFile(filePath: string, content: string): Promise<void> {
+    return fs.writeFile(path.join(appDir, filePath), content, "utf8");
+}
 
 function readFile(filePath: string): Promise<string> {
     return fs.readFile(path.join(appDir, filePath), "utf8");
@@ -769,46 +775,78 @@ describe("IfSameFilehash option", () => {
         expect(cloneman?.version).toBe("1.0.0");
     });
 
-    it("should succeed if the file hash matches the expected value", async () => {
-        expect.assertions(1);
-        await create({
-            name: "mock-app",
-            templatePackage: "@forsakringskassan/base-template@1.0.2",
-            cwd,
-            env: userEnv,
-            parameters: new Map(),
+    describe("with base-template@1.0.2", () => {
+        beforeEach(async () => {
+            await create({
+                name: "mock-app",
+                templatePackage: "@forsakringskassan/base-template@1.0.2",
+                cwd,
+                env: userEnv,
+                parameters: new Map(),
+            });
         });
 
-        await expect(
-            update({
+        it("should succeed if the file hash matches the expected value", async () => {
+            expect.assertions(1);
+
+            await expect(
+                update({
+                    cwd: appDir,
+                    version: "1.0.3",
+                    env: userEnv,
+                    parameters: new Map(),
+                    ifSameFilehash: true,
+                }),
+            ).resolves.not.toThrow();
+        });
+
+        it("files should not be modified", async () => {
+            expect.assertions(1);
+
+            await writeFile("managed.txt", "modified");
+
+            await update({
                 cwd: appDir,
                 version: "1.0.3",
                 env: userEnv,
                 parameters: new Map(),
                 ifSameFilehash: true,
-            }),
-        ).resolves.not.toThrow();
-    });
+            });
 
-    it("hooks should not be called", async () => {
-        expect.assertions(1);
-        await create({
-            name: "mock-app",
-            templatePackage: "@forsakringskassan/base-template@1.0.2",
-            cwd,
-            env: userEnv,
-            parameters: new Map(),
+            expect(await readFile("managed.txt")).toMatchInlineSnapshot(
+                `modified`,
+            );
         });
 
-        const runHookSpy = vi.spyOn(utils, "runHook");
+        it("removed files should not be re added", async () => {
+            expect.assertions(1);
 
-        await update({
-            cwd: appDir,
-            version: "1.0.3",
-            env: userEnv,
-            parameters: new Map(),
-            ifSameFilehash: true,
+            await deleteFile("managed.txt");
+
+            await update({
+                cwd: appDir,
+                version: "1.0.3",
+                env: userEnv,
+                parameters: new Map(),
+                ifSameFilehash: true,
+            });
+
+            await expect(readFile("managed.txt")).rejects.toThrow();
         });
-        expect(runHookSpy).not.toHaveBeenCalled();
+
+        it("hooks should not be called", async () => {
+            expect.assertions(1);
+
+            const runHookSpy = vi.spyOn(utils, "runHook");
+
+            await update({
+                cwd: appDir,
+                version: "1.0.3",
+                env: userEnv,
+                parameters: new Map(),
+                ifSameFilehash: true,
+            });
+            expect(runHookSpy).not.toHaveBeenCalled();
+        });
     });
 });

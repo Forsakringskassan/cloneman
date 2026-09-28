@@ -254,6 +254,30 @@ export async function update(options: {
                 });
             }
 
+            const finalPackageJson = createUpdatedPackageJson({
+                currentPackageJson: appPackageJson,
+                templatePackageJson: tmplPackageJson,
+                tarballPackageJson,
+                version: packageJsonVersion,
+                dependencies,
+                devDependencies,
+                parameters,
+                fileHash,
+            });
+
+            await writeJsonFile(
+                path.join(appDir, "package.json"),
+                finalPackageJson,
+                {
+                    indent: 2,
+                    trailer: "\n",
+                },
+            );
+
+            if (ifSameFilehash) {
+                return;
+            }
+
             await text("Removing obsolete files", () => {
                 return removeFiles(tarballPackageJson.cloneman, {
                     cwd: appDir,
@@ -297,30 +321,6 @@ export async function update(options: {
                         trailer: "\n",
                     },
                 );
-            }
-
-            const finalPackageJson = createUpdatedPackageJson({
-                currentPackageJson: appPackageJson,
-                templatePackageJson: tmplPackageJson,
-                tarballPackageJson,
-                version: packageJsonVersion,
-                dependencies,
-                devDependencies,
-                parameters,
-                fileHash,
-            });
-
-            await writeJsonFile(
-                path.join(appDir, "package.json"),
-                finalPackageJson,
-                {
-                    indent: 2,
-                    trailer: "\n",
-                },
-            );
-
-            if (ifSameFilehash) {
-                return;
             }
 
             const hooksDir = path.join(templateDir, "hooks");
