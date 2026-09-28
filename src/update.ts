@@ -263,6 +263,7 @@ export async function update(options: {
                 devDependencies,
                 parameters,
                 fileHash,
+                onlyDependencies: ifSameFilehash,
             });
 
             await writeJsonFile(
