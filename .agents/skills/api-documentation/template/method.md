@@ -2,13 +2,13 @@
 
 ${description}
 
-**Syntax**
+### Syntax
 
 ```ts
 ${prototype};
 ```
 
-**Parameters**
+### Parameters
 
 : `${parameter}: ${type}`${optional suffix}
 ${parameter description}
@@ -20,7 +20,7 @@ ${property description}
 Default `${default}`.
 <!-- Omit the preceding line when no default is known. -->
 
-**Return value**
+### Return value
 
 Returns ${return value}.
 

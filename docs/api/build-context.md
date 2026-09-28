@@ -27,7 +27,7 @@ A console instance to use for logging.
 > [!CAUTION]
 > Do not write directly to stdout or stderr.
 
-**Value**
+### Value
 
 ```ts
 logger: Console;
@@ -43,7 +43,7 @@ context.logger.info("Building template");
 
 The output directory where files are written.
 
-**Value**
+### Value
 
 ```ts
 targetDir: string;
@@ -59,7 +59,7 @@ context.logger.info(context.targetDir);
 
 The template directory, typically the root of the template repository.
 
-**Value**
+### Value
 
 ```ts
 templateDir: string;
@@ -75,13 +75,13 @@ context.logger.info(context.templateDir);
 
 Builds a cloneman template.
 
-**Syntax**
+### Syntax
 
 ```ts
 buildTemplate(name, [config]);
 ```
 
-**Parameters**
+### Parameters
 
 : `name: string`
 The name to publish this package as.
@@ -92,7 +92,7 @@ Template configuration.
 : `config: NormalizedTemplateConfig`
 A normalized template configuration.
 
-**Return value**
+### Return value
 
 A promise resolved with the built template result as [`BuildTemplateResult`](./build-template-result.md).
 

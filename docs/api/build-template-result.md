@@ -30,7 +30,7 @@ interface BuildTemplateResult {
 
 The files included in the template.
 
-**Value**
+### Value
 
 ```ts
 files: string[];
@@ -50,13 +50,13 @@ Parameters are collected during `create` and `update`, interactively or through 
 > [!CAUTION]
 > Do not use parameters for sensitive information such as API keys or passwords.
 
-**Syntax**
+### Syntax
 
 ```ts
 template.addParameter(key, [definition]);
 ```
 
-**Parameters**
+### Parameters
 
 : `key: string`
 Parameter key.
@@ -80,7 +80,7 @@ Regular expression used to validate the parameter value.
 : `definition.required: boolean` (optional)
 When `true`, the user must provide a non-empty value.
 
-**Return value**
+### Return value
 
 Returns nothing.
 
@@ -100,17 +100,17 @@ template.addParameter("repository", {
 
 Appends template-specific dependencies to the `ignoreDeps` array in the template's `renovate.json`, so Renovate ignores template-managed dependencies.
 
-**Syntax**
+### Syntax
 
 ```ts
 template.renovateIgnoreDependencies();
 ```
 
-**Parameters**
+### Parameters
 
 This method has no parameters.
 
-**Return value**
+### Return value
 
 A promise resolved when `renovate.json` has been updated.
 
@@ -131,13 +131,13 @@ Replacements happen line by line.
 > Use the global `/g` flag to replace multiple matches when `pattern` is a regular expression.
 > Without it, only the first occurrence is replaced.
 
-**Syntax**
+### Syntax
 
 ```ts
 template.replaceInFile(filePath, [matcher], pattern, replacement);
 ```
 
-**Parameters**
+### Parameters
 
 : `filePath: string`
 Path relative to the application root.
@@ -152,7 +152,7 @@ Pattern to replace in the file.
 Replacement value.
 When using a function it receives the matched `pattern` as well as each regular expression capture group.
 
-**Return value**
+### Return value
 
 A promise resolved when the file has been updated.
 
@@ -171,13 +171,13 @@ Updates the JSON file at the given path with the given content.
 
 Existing indentation and a trailing newline are preserved when present.
 
-**Syntax**
+### Syntax
 
 ```ts
 template.updateJson(filePath, content);
 ```
 
-**Parameters**
+### Parameters
 
 : `filePath: string`
 Path relative to the template root.
@@ -185,7 +185,7 @@ Path relative to the template root.
 : `content: unknown`
 Content to add to the existing JSON.
 
-**Return value**
+### Return value
 
 A promise resolved when the JSON file has been updated.
 
@@ -205,13 +205,13 @@ await template.updateJson("package.json", {
 
 Writes a file to the template's file directory.
 
-**Syntax**
+### Syntax
 
 ```ts
 template.writeFile(filePath, content);
 ```
 
-**Parameters**
+### Parameters
 
 : `filePath: string`
 Path relative to the template root.
@@ -219,7 +219,7 @@ Path relative to the template root.
 : `content: string`
 Content to write to the file.
 
-**Return value**
+### Return value
 
 A promise resolved when the file has been written.
 

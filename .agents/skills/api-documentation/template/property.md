@@ -2,7 +2,7 @@
 
 ${description}
 
-**Value**
+### Value
 
 ```ts
 ${prototype};

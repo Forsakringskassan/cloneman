@@ -41,13 +41,13 @@ interface InstallContext {
 
 The command being issued by the user.
 
-**Value**
+### Value
 
 ```ts
 command: "create" | "update";
 ```
 
-**Example:**
+### Example
 
 ```ts
 if (context.command === "update") {
@@ -62,13 +62,13 @@ A console instance to use for logging.
 > [!CAUTION]
 > Do not write directly to stdout or stderr.
 
-**Value**
+### Value
 
 ```ts
 logger: Console;
 ```
 
-**Example:**
+### Example
 
 ```ts
 context.logger.info("Installing template files");
@@ -78,13 +78,13 @@ context.logger.info("Installing template files");
 
 The application directory, relative to the current working directory.
 
-**Value**
+### Value
 
 ```ts
 relativeTargetDir: string;
 ```
 
-**Example:**
+### Example
 
 ```ts
 context.logger.info(`Updating ${context.relativeTargetDir}`);
@@ -94,13 +94,13 @@ context.logger.info(`Updating ${context.relativeTargetDir}`);
 
 The application directory being created or updated.
 
-**Value**
+### Value
 
 ```ts
 targetDir: string;
 ```
 
-**Example:**
+### Example
 
 ```ts
 context.logger.info(`Writing files to ${context.targetDir}`);
@@ -111,7 +111,7 @@ context.logger.info(`Writing files to ${context.targetDir}`);
 The template version.
 `oldVersion` is `null` when creating a new application.
 
-**Value**
+### Value
 
 ```ts
 version: {
@@ -120,7 +120,7 @@ version: {
 }
 ```
 
-**Example:**
+### Example
 
 ```ts
 /* Would only run if an update is performed. */
@@ -135,13 +135,13 @@ if (context.version.oldVersion) {
 
 Gets the application name, such as the `name` field in `package.json`.
 
-**Syntax**
+### Syntax
 
 ```ts
 context.getApplicationName([options]);
 ```
 
-**Parameters**
+### Parameters
 
 : `options: object` (optional)
 Optional options.
@@ -150,11 +150,11 @@ Optional options.
 Set to `true` to omit the package scope.
 Default `false`.
 
-**Return value**
+### Return value
 
 Returns the application name as `string`.
 
-**Example:**
+### Example
 
 ```ts
 console.log(context.getApplicationName({ unscoped: true }));
@@ -171,21 +171,21 @@ Returns a CSS class selector derived from the application name.
 - name is lowercased
 - all non-alphanumeric characters except for hyphens and underscores are removed.
 
-**Syntax**
+### Syntax
 
 ```ts
 context.getApplicationSelector();
 ```
 
-**Parameters**
+### Parameters
 
 This method has no parameters.
 
-**Return value**
+### Return value
 
 Returns the application CSS selector as `string`.
 
-**Example:**
+### Example
 
 ```ts
 console.log(context.getApplicationSelector());
@@ -202,21 +202,21 @@ Returns a slug derived from the application name.
 - name is lowercased
 - all non-alphanumeric characters except for hyphens and underscores are removed.
 
-**Syntax**
+### Syntax
 
 ```ts
 context.getApplicationSlug();
 ```
 
-**Parameters**
+### Parameters
 
 This method has no parameters.
 
-**Return value**
+### Return value
 
 Returns the application slug as `string`.
 
-**Example:**
+### Example
 
 ```ts
 console.log(context.getApplicationSlug());
@@ -229,22 +229,22 @@ Given an application named `@scope/foobar`, the example outputs `scope--foobar`.
 Gets a template parameter value by key.
 The key must have been declared with `addParameter` in the build hook.
 
-**Syntax**
+### Syntax
 
 ```ts
 context.getParameter(key);
 ```
 
-**Parameters**
+### Parameters
 
 : `key: string`
 The declared parameter key.
 
-**Return value**
+### Return value
 
 Returns the parameter value as `string`.
 
-**Example:**
+### Example
 
 ```ts
 const repository = context.getParameter("repository");
@@ -263,22 +263,22 @@ the example sets `repository.url` in `package.json` to
 
 Reads file content.
 
-**Syntax**
+### Syntax
 
 ```ts
 context.readFile(filePath);
 ```
 
-**Parameters**
+### Parameters
 
 : `filePath: string`
 Path relative to the application root.
 
-**Return value**
+### Return value
 
 A promise resolved with the file content as `string`.
 
-**Example:**
+### Example
 
 ```ts
 const readme = await context.readFile("README.md");
@@ -289,22 +289,22 @@ context.logger.info(readme);
 
 Reads and parses a JSON file.
 
-**Syntax**
+### Syntax
 
 ```ts
 context.readJsonFile(filePath);
 ```
 
-**Parameters**
+### Parameters
 
 : `filePath: string`
 Path relative to the application root.
 
-**Return value**
+### Return value
 
 A promise resolved with the parsed file content as `T`.
 
-**Example:**
+### Example
 
 ```ts
 const packageJson = await context.readJsonFile("package.json");
@@ -321,13 +321,13 @@ Replacements happen line by line.
 > Use the global `/g` flag to replace multiple matches when `pattern` is a regular expression.
 > Without it, only the first occurrence is replaced.
 
-**Syntax**
+### Syntax
 
 ```ts
 context.replaceInFile(filePath, [matcher], pattern, replacement);
 ```
 
-**Parameters**
+### Parameters
 
 : `filePath: string`
 Path relative to the application root.
@@ -342,11 +342,11 @@ Pattern to replace in the file.
 Replacement value.
 When using a function it receives the matched `pattern` as well as each regular expression capture group.
 
-**Return value**
+### Return value
 
 A promise resolved when the file has been updated.
 
-**Example:**
+### Example
 
 ```ts
 await context.replaceInFile("README.md", "Old name", "New name");
@@ -356,13 +356,13 @@ await context.replaceInFile("README.md", "Old name", "New name");
 
 Overrides the default message shown after the application is created or updated.
 
-**Syntax**
+### Syntax
 
 ```ts
 context.setMessage(text, [delimiter]);
 ```
 
-**Parameters**
+### Parameters
 
 : `text: string | string[]`
 The message to show.
@@ -372,11 +372,11 @@ Arrays are joined with `delimiter`.
 Delimiter for array values.
 Defaults to `\n`.
 
-**Return value**
+### Return value
 
 Returns nothing.
 
-**Example:**
+### Example
 
 ```ts
 context.setMessage("Template update complete");
@@ -389,13 +389,13 @@ The message is shown after the application has been created or updated.
 Updates a JSON file.
 Objects are updated recursively, keys set to `undefined` are removed, and arrays are replaced.
 
-**Syntax**
+### Syntax
 
 ```ts
 context.updateJsonFile(filePath, content);
 ```
 
-**Parameters**
+### Parameters
 
 : `filePath: string`
 Path relative to the application root.
@@ -403,11 +403,11 @@ Path relative to the application root.
 : `content: object`
 Content to add to the existing JSON.
 
-**Return value**
+### Return value
 
 A promise resolved when the JSON file has been updated.
 
-**Example:**
+### Example
 
 ```ts
 await context.updateJsonFile("package.json", {
@@ -421,13 +421,13 @@ await context.updateJsonFile("package.json", {
 
 Writes content to a file.
 
-**Syntax**
+### Syntax
 
 ```ts
 context.writeFile(filePath, content);
 ```
 
-**Parameters**
+### Parameters
 
 : `filePath: string`
 Path relative to the application root.
@@ -435,11 +435,11 @@ Path relative to the application root.
 : `content: string`
 Content to write.
 
-**Return value**
+### Return value
 
 A promise resolved when the file has been written.
 
-**Example:**
+### Example
 
 ```ts
 await context.writeFile(".nvmrc", "24\n");
@@ -449,13 +449,13 @@ await context.writeFile(".nvmrc", "24\n");
 
 Serializes JSON and writes it to a file.
 
-**Syntax**
+### Syntax
 
 ```ts
 context.writeJsonFile(filePath, content);
 ```
 
-**Parameters**
+### Parameters
 
 : `filePath: string`
 Path relative to the application root.
@@ -463,11 +463,11 @@ Path relative to the application root.
 : `content: unknown`
 Content to write.
 
-**Return value**
+### Return value
 
 A promise resolved when the JSON file has been written.
 
-**Example:**
+### Example
 
 ```ts
 await context.writeJsonFile("package.json", {
