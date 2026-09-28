@@ -89,8 +89,13 @@ function updateNestedPackageJson(
     currentSubPackageJson: PackageJson,
     uninstallDependencies: string[],
     ignoredDependencies: string[],
+    onlyDevDependencies: boolean,
 ): PackageJson {
-    const massagedSubPackageJson = { ...nestedPackageJson.packageJson };
+    const sourceJson = onlyDevDependencies
+        ? currentSubPackageJson
+        : nestedPackageJson.packageJson;
+
+    const massagedSubPackageJson = { ...sourceJson };
 
     massagedSubPackageJson.dependencies = filterDependencies({
         appDependencies: currentSubPackageJson.dependencies,
@@ -275,31 +280,29 @@ export async function update(options: {
                 },
             );
 
-            if (ifSameFilehash) {
-                return;
-            }
-
-            await text("Removing obsolete files", () => {
-                return removeFiles(tarballPackageJson.cloneman, {
-                    cwd: appDir,
-                });
-            });
-
-            await text("Copying managed files", () => {
-                return copyFiles(files, tarballPackageJson.cloneman, {
-                    cwd: appDir,
-                });
-            });
-
-            await text("Updating partially managed files", () => {
-                return updatePartiallyManagedFiles(
-                    files,
-                    tarballPackageJson.cloneman,
-                    {
+            if (!ifSameFilehash) {
+                await text("Removing obsolete files", () => {
+                    return removeFiles(tarballPackageJson.cloneman, {
                         cwd: appDir,
-                    },
-                );
-            });
+                    });
+                });
+
+                await text("Copying managed files", () => {
+                    return copyFiles(files, tarballPackageJson.cloneman, {
+                        cwd: appDir,
+                    });
+                });
+
+                await text("Updating partially managed files", () => {
+                    return updatePartiallyManagedFiles(
+                        files,
+                        tarballPackageJson.cloneman,
+                        {
+                            cwd: appDir,
+                        },
+                    );
+                });
+            }
 
             const nestedPackageJsons = await findPackageJson(filesDir);
             for (const templatePackageJson of nestedPackageJsons) {
@@ -312,6 +315,7 @@ export async function update(options: {
                     currentPackageJson,
                     uninstallDependencies,
                     ignoredDependencies,
+                    ifSameFilehash,
                 );
 
                 await writeJsonFile(
@@ -322,6 +326,10 @@ export async function update(options: {
                         trailer: "\n",
                     },
                 );
+            }
+
+            if (ifSameFilehash) {
+                return;
             }
 
             const hooksDir = path.join(templateDir, "hooks");
