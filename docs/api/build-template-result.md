@@ -149,7 +149,8 @@ Regular expression that identifies lines where replacements are made.
 Pattern to replace in the file.
 
 : `replacement: string | ((match: string, ...args: string[]) => string)`
-Replacement value. When using a function it receives the matched `pattern` as well as each regular expression capture group.
+Replacement value.
+When using a function it receives the matched `pattern` as well as each regular expression capture group.
 
 **Return value**
 

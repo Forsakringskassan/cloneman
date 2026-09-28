@@ -6,7 +6,8 @@
 
 ### version
 
-The version to update to. This argument is optional and defaults to `latest` if it is not specified.
+The version to update to.
+This argument is optional and defaults to `latest` if it is not specified.
 
 ### --param
 

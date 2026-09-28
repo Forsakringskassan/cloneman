@@ -17,7 +17,8 @@ Available commands
 
 Keep in mind that `template-package-name` needs to be published to the npm registry.
 
-The latest version of the template is installed by default. To install a specific version, specify it using the `@version` suffix:
+The latest version of the template is installed by default.
+To install a specific version, specify it using the `@version` suffix:
 `npx cloneman@latest create my-new-application template-package-name@1.2.3`
 
 You can also refer to a local template file:
@@ -70,7 +71,8 @@ After migrating, run update to apply the template files:
 
 `npx cloneman@latest update`
 
-Note: the migration won't modify any files other than `package.json`, which connects your application to a specific template. It is up to the update command to actually modify the repository.
+Note: the migration won't modify any files other than `package.json`, which connects your application to a specific template.
+It is up to the update command to actually modify the repository.
 
 ## Get Template Parameters
 

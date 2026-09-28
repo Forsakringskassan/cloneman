@@ -157,7 +157,8 @@ where:
 
 ### Sorting
 
-Cloneman automatically sorts `package.json` (with [sort-package-json](https://www.npmjs.com/package/sort-package-json)) both when building a template and when a consumer runs the `update` command. Template maintainers cannot customize or disable this sorting.
+Cloneman automatically sorts `package.json` (with [sort-package-json](https://www.npmjs.com/package/sort-package-json)) both when building a template and when a consumer runs the `update` command.
+Template maintainers cannot customize or disable this sorting.
 
 ### Update
 
