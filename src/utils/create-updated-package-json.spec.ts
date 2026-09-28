@@ -44,6 +44,7 @@ describe("createUpdatedPackageJson", () => {
             version: "1.2.3",
             parameters: new Map(),
             fileHash: "hash",
+            onlyDependencies: false,
         });
 
         expect(JSON.stringify(result, null, 2)).toMatchInlineSnapshot(`
@@ -97,6 +98,7 @@ describe("createUpdatedPackageJson", () => {
             version: "1.2.3",
             parameters: new Map(),
             fileHash: "hash",
+            onlyDependencies: false,
         });
 
         expect(Object.keys(result)).toStrictEqual([
@@ -142,6 +144,7 @@ describe("createUpdatedPackageJson", () => {
             version: "1.2.3",
             parameters: new Map(),
             fileHash: "hash",
+            onlyDependencies: false,
         });
 
         expect(result).toMatchInlineSnapshot(`
@@ -192,6 +195,7 @@ describe("createUpdatedPackageJson", () => {
             version: "1.2.3",
             parameters: new Map(),
             fileHash: "hash",
+            onlyDependencies: false,
         });
 
         expect(result.scripts).toEqual({ template: "template" });
@@ -219,6 +223,7 @@ describe("createUpdatedPackageJson", () => {
             version: "1.2.3",
             parameters: new Map(),
             fileHash: "hash",
+            onlyDependencies: false,
         });
         expect(result.dependencies).toEqual({ provided: "provided" });
     });
@@ -245,6 +250,7 @@ describe("createUpdatedPackageJson", () => {
             version: "1.2.3",
             parameters: new Map(),
             fileHash: "hash",
+            onlyDependencies: false,
         });
         expect(result.devDependencies).toEqual({
             "@forsakringskassan/template": "1.2.3",
@@ -274,6 +280,7 @@ describe("createUpdatedPackageJson", () => {
             version: "1.2.3",
             parameters: new Map(),
             fileHash: "hash",
+            onlyDependencies: false,
         });
         expect(result.repository).toBeUndefined();
         expect(result.author).toBeUndefined();
@@ -302,6 +309,7 @@ describe("createUpdatedPackageJson", () => {
             version: "1.2.3",
             parameters: new Map(),
             fileHash: "hash",
+            onlyDependencies: false,
         });
         expect(result.scripts).toEqual({ foo: "bar" });
         expect(Object.keys(result)).toContain("scripts");
@@ -328,8 +336,73 @@ describe("createUpdatedPackageJson", () => {
             version: "1.2.3",
             parameters: new Map(),
             fileHash: "hash",
+            onlyDependencies: false,
         });
         expect(result.scripts).toBeUndefined();
         expect(Object.keys(result)).not.toContain("scripts");
+    });
+
+    describe("with same filehash", () => {
+        it("should retain user modifications when filehash is the same", () => {
+            expect.assertions(1);
+
+            const currentPackageJson: PackageJson = {
+                name: "implementation",
+                scripts: { modified: "by user" }, // Either modified by the user or inherited from the original template
+                version: "1.0.0",
+                license: "implementation",
+                author: "implementation",
+                description: "implementation",
+                repository: "implementation",
+                keywords: ["implementation"],
+            };
+
+            const templatePackageJson: PackageJson = {
+                name: "${name}",
+                version: "${version}",
+                license: "template",
+                keywords: ["template"],
+                scripts: { foo: "bar" }, // Latest version of the template, just for testing purpose
+            };
+
+            const result = createUpdatedPackageJson({
+                currentPackageJson,
+                templatePackageJson,
+                dependencies: {},
+                devDependencies: {},
+                tarballPackageJson,
+                version: "1.2.3",
+                parameters: new Map(),
+                fileHash: "hash",
+                onlyDependencies: true,
+            });
+
+            expect(JSON.stringify(result, null, 2)).toMatchInlineSnapshot(`
+              "{
+                "name": "implementation",
+                "version": "1.0.0",
+                "description": "implementation",
+                "keywords": [
+                  "implementation"
+                ],
+                "repository": "implementation",
+                "license": "implementation",
+                "author": "implementation",
+                "scripts": {
+                  "modified": "by user"
+                },
+                "dependencies": {},
+                "devDependencies": {
+                  "@forsakringskassan/template": "1.2.3"
+                },
+                "cloneman": {
+                  "version": "1.2.3",
+                  "template": "@forsakringskassan/template",
+                  "parameters": {},
+                  "fileHash": "hash"
+                }
+              }"
+            `);
+        });
     });
 });

@@ -31,6 +31,9 @@ export interface CreateUpdatedPackageJsonOptions {
 
     /** Generated hash of the template files */
     fileHash: string;
+
+    /** If true, only dependencies will be updated, keeping the rest of the current package.json intact */
+    onlyDependencies: boolean;
 }
 
 /**
@@ -48,9 +51,13 @@ export function createUpdatedPackageJson(
         parameters,
         fileHash,
         version,
+        onlyDependencies,
     } = options;
+
+    const base = onlyDependencies ? currentPackageJson : templatePackageJson;
+
     const packageJson: PackageJson = {
-        ...templatePackageJson,
+        ...base,
         dependencies,
         devDependencies: {
             ...devDependencies,
@@ -64,13 +71,15 @@ export function createUpdatedPackageJson(
         } satisfies ClientMetadata,
     };
 
-    for (const field of APPLICATION_OWNED_FIELDS) {
-        if (Object.hasOwn(currentPackageJson, field)) {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment -- no user input
-            packageJson[field] = currentPackageJson[field] as any;
-        } else {
-            // eslint-disable-next-line @typescript-eslint/no-dynamic-delete -- no user input
-            delete packageJson[field as keyof PackageJson];
+    if (!onlyDependencies) {
+        for (const field of APPLICATION_OWNED_FIELDS) {
+            if (Object.hasOwn(currentPackageJson, field)) {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment -- no user input
+                packageJson[field] = currentPackageJson[field] as any;
+            } else {
+                // eslint-disable-next-line @typescript-eslint/no-dynamic-delete -- no user input
+                delete packageJson[field as keyof PackageJson];
+            }
         }
     }
 
