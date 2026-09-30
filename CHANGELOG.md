@@ -1,5 +1,20 @@
 # CHANGELOG
 
+## [1.26.0](https://github.com/Forsakringskassan/cloneman/compare/v1.25.1...v1.26.0) (2026-09-30)
+
+### Features
+
+* cloneman get-params <template> ([28e87aa](https://github.com/Forsakringskassan/cloneman/commit/28e87aa68fe1c7b7939a4993cb6d9608e328f432))
+
+### Bug Fixes
+
+* **deps:** update dependency @forsakringskassan/get-application-slug to v1.2.1 ([ec67de8](https://github.com/Forsakringskassan/cloneman/commit/ec67de81c0d99a0ccbe1beb1171fe26f3063ab6b))
+* **deps:** update dependency yargs to v18.2.0 ([d827dba](https://github.com/Forsakringskassan/cloneman/commit/d827dbaae20b0fe6d6585029923ee73e67495444))
+* filter out ignored fields in all nested package.json files ([a673fed](https://github.com/Forsakringskassan/cloneman/commit/a673fedca17d5cf79dac962050875cf3f92ff2a6))
+* rename --if-same-filehash -> --only-dependencies ([dce162b](https://github.com/Forsakringskassan/cloneman/commit/dce162be125141d989d94ac2925ff632742303ad))
+* should not modify files if using update --if-same-filehash ([57b5fb3](https://github.com/Forsakringskassan/cloneman/commit/57b5fb30efa56490cd27dfb6cda6fe79fc2b791e))
+* should only update dependencies when using --if-same-filehash ([6ba08e1](https://github.com/Forsakringskassan/cloneman/commit/6ba08e18c71cf79415544f5d742615669419f4af))
+
 ## [1.25.1](https://github.com/Forsakringskassan/cloneman/compare/v1.25.0...v1.25.1) (2026-09-25)
 
 ### Bug Fixes
