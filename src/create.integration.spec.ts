@@ -1,3 +1,4 @@
+import { existsSync } from "node:fs";
 import fs from "node:fs/promises";
 import path from "node:path";
 import {
@@ -17,6 +18,7 @@ import { printTree } from "./test-utils";
 import { rmDir } from "./test-utils/rm-dir";
 import { temporaryDirectory } from "./test-utils/temporary-directory";
 import { type ClientMetadata } from "./types";
+import { type ApplicationPackageJson } from "./utils";
 
 /* Increased timeout time since test involves a lot reading & writing to disc, and also fetching data from a local npm registry */
 vi.setConfig({ testTimeout: 30_000 });
@@ -313,4 +315,41 @@ it("should collect parameters via overrides and store them in package.json", asy
       repository=git+https://example.net/repo
       description=
     `);
+});
+
+it("should create new project in current directory", async () => {
+    expect.assertions(2);
+    appDir = cwd;
+
+    await create({
+        name: "mock-app",
+        output: "./",
+        templatePackage: "@forsakringskassan/base-template@1.0.0",
+        cwd,
+        env: userEnv,
+        parameters: new Map(),
+    });
+
+    const packageJson =
+        await readJsonFile<ApplicationPackageJson>("package.json");
+    expect(packageJson.name).toBe("mock-app");
+    expect(existsSync("mock-app")).toBe(false);
+});
+
+it("should create new project in custom output directory", async () => {
+    expect.assertions(1);
+    appDir = cwd;
+
+    await create({
+        name: "mock-app",
+        output: "./foo",
+        templatePackage: "@forsakringskassan/base-template@1.0.0",
+        cwd,
+        env: userEnv,
+        parameters: new Map(),
+    });
+
+    const packageJson =
+        await readJsonFile<ApplicationPackageJson>("foo/package.json");
+    expect(packageJson.name).toBe("mock-app");
 });
