@@ -145,7 +145,7 @@ describe("create from base template from npm registry", () => {
                 parameters: new Map(),
             }),
         ).rejects.toThrow(
-            `Failed to install template package: Command failed with exit code 1: npm install --save-dev --save-exact '@forsakringskassan/non-existing-package'`,
+            `Failed to install template package: Command failed with exit code 1: npm install --ignore-scripts --no-fund --no-audit --no-update-notifier --save-dev --save-exact '@forsakringskassan/non-existing-package'`,
         );
     });
 

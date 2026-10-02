@@ -9,6 +9,7 @@ interface UpdateArguments {
     param: string[];
     "if-same-filehash": boolean;
     "only-dependencies": boolean;
+    install: boolean;
 }
 
 async function updateHandler(
@@ -20,6 +21,7 @@ async function updateHandler(
         param,
         "if-same-filehash": ifSameFilehash,
         "only-dependencies": onlyDependencies,
+        install: npmInstall,
     } = argv;
     const { cwd } = context;
 
@@ -39,6 +41,7 @@ async function updateHandler(
             parameters,
             spinner,
             ifSameFilehash: ifSameFilehash || onlyDependencies,
+            npmInstall,
         });
     } catch (err) {
         spinner.stop();
@@ -82,6 +85,12 @@ export function updateCommand(
                     describe:
                         "Only update the dependencies & devDependencies for the application, leaving other managed files untouched.\n" +
                         "This option only works if the content of managed files has not changed between versions. If the list has changed, the command will fail and you must perform a full update.",
+                    type: "boolean",
+                    default: false,
+                })
+                .option("install", {
+                    describe:
+                        "Installing the application after updating the template.",
                     type: "boolean",
                     default: false,
                 })

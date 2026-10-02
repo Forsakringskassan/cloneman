@@ -1,6 +1,6 @@
 # Update your application
 
-> $ npx cloneman@latest update [version] [--if-same-filehash] [--param key=value]
+> $ npx cloneman@latest update [version] [--if-same-filehash] [--install] [--param key=value]
 
 ## Options
 
@@ -25,6 +25,10 @@ Updates only the dependencies and devDependencies without modifying other files.
 The content of managed files must remain unchanged between versions. If the file list has changed, an error is thrown and a full update is required.
 
 A common use case for this feature is within a Renovate postUpgradeTask, where you only want the update to proceed if no managed files are modified.
+
+### --install
+
+Runs `npm install` in the application directory after updating the template, to install the dependencies declared in the updated `package.json`. If this option is omitted, run `npm install` manually to install the updated dependencies.
 
 ## Package.json
 

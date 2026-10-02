@@ -86,3 +86,17 @@ it("should pass with --if-same-filehash", async () => {
         }),
     );
 });
+
+it("should pass with --install", async () => {
+    expect.hasAssertions();
+    const parser = createParser({ cwd: "./my-app" }).fail((msg) => {
+        expect.fail(msg);
+    });
+    await parser.parse(["update", "--install"]);
+
+    expect(update).toHaveBeenCalledExactlyOnceWith(
+        expect.objectContaining({
+            npmInstall: true,
+        }),
+    );
+});
