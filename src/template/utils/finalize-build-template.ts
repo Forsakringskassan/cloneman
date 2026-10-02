@@ -1,5 +1,6 @@
 import fs from "node:fs/promises";
 import path from "node:path";
+import { API_VERSION, CLONEMAN_VERSION } from "../../properties";
 import {
     type PackageJson,
     type TemplatePackageJson,
@@ -39,6 +40,8 @@ export async function finalizeBuildTemplate(targetDir: string): Promise<void> {
         const options = {
             ...packageJson.cloneman,
             fileHash: "${fileHash}",
+            apiVersion: ${API_VERSION},
+            clonemanVersion: "${CLONEMAN_VERSION}",
             filesDir: path.join(import.meta.dirname, "files"),
             hooksDir: path.join(import.meta.dirname, "hooks"),
         }

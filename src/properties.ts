@@ -1,3 +1,5 @@
+import pkg from "../package.json" with { type: "json" };
+
 /* Fields unique to each application and there for needs to be removed when creating template */
 export const BUILD_REMOVE_FIELDS = ["repository"] as const;
 
@@ -12,3 +14,9 @@ export const APPLICATION_OWNED_FIELDS = [
     "homepage",
     "repository",
 ] as const;
+
+/* Current API version */
+export const API_VERSION = 0;
+
+/* Current Cloneman version */
+export const CLONEMAN_VERSION = pkg.version;
