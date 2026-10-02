@@ -12,3 +12,9 @@ export const APPLICATION_OWNED_FIELDS = [
     "homepage",
     "repository",
 ] as const;
+
+/* Current API version */
+export const API_VERSION = 0;
+
+/* Current Cloneman version */
+export const CLONEMAN_VERSION: string = process.env["CLONEMAN_VERSION"] ?? "";

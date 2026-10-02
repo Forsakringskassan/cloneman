@@ -42,7 +42,7 @@
     "integration-test": "vitest run --mode integration",
     "lint": "run-s eslint prettier:check",
     "lint:fix": "run-s eslint:fix prettier:write",
-    "prepack": "release-prepack --bundle",
+    "prepack": "npm run build && release-prepack --bundle",
     "postpack": "release-postpack",
     "prepare": "commitlint-config",
     "prepublishOnly": "release-prepublish --bundle",
