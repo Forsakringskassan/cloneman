@@ -11,6 +11,7 @@ import {
     collectParameters,
     createInstallContext,
     getTemplateInfo,
+    install,
     normalizeTemplatePackage,
     readJsonFile,
     runHook,
@@ -60,18 +61,9 @@ export async function create(options: {
         await spawn("npm", ["init", "--yes"], { cwd: appPath, env });
 
         text("Installing template...");
-        await spawn(
-            "npm",
-            [
-                "install",
-                "--save-dev",
-                "--save-exact",
-                normalizedTemplatePackage,
-            ],
-            {
-                cwd: appPath,
-                env,
-            },
+        await install(
+            ["--save-dev", "--save-exact", normalizedTemplatePackage],
+            { cwd: appPath, env },
         );
 
         /**
