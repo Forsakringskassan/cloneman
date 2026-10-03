@@ -19,6 +19,7 @@ import {
     findPackageJson,
     getTemplateInfo,
     info,
+    install,
     isClientMetadata,
     isTarball,
     parseTarball,
@@ -124,6 +125,7 @@ export async function update(options: {
     parameters: Map<string, string>;
     spinner?: ReturnType<typeof yoctoSpinner>;
     ifSameFilehash: boolean;
+    npmInstall: boolean;
 }): Promise<{ message: string }> {
     const {
         cwd: appDir,
@@ -132,6 +134,7 @@ export async function update(options: {
         parameters: cliParameters,
         spinner,
         ifSameFilehash,
+        npmInstall,
     } = options;
 
     async function text(
@@ -246,7 +249,10 @@ export async function update(options: {
         ignoredDependencies,
     });
 
-    let message = [`Now run:`, ``, `  npm install`].join("\n");
+    let message = "";
+    if (!npmInstall) {
+        message = [`Now run:`, ``, `  npm install`].join("\n");
+    }
 
     await withTemporaryTarBallDirectory(
         async (templateDir, filesDir, index) => {
@@ -352,6 +358,11 @@ export async function update(options: {
             files,
         },
     );
+
+    if (npmInstall) {
+        await text("Running npm install - this may take a while");
+        await install([], { cwd: appDir, env });
+    }
 
     return { message };
 }

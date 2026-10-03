@@ -118,6 +118,7 @@ describe("update existing project with template from registry", () => {
             env: userEnv,
             parameters: new Map(),
             ifSameFilehash: false,
+            npmInstall: false,
         });
         expect(await printTree(appDir)).toMatchInlineSnapshot(`
           (root)
@@ -203,6 +204,7 @@ describe("update existing project with template from registry", () => {
             env: userEnv,
             ifSameFilehash: false,
             parameters: new Map(),
+            npmInstall: false,
         });
 
         expect(await readFile(".gitignore")).toMatchInlineSnapshot(`
@@ -240,6 +242,7 @@ describe("update existing project with template from registry", () => {
             env: userEnv,
             ifSameFilehash: false,
             parameters: new Map(),
+            npmInstall: false,
         });
 
         expect(await readFile(".gitignore")).toMatchInlineSnapshot(`
@@ -258,6 +261,7 @@ describe("update existing project with template from registry", () => {
             env: userEnv,
             parameters: new Map(),
             ifSameFilehash: false,
+            npmInstall: false,
         });
         const packageJson =
             await readJsonFile<ApplicationPackageJson>("package.json");
@@ -274,6 +278,7 @@ describe("update existing project with template from registry", () => {
             env: userEnv,
             parameters: new Map(),
             ifSameFilehash: false,
+            npmInstall: false,
         });
         const packageJson =
             await readJsonFile<ApplicationPackageJson>("package.json");
@@ -316,6 +321,7 @@ describe("update existing project with template from registry", () => {
             env: userEnv,
             parameters: new Map(),
             ifSameFilehash: false,
+            npmInstall: false,
         });
         const updatedPackageJson =
             await readJsonFile<ApplicationPackageJson>("package.json");
@@ -346,6 +352,7 @@ describe("update existing project with template from registry", () => {
             env: userEnv,
             parameters: new Map(),
             ifSameFilehash: false,
+            npmInstall: false,
         });
 
         const updatedPackageJson =
@@ -385,6 +392,7 @@ describe("update existing project with template from registry", () => {
             env: userEnv,
             parameters: new Map(),
             ifSameFilehash: false,
+            npmInstall: false,
         });
 
         const updatedPackageJson =
@@ -441,6 +449,7 @@ it("should update existing project from local tar", async () => {
         env: userEnv,
         parameters: new Map(),
         ifSameFilehash: false,
+        npmInstall: false,
     });
     expect(await printTree(appDir)).toMatchInlineSnapshot(`
       (root)
@@ -499,6 +508,7 @@ it("should crash if invalid tar path", async () => {
             env: userEnv,
             parameters: new Map(),
             ifSameFilehash: false,
+            npmInstall: false,
         }),
     ).rejects.toThrow(`Tarball not found at path`);
 });
@@ -526,6 +536,7 @@ it("should remove files set in removeFiles", async () => {
         env: userEnv,
         parameters: new Map(),
         ifSameFilehash: false,
+        npmInstall: false,
     });
     /* should have renamed file.js to file.mts, while keeping file.json */
     expect(await printTree(appDir)).toMatchInlineSnapshot(`
@@ -552,6 +563,7 @@ it("should return a default instructions message", async () => {
         env: userEnv,
         parameters: new Map(),
         ifSameFilehash: false,
+        npmInstall: false,
     });
     expect(message).toMatchInlineSnapshot(`
       Now run:
@@ -578,6 +590,7 @@ it("should run install hook if present", async () => {
         env: userEnv,
         parameters: new Map(),
         ifSameFilehash: false,
+        npmInstall: false,
     });
 
     expect(runHookSpy).toHaveBeenCalledOnce();
@@ -612,6 +625,7 @@ it("should keep existing parameters when updating without overrides", async () =
         env: userEnv,
         parameters: new Map(),
         ifSameFilehash: false,
+        npmInstall: false,
     });
     const { cloneman } = await readJsonFile<{ cloneman?: ClientMetadata }>(
         "package.json",
@@ -643,6 +657,7 @@ it("should override existing parameters when updating with overrides", async () 
         version: "1.0.0",
         env: userEnv,
         ifSameFilehash: false,
+        npmInstall: false,
         parameters: new Map([
             ["repository", "git+https://example.net/overridden"],
             ["description", ""],
@@ -679,12 +694,41 @@ it("Updating to a new version should keep same filehash if only dependencies cha
         env: userEnv,
         parameters: new Map(),
         ifSameFilehash: false,
+        npmInstall: false,
     });
     const { cloneman: clonemanAfter } = await readJsonFile<{
         cloneman?: ClientMetadata;
     }>("package.json");
     expect(clonemanBefore?.fileHash).toMatch(/^[a-f0-9]{64}$/);
     expect(clonemanAfter?.fileHash).toBe(clonemanBefore?.fileHash);
+});
+
+it("should run npm install when specified", async () => {
+    expect.assertions(1);
+
+    await create({
+        name: "mock-app",
+        templatePackage: "@forsakringskassan/base-template@1.0.0",
+        cwd,
+        env: userEnv,
+        parameters: new Map(),
+    });
+
+    const installSpy = vi.spyOn(utils, "install").mockResolvedValue();
+
+    await update({
+        cwd: appDir,
+        version: "1.0.1",
+        env: userEnv,
+        parameters: new Map(),
+        ifSameFilehash: false,
+        npmInstall: true,
+    });
+
+    expect(installSpy).toHaveBeenCalledWith([], {
+        cwd: appDir,
+        env: userEnv,
+    });
 });
 
 describe("update with sub-package.json files", () => {
@@ -735,6 +779,7 @@ describe("update with sub-package.json files", () => {
             env: userEnv,
             parameters: new Map(),
             ifSameFilehash: false,
+            npmInstall: false,
         });
 
         const docsPackageJson =
@@ -772,6 +817,7 @@ describe("update with sub-package.json files", () => {
             env: userEnv,
             parameters: new Map(),
             ifSameFilehash: false,
+            npmInstall: false,
         });
 
         const docsPackageJson =
@@ -802,6 +848,7 @@ describe("IfSameFilehash option", () => {
                 env: userEnv,
                 parameters: new Map(),
                 ifSameFilehash: true,
+                npmInstall: false,
             }),
         ).rejects.toThrow("does not match the expected old hash");
 
@@ -832,6 +879,7 @@ describe("IfSameFilehash option", () => {
                     env: userEnv,
                     parameters: new Map(),
                     ifSameFilehash: true,
+                    npmInstall: false,
                 }),
             ).resolves.not.toThrow();
         });
@@ -847,6 +895,7 @@ describe("IfSameFilehash option", () => {
                 env: userEnv,
                 parameters: new Map(),
                 ifSameFilehash: true,
+                npmInstall: false,
             });
 
             expect(await readFile("managed.txt")).toMatchInlineSnapshot(
@@ -865,6 +914,7 @@ describe("IfSameFilehash option", () => {
                 env: userEnv,
                 parameters: new Map(),
                 ifSameFilehash: true,
+                npmInstall: false,
             });
 
             await expect(readFile("managed.txt")).rejects.toThrow();
@@ -893,6 +943,7 @@ describe("IfSameFilehash option", () => {
                 env: userEnv,
                 parameters: new Map(),
                 ifSameFilehash: true,
+                npmInstall: false,
             });
 
             const newPackageJson =
@@ -920,6 +971,7 @@ describe("IfSameFilehash option", () => {
                 env: userEnv,
                 parameters: new Map(),
                 ifSameFilehash: true,
+                npmInstall: false,
             });
 
             expect(await readJsonFile("package.json")).toMatchObject({
@@ -943,6 +995,7 @@ describe("IfSameFilehash option", () => {
                 env: userEnv,
                 parameters: new Map(),
                 ifSameFilehash: true,
+                npmInstall: false,
             });
             expect(runHookSpy).not.toHaveBeenCalled();
         });
@@ -969,6 +1022,7 @@ describe("IfSameFilehash option", () => {
                     env: userEnv,
                     parameters: new Map(),
                     ifSameFilehash: true,
+                    npmInstall: false,
                 }),
             ).resolves.not.toThrow();
         });
@@ -982,6 +1036,7 @@ describe("IfSameFilehash option", () => {
                 env: userEnv,
                 parameters: new Map(),
                 ifSameFilehash: false,
+                npmInstall: false,
             });
 
             const docsPackageJson =
@@ -1024,6 +1079,7 @@ describe("IfSameFilehash option", () => {
                 env: userEnv,
                 parameters: new Map(),
                 ifSameFilehash: true,
+                npmInstall: false,
             });
 
             const docsPackageJson =
