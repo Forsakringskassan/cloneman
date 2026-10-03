@@ -3,6 +3,8 @@ import { Extractor, ExtractorConfig } from "@microsoft/api-extractor";
 import esbuild from "esbuild";
 import isCI from "is-ci";
 
+import packageJson from "./package.json" with { type: "json" };
+
 async function build() {
     const result = await esbuild.build({
         entryPoints: ["src/index.ts", { in: "src/cli/cli.ts", out: "cli" }],
@@ -18,6 +20,10 @@ async function build() {
         external: ["prettier"],
         outExtension: {
             ".js": ".mjs",
+        },
+
+        define: {
+            "process.env.CLONEMAN_VERSION": JSON.stringify(packageJson.version),
         },
     });
     console.log(await esbuild.analyzeMetafile(result.metafile));
