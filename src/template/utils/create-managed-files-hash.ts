@@ -5,7 +5,7 @@ import { type PackageJson, readJsonFile } from "../../utils";
 import { getStoredFileName } from "./get-stored-file-name";
 
 /**
- * Creates a SHA-256 hash from the contents of all managed template files.
+ * Creates a SHA-256 hash from the contents of all managed files and files in hooks folder.
  *
  * All `package.json` files found (both root and in subdirectories) are included with
  * `dependencies`, `devDependencies` and `version` stripped, since those are
@@ -15,16 +15,30 @@ import { getStoredFileName } from "./get-stored-file-name";
  */
 export async function createManagedFilesHash(
     filesDir: string,
+    hooksDir: string,
     fileList: string[],
     pkg: PackageJson,
 ): Promise<string> {
     const ignoredFiles = new Set(["package.json"]);
     const hashedFiles = fileList.filter((file) => !ignoredFiles.has(file));
+    const hookFiles = await listHookFiles(hooksDir);
     const contents = await Promise.all([
         Promise.resolve(hashPackageJson(pkg)),
         ...hashedFiles.map((file) => readManagedFile(filesDir, file)),
+        ...hookFiles.map((file) => fs.readFile(path.join(hooksDir, file))),
     ]);
     return createHash("sha256").update(Buffer.concat(contents)).digest("hex");
+}
+
+async function listHookFiles(hooksDir: string): Promise<string[]> {
+    const files = await Array.fromAsync(
+        fs.glob("**/*", { cwd: hooksDir, withFileTypes: true }),
+    );
+
+    return files
+        .filter((it) => it.isFile())
+        .map((it) => path.relative(hooksDir, path.join(it.parentPath, it.name)))
+        .toSorted((a, b) => a.localeCompare(b));
 }
 
 function hashPackageJson(pkg: PackageJson): Buffer {

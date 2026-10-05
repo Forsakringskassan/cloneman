@@ -432,6 +432,7 @@ describe("writeFile()", () => {
 
             const expectedHash = await createManagedFilesHash(
                 filesDir,
+                path.join(fixture, ".cloneman"),
                 templatePackageJson.cloneman.managedFiles,
                 massagedPackageJson,
             );

@@ -11,7 +11,10 @@ import { createManagedFilesHash } from "./create-managed-files-hash";
 /*
  * @internal
  */
-export async function finalizeBuildTemplate(targetDir: string): Promise<void> {
+export async function finalizeBuildTemplate(
+    targetDir: string,
+    hooksDir: string,
+): Promise<void> {
     const filesDir = path.join(targetDir, "files");
     const { cloneman } = await readJsonFile<TemplatePackageJson>(
         path.join(targetDir, "package.json"),
@@ -26,6 +29,7 @@ export async function finalizeBuildTemplate(targetDir: string): Promise<void> {
 
     const fileHash = await createManagedFilesHash(
         filesDir,
+        hooksDir,
         [...cloneman.managedFiles, ...partiallyManagedFiles],
         packageJson,
     );
