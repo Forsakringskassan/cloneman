@@ -55,7 +55,7 @@ export async function prepare(
             logger,
         });
 
-        await finalizeBuildTemplate(targetDir);
+        await finalizeBuildTemplate(targetDir, hooksDir);
         if (parameters.length > 0) {
             const filePath = path.join(targetDir, "package.json");
             await updateJsonFile(filePath, {
