@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## [1.27.0](https://github.com/Forsakringskassan/cloneman/compare/v1.26.0...v1.27.0) (2026-10-05)
+
+### Features
+
+* --install option in update command ([c41d790](https://github.com/Forsakringskassan/cloneman/commit/c41d790010af3ecff833b533ef2e9ba3faa4f0a6))
+* create an application to a custom folder ([6bc2323](https://github.com/Forsakringskassan/cloneman/commit/6bc2323d617a2c34de5e5f0c17f458caffceaed8))
+
+### Bug Fixes
+
+* store API and Cloneman version in template ([d6ce954](https://github.com/Forsakringskassan/cloneman/commit/d6ce95463c35c5d6dc6a63b92bf4b6b78f804f3b))
+
 ## [1.26.0](https://github.com/Forsakringskassan/cloneman/compare/v1.25.1...v1.26.0) (2026-09-30)
 
 ### Features
