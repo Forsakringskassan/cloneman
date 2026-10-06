@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## [1.27.1](https://github.com/Forsakringskassan/cloneman/compare/v1.27.0...v1.27.1) (2026-10-06)
+
+### Bug Fixes
+
+* changes in hooks should generate a new unique file hash ([eb8f472](https://github.com/Forsakringskassan/cloneman/commit/eb8f472154650214ea6ed2e6cba7c8db7d044ce1))
+
 ## [1.27.0](https://github.com/Forsakringskassan/cloneman/compare/v1.26.0...v1.27.0) (2026-10-05)
 
 ### Features
