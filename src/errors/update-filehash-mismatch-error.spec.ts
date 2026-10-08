@@ -11,11 +11,18 @@ it("should format pretty message", async () => {
         newHash: "new-hash",
     });
     expect(error.prettyMessage()).toMatchInlineSnapshot(`
-      <red>ERROR cloneman: Update task failed, new hash does not match the expected old hash</color>
+      <red>ERROR cloneman: Update task failed, Cannot update because the template's managed files have changed.</color>
 
-        Old Hash: "<yellow>old-hash</color>"
-        New Hash: "<yellow>new-hash</color>"
-      The template's managed files have changed between versions. A full update is required
-      Run npx cloneman update
+      Why this happened:
+      The template has changed since this branch was last fully updated.
+
+      How to fix it:
+      1. Check out the branch where the update failed (for example, the Renovate pull request branch).
+      2. Run \`npx cloneman update\` to update both the managed files and dependencies.
+      3. Commit and push the changes to the same branch.
+
+      New hash does not match the expected old hash:
+        Expected: "<yellow>old-hash</color>"
+        Found:    "<yellow>new-hash</color>"
     `);
 });
