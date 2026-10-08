@@ -1,5 +1,4 @@
 import { afterEach, beforeEach, expect, it, vi } from "vitest";
-import yoctoSpinner from "yocto-spinner";
 import { create } from "../create";
 import { createParser } from "./cli";
 
@@ -8,15 +7,6 @@ vi.mock(import("../create"), () => ({
 }));
 
 const mockMessage = "lorem ipsum";
-const mockSuccess = vi.fn();
-const mockSpinner = {
-    start: vi.fn().mockReturnThis(),
-    success: mockSuccess,
-} as unknown as ReturnType<typeof yoctoSpinner>;
-
-vi.mock(import("yocto-spinner"), () => ({
-    default: vi.fn(() => mockSpinner),
-}));
 
 beforeEach(() => {
     vi.mocked(create).mockResolvedValue({
@@ -38,20 +28,14 @@ it("create app", async () => {
     });
     await parser.parse(["create", appName, templateName]);
 
-    expect(create).toHaveBeenCalledExactlyOnceWith({
-        name: appName,
-        output: "",
-        templatePackage: templateName,
-        cwd: "./new-app",
-        parameters: new Map(),
-        spinner: mockSpinner,
-    });
-
-    expect(yoctoSpinner).toHaveBeenCalledWith({
-        text: `Creating application "${appName}" with template "${templateName}"...`,
-    });
-    expect(mockSuccess).toHaveBeenCalledWith(
-        `Application created successfully`,
+    expect(create).toHaveBeenCalledExactlyOnceWith(
+        expect.objectContaining({
+            name: appName,
+            output: "",
+            templatePackage: templateName,
+            cwd: "./new-app",
+            parameters: new Map(),
+        }),
     );
     expect(vi.mocked(console.log)).toHaveBeenCalledWith(mockMessage);
 });

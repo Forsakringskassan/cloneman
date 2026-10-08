@@ -1,8 +1,8 @@
 import { type CommandModule } from "yargs";
-import yoctoSpinner from "yocto-spinner";
 import { update } from "../update";
 import { type Context } from "./context";
 import { parseParams } from "./parse-params";
+import { createSpinner } from "./spinner";
 
 interface UpdateArguments {
     target: string | undefined;
@@ -28,7 +28,7 @@ async function updateHandler(
     const version = target ?? "latest";
     const parameters = parseParams(param);
 
-    const spinner = yoctoSpinner({
+    const spinner = createSpinner({
         text: `Updating template package to version ${version}...`,
     }).start();
 
