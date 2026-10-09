@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## [1.27.2](https://github.com/Forsakringskassan/cloneman/compare/v1.27.1...v1.27.2) (2026-10-09)
+
+### Bug Fixes
+
+* update instructions when filehash changes during an update --only-dependencies ([1cec2ce](https://github.com/Forsakringskassan/cloneman/commit/1cec2ce2edb613b75c4372f7dd030df7513ebf81))
+
 ## [1.27.1](https://github.com/Forsakringskassan/cloneman/compare/v1.27.0...v1.27.1) (2026-10-06)
 
 ### Bug Fixes
