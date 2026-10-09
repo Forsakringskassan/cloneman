@@ -1,7 +1,7 @@
 import { type CommandModule } from "yargs";
-import yoctoSpinner from "yocto-spinner";
 import { migrate } from "../migrate";
 import { type Context } from "./context";
+import { createSpinner } from "./spinner";
 
 interface MigrateArguments {
     template: string;
@@ -14,7 +14,7 @@ async function createHandler(
     const { template } = argv;
     const { cwd } = context;
 
-    const spinner = yoctoSpinner({
+    const spinner = createSpinner({
         text: `Migrating application to template "${template}"...`,
     }).start();
 

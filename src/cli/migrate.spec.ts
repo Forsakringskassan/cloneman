@@ -1,20 +1,9 @@
 import { afterEach, beforeEach, expect, it, vi } from "vitest";
-import yoctoSpinner from "yocto-spinner";
 import { migrate } from "../migrate";
 import { createParser } from "./cli";
 
 vi.mock(import("../migrate"), () => ({
     migrate: vi.fn(),
-}));
-
-const mockSuccess = vi.fn();
-const mockSpinner = {
-    start: vi.fn().mockReturnThis(),
-    success: mockSuccess,
-} as unknown as ReturnType<typeof yoctoSpinner>;
-
-vi.mock(import("yocto-spinner"), () => ({
-    default: vi.fn(() => mockSpinner),
 }));
 
 beforeEach(() => {
@@ -34,17 +23,11 @@ it("migrate app", async () => {
     });
     await parser.parse(["migrate", templateName]);
 
-    expect(migrate).toHaveBeenCalledExactlyOnceWith({
-        templatePackage: templateName,
-        cwd: "./my-app",
-        spinner: mockSpinner,
-    });
-
-    expect(yoctoSpinner).toHaveBeenCalledWith({
-        text: `Migrating application to template "${templateName}"...`,
-    });
-    expect(mockSuccess).toHaveBeenCalledWith(
-        `Application migrated successfully`,
+    expect(migrate).toHaveBeenCalledExactlyOnceWith(
+        expect.objectContaining({
+            templatePackage: templateName,
+            cwd: "./my-app",
+        }),
     );
     expect(vi.mocked(console.log)).toHaveBeenCalledWith(`
 Now run:

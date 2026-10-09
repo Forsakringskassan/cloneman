@@ -1,8 +1,8 @@
 import { type CommandModule } from "yargs";
-import yoctoSpinner from "yocto-spinner";
 import { create } from "../create";
 import { type Context } from "./context";
 import { parseParams } from "./parse-params";
+import { createSpinner } from "./spinner";
 
 interface CreateArguments {
     name: string;
@@ -19,7 +19,7 @@ async function createHandler(
     const { cwd } = context;
     const parameters = parseParams(param);
 
-    const spinner = yoctoSpinner({
+    const spinner = createSpinner({
         text: `Creating application "${name}" with template "${template}"...`,
     }).start();
 
@@ -30,8 +30,8 @@ async function createHandler(
             templatePackage: template,
             cwd,
             parameters,
-            spinner,
             output,
+            spinner,
         });
     } catch (err) {
         spinner.stop();
