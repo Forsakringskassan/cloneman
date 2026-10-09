@@ -253,6 +253,37 @@ describe("update existing project with template from registry", () => {
         `);
     });
 
+    it("should restore file content if the target marker is removed in a partially managed file", async () => {
+        expect.assertions(1);
+
+        appDir = path.join(cwd, "partially-managed-app");
+        await create({
+            name: "partially-managed-app",
+            templatePackage:
+                "@forsakringskassan/with-partially-managed-file@1.0.0",
+            cwd,
+            env: userEnv,
+            parameters: new Map(),
+        });
+        await writeFile(".gitignore", "User rewriting file...");
+
+        await update({
+            cwd: appDir,
+            version: "1.0.1",
+            env: userEnv,
+            ifSameFilehash: false,
+            parameters: new Map(),
+            npmInstall: false,
+        });
+
+        expect(await readFile(".gitignore")).toMatchInlineSnapshot(`
+          node_modules/
+          additional-ignore-in-template
+
+          # template above
+        `);
+    });
+
     it("should set actual version to the resolved version if input version is 'latest'", async () => {
         expect.assertions(1);
         await update({
