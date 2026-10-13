@@ -42,8 +42,10 @@ const userEnv = inject("userEnv");
 function deleteFile(filePath: string): Promise<void> {
     return fs.rm(path.join(appDir, filePath));
 }
-function writeFile(filePath: string, content: string): Promise<void> {
-    return fs.writeFile(path.join(appDir, filePath), content, "utf8");
+async function writeFile(filePath: string, content: string): Promise<void> {
+    const filename = path.join(appDir, filePath);
+    await fs.mkdir(path.dirname(filename), { recursive: true });
+    await fs.writeFile(filename, content, "utf8");
 }
 
 function readFile(filePath: string): Promise<string> {
@@ -561,6 +563,10 @@ it("should remove files set in removeFiles", async () => {
           ├── package-lock.json
           └── package.json
     `);
+
+    await writeFile("subfolder/1.txt", "remove me");
+    await writeFile("file.directory/nested/file.txt", "remove me");
+
     await update({
         cwd: appDir,
         version: "1.0.1",
@@ -569,6 +575,7 @@ it("should remove files set in removeFiles", async () => {
         ifSameFilehash: false,
         npmInstall: false,
     });
+
     /* should have renamed file.js to file.mts, while keeping file.json */
     expect(await printTree(appDir)).toMatchInlineSnapshot(`
       (root)

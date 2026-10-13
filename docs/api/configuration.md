@@ -37,8 +37,9 @@ It is considered an error if a file or file glob pattern does not match any file
 - type: `string[]`
 - default: `[]`
 
-List of files to be removed from the application during an update.
+List of files or file glob patterns be removed from the application during an update.
 Supports exact file names or glob patterns, e.g. `tsconfig.*` to remove all matching files.
+If a glob matches a directory, that directory and its contents are removed recursively.
 
 Files are removed before copying over the new files from the template.
 If `removeFiles` matches entries also present in `managedFiles` the files (or glob patterns) will be removed before copying over the updated files.

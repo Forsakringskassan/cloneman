@@ -51,7 +51,7 @@ async function removeFiles(
                 return;
             }
             const filename = path.join(cwd, it);
-            await fs.unlink(filename);
+            await fs.rm(filename, { recursive: true, force: true });
         }),
     );
 }
