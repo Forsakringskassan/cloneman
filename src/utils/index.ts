@@ -28,6 +28,7 @@ export { readPackageJsonFromTarball } from "./read-package-json-from-tarball";
 export { replaceInFile } from "./replace-in-file";
 export { runHook } from "./run-hook";
 export { updatePartiallyManagedFiles } from "./update-partially-managed-files";
+export { updateNestedPackageJson } from "./update-nested-package-json";
 export { writeJsonFile } from "./write-json-file";
 export {
     isTarball,
