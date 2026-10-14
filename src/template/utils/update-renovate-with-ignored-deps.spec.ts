@@ -26,7 +26,7 @@ describe("updateRenovateWithIgnoredDeps", () => {
 
         const result = updateRenovateWithIgnoredDeps(
             renovateConfig,
-            pkg,
+            [pkg],
             "my-template",
             templateConfig,
         );
@@ -51,7 +51,7 @@ describe("updateRenovateWithIgnoredDeps", () => {
 
         const result = updateRenovateWithIgnoredDeps(
             renovateConfig,
-            pkg,
+            [pkg],
             "my-template",
             templateConfig,
         );
@@ -76,7 +76,7 @@ describe("updateRenovateWithIgnoredDeps", () => {
 
         const result = updateRenovateWithIgnoredDeps(
             renovateConfig,
-            pkg,
+            [pkg],
             "my-template",
             templateConfig,
         );
@@ -101,7 +101,7 @@ describe("updateRenovateWithIgnoredDeps", () => {
 
         const result = updateRenovateWithIgnoredDeps(
             renovateConfig,
-            pkg,
+            [pkg],
             "my-template",
             templateConfig,
         );
@@ -129,7 +129,7 @@ describe("updateRenovateWithIgnoredDeps", () => {
 
         const result = updateRenovateWithIgnoredDeps(
             renovateConfig,
-            pkg,
+            [pkg],
             "my-template",
             templateConfig,
         );
@@ -158,7 +158,7 @@ describe("updateRenovateWithIgnoredDeps", () => {
 
         const result = updateRenovateWithIgnoredDeps(
             renovateConfig,
-            pkg,
+            [pkg],
             "my-template",
             templateConfig,
         );
@@ -187,7 +187,7 @@ describe("updateRenovateWithIgnoredDeps", () => {
 
         const result = updateRenovateWithIgnoredDeps(
             renovateConfig,
-            pkg,
+            [pkg],
             "my-template",
             templateConfig,
         );
@@ -214,7 +214,7 @@ describe("updateRenovateWithIgnoredDeps", () => {
 
         const result = updateRenovateWithIgnoredDeps(
             renovateConfig,
-            pkg,
+            [pkg],
             "my-template",
             templateConfig,
         );
@@ -236,7 +236,7 @@ describe("updateRenovateWithIgnoredDeps", () => {
 
         const result = updateRenovateWithIgnoredDeps(
             renovateConfig,
-            pkg,
+            [pkg],
             "my-template",
             templateConfig,
         );
@@ -244,5 +244,22 @@ describe("updateRenovateWithIgnoredDeps", () => {
         expect(result).toEqual({
             ignoreDeps: [],
         });
+    });
+
+    it("should consider all given package.json files", () => {
+        expect.hasAssertions();
+
+        const result = updateRenovateWithIgnoredDeps(
+            {},
+            [
+                { name: "a", version: "1.0.0", dependencies: { foo: "1" } },
+                { name: "b", version: "1.0.0", devDependencies: { bar: "1" } },
+                { name: "c", version: "1.0.0", dependencies: { foo: "1" } },
+            ],
+            "my-template",
+            {},
+        );
+
+        expect(result).toEqual({ ignoreDeps: ["bar", "foo"] });
     });
 });

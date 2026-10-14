@@ -781,7 +781,27 @@ describe("update with sub-package.json files", () => {
               ├── docs
               │   └── package.json
               ├── package-lock.json
-              └── package.json
+              ├── package.json
+              └── renovate.json
+        `);
+    });
+
+    it("should ignore dependencies from sub package.json in renovate.json", async () => {
+        expect.assertions(1);
+
+        const renovateJson = await readJsonFile<{ ignoreDeps?: string[] }>(
+            "renovate.json",
+        );
+
+        expect(renovateJson.ignoreDeps).toMatchInlineSnapshot(`
+          [
+            @forsakringskassan/api-lib-a,
+            @forsakringskassan/api-lib-b,
+            @forsakringskassan/docs-dependency,
+            @forsakringskassan/lib-used-by-templates,
+            @forsakringskassan/template-owned,
+            cloneman,
+          ]
         `);
     });
 
@@ -1083,6 +1103,7 @@ describe("IfSameFilehash option", () => {
               {
                 @forsakringskassan/api-lib-a: 1.1.0,
                 @forsakringskassan/api-lib-b: 1.1.0,
+                @forsakringskassan/docs-dependency: 1.1.0,
               }
             `);
         });

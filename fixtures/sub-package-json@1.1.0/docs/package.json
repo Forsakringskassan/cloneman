@@ -24,7 +24,8 @@
   },
   "dependencies": {
     "@forsakringskassan/api-lib-a": "1.1.0",
-    "@forsakringskassan/api-lib-b": "1.1.0"
+    "@forsakringskassan/api-lib-b": "1.1.0",
+    "@forsakringskassan/docs-dependency": "1.1.0"
   },
   "devDependencies": {
     "@forsakringskassan/application-owned": "1.1.0",

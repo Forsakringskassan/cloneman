@@ -14,6 +14,7 @@ import { type Parameter } from "../types";
 import {
     type PackageJson,
     assertPartiallyManagedFiles,
+    findPackageJson,
     readJsonFile,
     replaceInFile,
     writeJsonFile,
@@ -326,7 +327,7 @@ async function prepareFolders(
 }
 
 async function renovateIgnoreDependencies(
-    packageJson: PackageJson,
+    rootPackageJson: PackageJson,
     templatePackageName: string,
     templateConfig: TemplateConfig,
     filesDir: string,
@@ -341,9 +342,13 @@ async function renovateIgnoreDependencies(
     const renovateConfig =
         await readJsonFile<Record<string, unknown>>(renovateFilePath);
 
+    const nestedPackageJsons = await findPackageJson(filesDir);
+    const nestedPackagesContent = nestedPackageJsons.map(
+        (it) => it.packageJson,
+    );
     const newConfig = updateRenovateWithIgnoredDeps(
         renovateConfig,
-        packageJson,
+        [rootPackageJson, ...nestedPackagesContent],
         templatePackageName,
         templateConfig,
     );
