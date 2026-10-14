@@ -18,21 +18,27 @@ export function updateNestedPackageJson(
         ? currentSubPackageJson
         : nestedPackageJson.packageJson;
 
-    const massagedSubPackageJson = { ...sourceJson };
-
-    massagedSubPackageJson.dependencies = filterDependencies({
+    const dependencies = filterDependencies({
         appDependencies: currentSubPackageJson.dependencies,
         templateDependencies: nestedPackageJson.packageJson.dependencies,
         uninstallDependencies,
         ignoredDependencies,
     });
 
-    massagedSubPackageJson.devDependencies = filterDependencies({
+    const devDependencies = filterDependencies({
         appDependencies: currentSubPackageJson.devDependencies,
         templateDependencies: nestedPackageJson.packageJson.devDependencies,
         uninstallDependencies,
         ignoredDependencies,
     });
 
-    return massagedSubPackageJson;
+    if (Object.keys(dependencies).length > 0) {
+        sourceJson.dependencies = dependencies;
+    }
+
+    if (Object.keys(devDependencies).length > 0) {
+        sourceJson.devDependencies = devDependencies;
+    }
+
+    return sourceJson;
 }
