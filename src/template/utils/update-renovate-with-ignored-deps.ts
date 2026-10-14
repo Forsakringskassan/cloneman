@@ -8,9 +8,22 @@ export interface RenovateJson {
     ignoreDeps?: string[];
 }
 
+function getDependencyNames(pkg: PackageJson): string[] {
+    const {
+        dependencies = {},
+        devDependencies = {},
+        peerDependencies = {},
+    } = pkg;
+    return [
+        ...Object.keys(dependencies),
+        ...Object.keys(devDependencies),
+        ...Object.keys(peerDependencies),
+    ];
+}
+
 export function updateRenovateWithIgnoredDeps(
     renovateConfig: RenovateJson,
-    pkg: PackageJson,
+    packages: PackageJson[],
     templatePackageName: string,
     templateConfig: TemplateConfig,
 ): RenovateJson {
@@ -32,16 +45,7 @@ export function updateRenovateWithIgnoredDeps(
     const original = renovateConfig.ignoreDeps ?? [];
 
     /* the dependencies managed by the template */
-    const {
-        dependencies = {},
-        devDependencies = {},
-        peerDependencies = {},
-    } = pkg;
-    const all = [
-        ...Object.keys(dependencies),
-        ...Object.keys(devDependencies),
-        ...Object.keys(peerDependencies),
-    ];
+    const all = packages.flatMap(getDependencyNames);
     const filtered = all.filter(isManagedByTemplate);
 
     /* merge and sort the combined lists */
