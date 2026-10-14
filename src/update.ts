@@ -8,7 +8,6 @@ import {
 } from "./errors";
 import { getStoredFileName } from "./template/utils";
 import {
-    type FindNestedPackageJsonResult,
     type PackageJson,
     type TemplatePackageJson,
     collectParameters,
@@ -25,6 +24,7 @@ import {
     parseTarball,
     readJsonFile,
     runHook,
+    updateNestedPackageJson,
     updatePartiallyManagedFiles,
     withTemporaryTarBallDirectory,
     writeJsonFile,
@@ -83,36 +83,6 @@ async function copyFiles(
             await fs.writeFile(dest, content);
         }),
     );
-}
-
-function updateNestedPackageJson(
-    nestedPackageJson: FindNestedPackageJsonResult,
-    currentSubPackageJson: PackageJson,
-    uninstallDependencies: string[],
-    ignoredDependencies: string[],
-    onlyDevDependencies: boolean,
-): PackageJson {
-    const sourceJson = onlyDevDependencies
-        ? currentSubPackageJson
-        : nestedPackageJson.packageJson;
-
-    const massagedSubPackageJson = { ...sourceJson };
-
-    massagedSubPackageJson.dependencies = filterDependencies({
-        appDependencies: currentSubPackageJson.dependencies,
-        templateDependencies: nestedPackageJson.packageJson.dependencies,
-        uninstallDependencies,
-        ignoredDependencies,
-    });
-
-    massagedSubPackageJson.devDependencies = filterDependencies({
-        appDependencies: currentSubPackageJson.devDependencies,
-        templateDependencies: nestedPackageJson.packageJson.devDependencies,
-        uninstallDependencies,
-        ignoredDependencies,
-    });
-
-    return massagedSubPackageJson;
 }
 
 /**
