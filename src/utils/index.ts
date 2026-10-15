@@ -8,9 +8,11 @@ export {
 } from "./collect-parameters";
 export { findHookScriptPath } from "./find-hook-script-path";
 export { getApplicationName } from "./get-application-name";
+export { getBranchName } from "./get-branch-name";
 export { getHookScriptPath } from "./get-hook-script-path";
 export { importHook } from "./import-hook";
 export { isClientMetadata } from "./is-client-metadata";
+export { isRenovateBranch } from "./is-renovate-branch";
 export { isTemplateFolder } from "./is-template";
 export { matchesPatterns } from "./matches-patterns";
 export {
