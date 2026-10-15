@@ -129,6 +129,17 @@ export interface InstallContext {
     readJsonFile<T = unknown>(filePath: string): Promise<T>;
 
     /**
+     * Renames a file in the application.
+     *
+     * @public
+     * @since %version%
+     * @param oldPath - Path of the existing file, relative to application root.
+     * @param newPath - New path, relative to application root.
+     * @returns A promise resolved when the file has been renamed.
+     */
+    renameFile(oldPath: string, newPath: string): Promise<void>;
+
+    /**
      * Replaces content in file. Each occurrence of `pattern` is replaced by
      * `replacement`.
      *

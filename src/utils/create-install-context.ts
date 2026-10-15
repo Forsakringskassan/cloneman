@@ -58,6 +58,12 @@ export function createInstallContext(options: {
         readJsonFile<T>(filePath: string) {
             return readJsonFile<T>(path.join(targetDir, filePath));
         },
+        renameFile(oldPath: string, newPath: string) {
+            return fs.rename(
+                path.join(targetDir, oldPath),
+                path.join(targetDir, newPath),
+            );
+        },
         replaceInFile(
             filePath: string,
             ...args:
