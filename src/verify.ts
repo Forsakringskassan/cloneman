@@ -8,7 +8,9 @@ import {
 } from "./errors";
 import {
     type ApplicationPackageJson,
+    getBranchName,
     isClientMetadata,
+    isRenovateBranch,
     readJsonFile,
 } from "./utils";
 
@@ -45,10 +47,13 @@ export async function verify(options: {
 
     /* eslint-disable-next-line unicorn/prefer-early-return -- Technical Debt */
     if (dependencyVersion !== templateVersion) {
+        const branchName = await getBranchName(applicationPath);
         const error = new TemplateVersionMismatchError({
             templateName,
             templateVersion,
             dependencyVersion,
+            branchName,
+            isRenovateBranch: isRenovateBranch(branchName),
         });
 
         if (isCI) {
