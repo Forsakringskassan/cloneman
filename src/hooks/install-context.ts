@@ -132,7 +132,7 @@ export interface InstallContext {
      * Renames a file in the application.
      *
      * @public
-     * @since %version%
+     * @since v1.28.0
      * @param oldPath - Path of the existing file, relative to application root.
      * @param newPath - New path, relative to application root.
      * @returns A promise resolved when the file has been renamed.

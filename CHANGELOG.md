@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## [1.28.0](https://github.com/Forsakringskassan/cloneman/compare/v1.27.2...v1.28.0) (2026-10-15)
+
+### Features
+
+* renameFile install hook ([c633eef](https://github.com/Forsakringskassan/cloneman/commit/c633eefb832148b816f39d81edd7d4c626a35ee8))
+
+### Bug Fixes
+
+* renovate.json should contain dependencies from nested package.json's ([3eb39ff](https://github.com/Forsakringskassan/cloneman/commit/3eb39ffc05bb37d6aaa98383f08ac501a6755b75))
+* support removing directories via removeFiles globs (fixes [#207](https://github.com/Forsakringskassan/cloneman/issues/207)) ([7bd528a](https://github.com/Forsakringskassan/cloneman/commit/7bd528a55374ea10d519cfb8dd96af4a5ff59792))
+
 ## [1.27.2](https://github.com/Forsakringskassan/cloneman/compare/v1.27.1...v1.27.2) (2026-10-09)
 
 ### Bug Fixes
