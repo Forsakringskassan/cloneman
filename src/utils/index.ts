@@ -11,6 +11,7 @@ export { getApplicationName } from "./get-application-name";
 export { getHookScriptPath } from "./get-hook-script-path";
 export { importHook } from "./import-hook";
 export { isClientMetadata } from "./is-client-metadata";
+export { isRenovateBranch } from "./is-renovate-branch";
 export { isTemplateFolder } from "./is-template";
 export { matchesPatterns } from "./matches-patterns";
 export {
