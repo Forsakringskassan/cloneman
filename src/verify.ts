@@ -9,6 +9,7 @@ import {
 import {
     type ApplicationPackageJson,
     isClientMetadata,
+    isRenovateBranch,
     readJsonFile,
 } from "./utils";
 
@@ -49,6 +50,7 @@ export async function verify(options: {
             templateName,
             templateVersion,
             dependencyVersion,
+            isRenovateBranch: await isRenovateBranch(applicationPath),
         });
 
         if (isCI) {
