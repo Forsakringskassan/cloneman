@@ -28,6 +28,7 @@ const targetDir = temporaryDirectory();
 const authEnv = inject("authEnv");
 const npmrc = inject("npmrc");
 
+/* eslint-disable-next-line unicorn/no-unnecessary-parameters -- do not want to use the global variable directly */
 async function writeNpmRc(dst: string): Promise<void> {
     const filePath = path.join(dst, ".npmrc");
     await fs.writeFile(filePath, npmrc);

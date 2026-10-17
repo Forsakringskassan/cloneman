@@ -39,15 +39,6 @@ export async function getTemplateInfo(
         );
     }
 
-    const templateInfo = JSON.parse(getInfo.stdout) as {
-        fileHash: string;
-        filesDir: string;
-        hooksDir?: string;
-        boilerplateFiles: string[];
-        managedFiles: string[];
-        parameters?: Parameter[];
-    };
-
     const {
         fileHash,
         filesDir,
@@ -55,7 +46,14 @@ export async function getTemplateInfo(
         boilerplateFiles,
         managedFiles,
         parameters,
-    } = templateInfo;
+    } = JSON.parse(getInfo.stdout) as {
+        fileHash: string;
+        filesDir: string;
+        hooksDir?: string;
+        boilerplateFiles: string[];
+        managedFiles: string[];
+        parameters?: Parameter[];
+    };
     return {
         fileHash,
         filesDir,
