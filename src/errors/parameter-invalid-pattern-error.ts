@@ -22,8 +22,8 @@ export class ParameterInvalidPatternError extends UserError {
     }
 
     public override prettyMessage(): string {
-        const { key, pattern } = this.parameter;
-        const patternLiteral = JSON.stringify(pattern ?? "");
+        const { key, pattern = "" } = this.parameter;
+        const patternLiteral = JSON.stringify(pattern);
         const cause =
             this.cause instanceof Error
                 ? ` ${styleText("magenta", this.cause.message)}`

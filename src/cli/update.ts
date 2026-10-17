@@ -17,7 +17,7 @@ async function updateHandler(
     argv: UpdateArguments,
 ): Promise<void> {
     const {
-        target,
+        target = "latest",
         param,
         "if-same-filehash": ifSameFilehash,
         "only-dependencies": onlyDependencies,
@@ -25,7 +25,7 @@ async function updateHandler(
     } = argv;
     const { cwd } = context;
 
-    const version = target ?? "latest";
+    const version = target;
     const parameters = parseParams(param);
 
     const spinner = yoctoSpinner({
