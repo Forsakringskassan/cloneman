@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## [1.28.1](https://github.com/Forsakringskassan/cloneman/compare/v1.28.0...v1.28.1) (2026-10-19)
+
+### Bug Fixes
+
+* **deps:** update dependency sort-package-json to v4.1.0 ([7ad6d9b](https://github.com/Forsakringskassan/cloneman/commit/7ad6d9b657b701dd9d6821eb5036265d43df253f))
+* preserve nested package.json dependency field ordering (fixes [#206](https://github.com/Forsakringskassan/cloneman/issues/206)) ([28b59f8](https://github.com/Forsakringskassan/cloneman/commit/28b59f817323b6e6dff6ebc8ead67e5313c9b915))
+
 ## [1.28.0](https://github.com/Forsakringskassan/cloneman/compare/v1.27.2...v1.28.0) (2026-10-15)
 
 ### Features
