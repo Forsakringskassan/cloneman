@@ -1,7 +1,7 @@
 import { type CommandModule } from "yargs";
-import yoctoSpinner from "yocto-spinner";
 
 import { getTemplateParams } from "../get-template-params";
+import { createSpinner } from "./spinner";
 
 interface GetParamsArguments {
     packageName: string;
@@ -11,7 +11,7 @@ interface GetParamsArguments {
 async function getParamsHandler(argv: GetParamsArguments): Promise<void> {
     const { packageName: template, json } = argv;
 
-    const spinner = yoctoSpinner({
+    const spinner = createSpinner({
         text: `Fetching template parameters for "${template}"...`,
     });
 
