@@ -6,11 +6,11 @@ interface PackStructure {
     filename: string;
 }
 
-type Npm11PackOutput = [PackStructure];
-type Npm12PackOutput = Record<string, PackStructure>;
-
 function getPackOutput(stdout: string): string {
     /* npm 11 returns an array, npm 12 returns object directly */
+    type Npm11PackOutput = [PackStructure];
+    type Npm12PackOutput = Record<string, PackStructure>;
+
     const parsed = JSON.parse(stdout) as Npm11PackOutput | Npm12PackOutput;
     const { filename } = Array.isArray(parsed)
         ? parsed[0]

@@ -40,7 +40,7 @@ export async function createclonemanPackageJson(
         boilerplateFiles,
         managedFiles,
         partiallyManagedFiles,
-        removeFiles, // eslint-disable-line unicorn/no-non-function-verb-prefix -- cannot be changed until next major
+        removeFiles,
         ignoredDependencies,
         uninstallDependencies,
     } = options;
