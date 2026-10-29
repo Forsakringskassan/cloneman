@@ -43,3 +43,33 @@ describe("ensureFile()", () => {
         ).resolves.toBe("existing content");
     });
 });
+
+describe("renameFile()", () => {
+    it("renames a file", async () => {
+        expect.assertions(2);
+        vol.fromJSON({ "/application/old.txt": "content" });
+
+        await context.renameFile("old.txt", "new.txt");
+
+        expect(await fs.readFile("/application/new.txt", "utf8")).toBe(
+            "content",
+        );
+        expect(memfs.existsSync("/application/old.txt")).toBe(false);
+    });
+
+    it("throws when the source file does not exist by default", async () => {
+        expect.assertions(1);
+
+        await expect(
+            context.renameFile("missing.txt", "new.txt"),
+        ).rejects.toThrow();
+    });
+
+    it("does not throw when the source file does not exist and graceful is true", async () => {
+        expect.assertions(1);
+
+        await expect(
+            context.renameFile("missing.txt", "new.txt", { graceful: true }),
+        ).resolves.toBeUndefined();
+    });
+});
