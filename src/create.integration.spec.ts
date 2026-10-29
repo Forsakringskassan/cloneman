@@ -260,6 +260,7 @@ it("should return a default instructions message", async () => {
         name: "mock-app",
         templatePackage: "@forsakringskassan/base-template@1.0.0",
         cwd,
+        output: "",
         env: userEnv,
         parameters: new Map(),
     });
@@ -318,12 +319,12 @@ it("should collect parameters via overrides and store them in package.json", asy
 });
 
 it("should create new project in current directory", async () => {
-    expect.assertions(2);
+    expect.assertions(3);
     appDir = cwd;
 
-    await create({
+    const { message } = await create({
         name: "mock-app",
-        output: "./",
+        output: ".",
         templatePackage: "@forsakringskassan/base-template@1.0.0",
         cwd,
         env: userEnv,
@@ -334,6 +335,7 @@ it("should create new project in current directory", async () => {
         await readJsonFile<ApplicationPackageJson>("package.json");
     expect(packageJson.name).toBe("mock-app");
     expect(existsSync("mock-app")).toBe(false);
+    expect(message).toBe(`Now run:\n\n  npm install`);
 });
 
 it("should create new project in custom output directory", async () => {

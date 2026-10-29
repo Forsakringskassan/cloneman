@@ -164,11 +164,13 @@ export async function create(options: {
         }),
     );
 
-    const outputPath = output ?? name;
-
-    let message = [`Now run:`, ``, `  cd ${outputPath}`, `  npm install`].join(
-        "\n",
-    );
+    const outputPath = output === "" ? name : (output ?? name);
+    const instructions = [`Now run:`, ``];
+    if (path.resolve(cwd, outputPath) !== path.resolve(cwd)) {
+        instructions.push(`  cd ${outputPath}`);
+    }
+    instructions.push(`  npm install`);
+    let message = instructions.join("\n");
 
     if (hooksDir) {
         const context = createInstallContext({
