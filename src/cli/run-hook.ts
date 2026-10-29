@@ -1,3 +1,4 @@
+import fs from "node:fs/promises";
 import path from "node:path";
 import { type CommandModule } from "yargs";
 import { type HookMapping } from "../hooks";
@@ -44,6 +45,7 @@ async function runHookHandler(
                 targetDir,
                 name: targetPkgJson.name,
                 parameters,
+                fs,
                 version: {
                     oldVersion: null,
                     newVersion: cwdPkgJson.version,

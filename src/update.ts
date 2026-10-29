@@ -313,6 +313,7 @@ export async function update(options: {
                 targetDir: appDir,
                 name,
                 parameters,
+                fs,
                 version: {
                     oldVersion: cloneman.version,
                     newVersion: tmplPackageJson.version,
