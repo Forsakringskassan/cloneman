@@ -1,11 +1,6 @@
 import { HookNoExportedFnError } from "../errors";
 import { type HookMapping } from "../hooks";
 
-type HookModule<K extends keyof HookMapping> = Record<
-    K | "default",
-    HookMapping[K]
->;
-
 /**
  * Import and hook script and return the exported function.
  *
@@ -18,6 +13,10 @@ export async function importHook<K extends keyof HookMapping>(
     hook: K,
     scriptPath: string,
 ): Promise<HookMapping[K]> {
+    type HookModule<K extends keyof HookMapping> = Record<
+        K | "default",
+        HookMapping[K]
+    >;
     const mod = (await import(scriptPath)) as HookModule<K>;
     if (Object.hasOwn(mod, hook) && typeof mod[hook] === "function") {
         return mod[hook];

@@ -34,7 +34,6 @@ async function removeFiles(
     cloneman: Partial<TemplatePackageJson["cloneman"]>,
     { cwd }: { cwd: string },
 ): Promise<void> {
-    /* eslint-disable-next-line unicorn/no-non-function-verb-prefix -- cannot be changed until next major */
     const { removeFiles } = cloneman;
     if (!removeFiles) {
         return;
