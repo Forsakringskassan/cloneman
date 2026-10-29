@@ -62,6 +62,25 @@ export interface InstallContext {
     };
 
     /**
+     * Create an empty file if it does not exist.
+     *
+     * Missing parent directories are created recursively.
+     * Existing files are left unchanged.
+     *
+     * @public
+     * @since %version%
+     * @param filePath - Path relative to application root.
+     * @returns A promise resolved when the file exists.
+     *
+     * @example
+     *
+     * ```ts
+     * await context.ensureFile("config/local.json");
+     * ```
+     */
+    ensureFile(filePath: string): Promise<void>;
+
+    /**
      * Get the application name, e.g. the `name` field in `package.json`.
      *
      * @public

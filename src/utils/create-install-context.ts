@@ -1,5 +1,5 @@
 import { type Console } from "node:console";
-import fs from "node:fs/promises";
+import type nodeFs from "node:fs/promises";
 import path from "node:path";
 import {
     getApplicationSelector,
@@ -22,6 +22,7 @@ export function createInstallContext(options: {
     name: string;
     version: { oldVersion: string | null; newVersion: string };
     logger?: Console;
+    fs: typeof nodeFs;
     parameters: Map<string, string>;
     setMessage(this: void, text: string): void;
 }): InstallContext {
@@ -32,6 +33,7 @@ export function createInstallContext(options: {
         version,
         logger = console,
         parameters,
+        fs,
         setMessage,
     } = options;
     return {
@@ -40,6 +42,11 @@ export function createInstallContext(options: {
         logger,
         command,
         version,
+        async ensureFile(filePath) {
+            const filename = path.join(targetDir, filePath);
+            await fs.mkdir(path.dirname(filename), { recursive: true });
+            await fs.writeFile(filename, "", { flag: "a" });
+        },
         getApplicationName(opts) {
             return getApplicationName(name, {
                 unscoped: false,

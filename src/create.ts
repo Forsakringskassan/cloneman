@@ -178,6 +178,7 @@ export async function create(options: {
             targetDir: appPath,
             name,
             parameters,
+            fs,
             version: {
                 oldVersion: null,
                 newVersion: templatePackageVersion,

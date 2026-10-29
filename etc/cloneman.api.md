@@ -29,6 +29,7 @@ export interface BuildTemplateResult {
 // @public (undocumented)
 export interface InstallContext {
     readonly command: "create" | "update";
+    ensureFile(filePath: string): Promise<void>;
     getApplicationName(options?: {
         unscoped?: boolean;
     }): string;
