@@ -203,7 +203,8 @@ The install context contains:
 - `getParameter(key)` - returns the value of a declared parameter (see [Parameters](#parameters)).
 - `readFile(filePath)` - a helper function to read a file.
 - `readJsonFile(filePath)` - a helper function to read a json file.
-- `renameFile(oldFilePath, newFilePath)` - a helper function to rename a file.
+- `renameFile(oldFilePath, newFilePath, options)` - a helper function to rename a file.
+    - Set `options.graceful` to `true` to suppress errors if the rename fails.
 - `replaceInFile(filepath, [matcher], pattern, replacement)` - a helper to replace lines in files.
 - `writeFile(filePath, content)` - a helper function to write a file.
 - `writeJsonFile(filePath, content)` - a helper function to write a json file.
