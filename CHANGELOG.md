@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## [1.29.0](https://github.com/Forsakringskassan/cloneman/compare/v1.28.1...v1.29.0) (2026-10-29)
+
+### Features
+
+* ensureFile() install hook ([0bbc5b6](https://github.com/Forsakringskassan/cloneman/commit/0bbc5b63a5d43c269c35549c8e2ed54e05681691))
+
+### Bug Fixes
+
+* clarify the template version mismatch error message ([794a50b](https://github.com/Forsakringskassan/cloneman/commit/794a50bed87ea47dae00934e9c80311198d8cbd8))
+* graceful renameFile option ([ebdfc47](https://github.com/Forsakringskassan/cloneman/commit/ebdfc47681ff813b371a7c16682de188f61003cc))
+* omit redundant create directory instruction ([fe10dab](https://github.com/Forsakringskassan/cloneman/commit/fe10dab976255d41f6d55f8a6bd7bb163a6203bd))
+
 ## [1.28.1](https://github.com/Forsakringskassan/cloneman/compare/v1.28.0...v1.28.1) (2026-10-19)
 
 ### Bug Fixes

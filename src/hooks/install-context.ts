@@ -68,7 +68,7 @@ export interface InstallContext {
      * Existing files are left unchanged.
      *
      * @public
-     * @since %version%
+     * @since v1.29.0
      * @param filePath - Path relative to application root.
      * @returns A promise resolved when the file exists.
      *
