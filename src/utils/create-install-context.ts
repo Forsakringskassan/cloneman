@@ -58,11 +58,21 @@ export function createInstallContext(options: {
         readJsonFile<T>(filePath: string) {
             return readJsonFile<T>(path.join(targetDir, filePath));
         },
-        renameFile(oldPath: string, newPath: string) {
-            return fs.rename(
-                path.join(targetDir, oldPath),
-                path.join(targetDir, newPath),
-            );
+        async renameFile(oldPath: string, newPath: string, userOptions) {
+            const defaultOptions = { graceful: false };
+            const options = { ...defaultOptions, ...userOptions };
+            try {
+                await fs.rename(
+                    path.join(targetDir, oldPath),
+                    path.join(targetDir, newPath),
+                );
+            } catch (error: unknown) {
+                if (options.graceful) {
+                    return;
+                }
+
+                throw error;
+            }
         },
         replaceInFile(
             filePath: string,

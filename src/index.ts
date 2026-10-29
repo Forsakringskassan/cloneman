@@ -3,7 +3,11 @@ export {
     type TemplateConfig,
     readConfigFile,
 } from "./config";
-export { type BuildContext, type InstallContext } from "./hooks";
+export {
+    type BuildContext,
+    type InstallContext,
+    type RenameFileOptions,
+} from "./hooks";
 export {
     type Marker,
     type PackageJson,

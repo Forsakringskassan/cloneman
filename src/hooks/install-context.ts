@@ -2,6 +2,26 @@ import { type Console } from "node:console";
 import { type PackageJson } from "../utils";
 
 /**
+ * Options for renaming a file.
+ *
+ * @public
+ */
+export interface RenameFileOptions {
+    /**
+     * Suppress errors if the rename fails.
+     *
+     * @example
+     *
+     * ```ts
+     * await context.renameFile("missing.txt", "new-name.txt", {
+     *     graceful: true,
+     * });
+     * ```
+     */
+    graceful?: boolean;
+}
+
+/**
  * @public
  * @since v1.12.0
  */
@@ -135,9 +155,15 @@ export interface InstallContext {
      * @since v1.28.0
      * @param oldPath - Path of the existing file, relative to application root.
      * @param newPath - New path, relative to application root.
+     * @param options - Optional {@link RenameFileOptions}.
+     *
      * @returns A promise resolved when the file has been renamed.
      */
-    renameFile(oldPath: string, newPath: string): Promise<void>;
+    renameFile(
+        oldPath: string,
+        newPath: string,
+        options?: RenameFileOptions,
+    ): Promise<void>;
 
     /**
      * Replaces content in file. Each occurrence of `pattern` is replaced by

@@ -19,7 +19,11 @@ interface InstallContext {
     readFile(filePath: string): Promise<string>;
     readJsonFile(filePath: "package.json"): Promise<PackageJson>;
     readJsonFile<T = unknown>(filePath: string): Promise<T>;
-    renameFile(oldPath: string, newPath: string): Promise<void>;
+    renameFile(
+        oldPath: string,
+        newPath: string,
+        options?: RenameFileOptions,
+    ): Promise<void>;
     replaceInFile(
         filePath: string,
         pattern: string | RegExp,
@@ -319,7 +323,7 @@ Renames a file in the application.
 **Syntax**
 
 ```js
-context.renameFile(oldPath, newPath);
+context.renameFile(oldPath, newPath, options);
 ```
 
 **Parameters**
@@ -330,14 +334,22 @@ Path of the existing file, relative to the application root.
 : `newPath: string`
 New path, relative to the application root.
 
+: `options: object` (optional)
+Optional rename settings.
+
+: `options.graceful: boolean` (optional)
+When `true`, errors are suppressed if the rename fails.
+
 **Return value**
 
 A promise resolved when the file has been renamed.
+When `options.graceful` is `true`, it is also resolved if the rename fails.
 
 **Example:**
 
 ```ts
 await context.renameFile("old-name.txt", "new-name.txt");
+await context.renameFile("missing.txt", "new-name.txt", { graceful: true });
 ```
 
 ## replaceInFile method
