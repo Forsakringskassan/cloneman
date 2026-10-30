@@ -86,7 +86,7 @@
     "@forsakringskassan/eslint-config-vitest": "15.13.0",
     "@forsakringskassan/prettier-config": "3.7.13",
     "@html-validate/release-scripts": "7.6.17",
-    "@microsoft/api-extractor": "7.59.4",
+    "@microsoft/api-extractor": "7.60.0",
     "@tsconfig/node22": "22.0.6",
     "@tsconfig/recommended": "1.0.13",
     "@tsconfig/strictest": "2.0.8",
