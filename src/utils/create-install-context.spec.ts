@@ -32,6 +32,27 @@ describe("ensureFile()", () => {
         ).resolves.toBe("");
     });
 
+    it("creates a file with given content", async () => {
+        expect.assertions(1);
+
+        await context.ensureFile("config.txt", { content: "hello" });
+
+        await expect(
+            fs.readFile("/application/config.txt", "utf8"),
+        ).resolves.toBe("hello");
+    });
+
+    it("does not overwrite an existing file when content is given", async () => {
+        expect.assertions(1);
+        vol.fromJSON({ "/application/config.txt": "existing content" });
+
+        await context.ensureFile("config.txt", { content: "new" });
+
+        await expect(
+            fs.readFile("/application/config.txt", "utf8"),
+        ).resolves.toBe("existing content");
+    });
+
     it("does not change an existing file", async () => {
         expect.assertions(1);
         vol.fromJSON({ "/application/config.txt": "existing content" });

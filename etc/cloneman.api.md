@@ -26,10 +26,15 @@ export interface BuildTemplateResult {
     writeFile(filePath: string, content: string): Promise<void>;
 }
 
+// @public
+export interface EnsureFileOptions {
+    content?: string;
+}
+
 // @public (undocumented)
 export interface InstallContext {
     readonly command: "create" | "update";
-    ensureFile(filePath: string): Promise<void>;
+    ensureFile(filePath: string, options?: EnsureFileOptions): Promise<void>;
     getApplicationName(options?: {
         unscoped?: boolean;
     }): string;

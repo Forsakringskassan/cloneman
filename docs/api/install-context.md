@@ -12,7 +12,7 @@ interface InstallContext {
         readonly oldVersion: string | null;
         readonly newVersion: string;
     };
-    ensureFile(filePath: string): Promise<void>;
+    ensureFile(filePath: string, options?: EnsureFileOptions): Promise<void>;
     getApplicationName(options?: { unscoped?: boolean }): string;
     getApplicationSelector(): string;
     getApplicationSlug(): string;
@@ -45,20 +45,26 @@ interface InstallContext {
 
 ## ensureFile method
 
-Creates an empty file if it does not exist.
+Creates a file if it does not exist.
+The file is empty unless `content` is given in the options.
 Missing parent directories are created recursively.
 Existing files are left unchanged.
 
 **Syntax**
 
 ```js
-context.ensureFile(filePath);
+context.ensureFile(filePath, options);
 ```
 
 **Parameters**
 
 : `filePath: string`
 Path relative to the application root.
+
+: `options?: EnsureFileOptions`
+Optional options:
+
+- `content` - String written to the file if it is created. Existing files are never modified.
 
 **Return value**
 
@@ -68,6 +74,7 @@ A promise resolved when the file exists.
 
 ```ts
 await context.ensureFile("config/local.json");
+await context.ensureFile("config/other.json", { content: "{}" });
 ```
 
 ## command property

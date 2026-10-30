@@ -7,11 +7,24 @@ import {
 } from "@forsakringskassan/get-application-slug";
 import { ParameterNotDeclaredError } from "../errors";
 import { type InstallContext } from "../hooks";
+import type { EnsureFileOptions } from "../hooks/install-context";
 import { getApplicationName } from "./get-application-name";
 import { readJsonFile } from "./read-json-file";
 import { replaceInFile } from "./replace-in-file";
 import { updateJsonFile } from "./update-json-file";
 import { writeJsonFile } from "./write-json-file";
+
+async function fileExists(
+    fs: typeof nodeFs,
+    filename: string,
+): Promise<boolean> {
+    try {
+        await fs.access(filename);
+        return true;
+    } catch {
+        return false;
+    }
+}
 
 /**
  * @internal
@@ -42,10 +55,20 @@ export function createInstallContext(options: {
         logger,
         command,
         version,
-        async ensureFile(filePath) {
+        async ensureFile(filePath, userOptions) {
+            const defaultOptions: EnsureFileOptions = { content: "" };
+            const options = { ...defaultOptions, ...userOptions };
+
             const filename = path.join(targetDir, filePath);
+            const content = options.content ?? "";
+
             await fs.mkdir(path.dirname(filename), { recursive: true });
-            await fs.writeFile(filename, "", { flag: "a" });
+
+            if (await fileExists(fs, filename)) {
+                return;
+            }
+
+            await fs.writeFile(filename, content);
         },
         getApplicationName(opts) {
             return getApplicationName(name, {
