@@ -22,6 +22,25 @@ export interface RenameFileOptions {
 }
 
 /**
+ * Options for ensuring a file exists.
+ *
+ * @public
+ */
+export interface EnsureFileOptions {
+    /**
+     * Content written to the file if it is created.
+     * Existing files are never modified.
+     *
+     * @example
+     *
+     * ```ts
+     * await context.ensureFile("config/local.json", { content: "{}" });
+     * ```
+     */
+    content?: string;
+}
+
+/**
  * @public
  * @since v1.12.0
  */
@@ -62,7 +81,9 @@ export interface InstallContext {
     };
 
     /**
-     * Create an empty file if it does not exist.
+     * Create a file if it does not exist.
+     *
+     * The file is empty unless `content` is given in the options.
      *
      * Missing parent directories are created recursively.
      * Existing files are left unchanged.
@@ -70,6 +91,7 @@ export interface InstallContext {
      * @public
      * @since v1.29.0
      * @param filePath - Path relative to application root.
+     * @param options - Optional {@link EnsureFileOptions}.
      * @returns A promise resolved when the file exists.
      *
      * @example
@@ -78,7 +100,7 @@ export interface InstallContext {
      * await context.ensureFile("config/local.json");
      * ```
      */
-    ensureFile(filePath: string): Promise<void>;
+    ensureFile(filePath: string, options?: EnsureFileOptions): Promise<void>;
 
     /**
      * Get the application name, e.g. the `name` field in `package.json`.

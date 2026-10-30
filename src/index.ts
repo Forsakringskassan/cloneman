@@ -5,6 +5,7 @@ export {
 } from "./config";
 export {
     type BuildContext,
+    type EnsureFileOptions,
     type InstallContext,
     type RenameFileOptions,
 } from "./hooks";
