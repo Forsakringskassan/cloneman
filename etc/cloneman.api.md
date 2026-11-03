@@ -47,8 +47,8 @@ export interface InstallContext {
     readJsonFile<T = unknown>(filePath: string): Promise<T>;
     readonly relativeTargetDir: string;
     renameFile(oldPath: string, newPath: string, options?: RenameFileOptions): Promise<void>;
-    replaceInFile(filePath: string, pattern: string | RegExp, replacement: string | ((match: string, ...args: string[]) => string)): Promise<void>;
-    replaceInFile(filePath: string, matcher: RegExp, pattern: string | RegExp, replacement: string | ((match: string, ...args: string[]) => string)): Promise<void>;
+    replaceInFile(filePath: string, pattern: string | RegExp, replacement: string | ((match: string, ...args: string[]) => string), options?: ReplaceInFileOptions): Promise<void>;
+    replaceInFile(filePath: string, matcher: RegExp, pattern: string | RegExp, replacement: string | ((match: string, ...args: string[]) => string), options?: ReplaceInFileOptions): Promise<void>;
     setMessage(text: string | string[], delimiter?: string): void;
     readonly targetDir: string;
     updateJsonFile(filePath: string, content: object): Promise<void>;
@@ -173,6 +173,11 @@ export function readPackageJson(dir: string): Promise<PackageJson>;
 
 // @public
 export interface RenameFileOptions {
+    graceful?: boolean;
+}
+
+// @public
+export interface ReplaceInFileOptions {
     graceful?: boolean;
 }
 

@@ -206,7 +206,8 @@ The install context contains:
 - `readJsonFile(filePath)` - a helper function to read a json file.
 - `renameFile(oldFilePath, newFilePath, options)` - a helper function to rename a file.
     - Set `options.graceful` to `true` to suppress errors if the rename fails.
-- `replaceInFile(filepath, [matcher], pattern, replacement)` - a helper to replace lines in files.
+- `replaceInFile(filepath, [matcher], pattern, replacement, options?)` - a helper to replace lines in files.
+    - Set `options.graceful` to `true` to suppress the error if the file does not exist.
 - `writeFile(filePath, content)` - a helper function to write a file.
 - `writeJsonFile(filePath, content)` - a helper function to write a json file.
 - `updateJsonFile(filePath, content)` - a helper function to update an existing json file.

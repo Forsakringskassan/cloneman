@@ -4,4 +4,5 @@ export {
     type EnsureFileOptions,
     type InstallContext,
     type RenameFileOptions,
+    type ReplaceInFileOptions,
 } from "./install-context";
