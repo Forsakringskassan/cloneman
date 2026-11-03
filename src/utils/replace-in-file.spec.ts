@@ -18,6 +18,29 @@ beforeEach(() => {
     vol.reset();
 });
 
+it("should throw when the file does not exist by default", async () => {
+    expect.assertions(1);
+
+    await expect(
+        replaceInFile("/path/to/missing.txt", {
+            pattern: "foo",
+            replacement: "bar",
+        }),
+    ).rejects.toThrow();
+});
+
+it("should not throw when the file does not exist and graceful is true", async () => {
+    expect.assertions(1);
+
+    await expect(
+        replaceInFile("/path/to/missing.txt", {
+            pattern: "foo",
+            replacement: "bar",
+            graceful: true,
+        }),
+    ).resolves.toBeUndefined();
+});
+
 it("should replace string in file", async () => {
     expect.assertions(1);
     vol.fromJSON({

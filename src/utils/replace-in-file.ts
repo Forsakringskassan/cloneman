@@ -9,9 +9,18 @@ export async function replaceInFile(
         match?: RegExp | undefined;
         pattern: string | RegExp;
         replacement: string | ((match: string, ...args: string[]) => string);
+        graceful?: boolean | undefined;
     },
 ): Promise<void> {
-    const { match = /.*/, pattern, replacement } = options;
+    const { match = /.*/, pattern, replacement, graceful = false } = options;
+
+    if (
+        graceful &&
+        (await fs.stat(filePath, { throwIfNoEntry: false })) === undefined
+    ) {
+        return;
+    }
+
     const content = await fs.readFile(filePath, "utf8");
     const fn =
         typeof replacement === "string" ? () => replacement : replacement;

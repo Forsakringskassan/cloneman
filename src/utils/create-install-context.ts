@@ -11,6 +11,7 @@ import type { EnsureFileOptions } from "../hooks/install-context";
 import { getApplicationName } from "./get-application-name";
 import { readJsonFile } from "./read-json-file";
 import { replaceInFile } from "./replace-in-file";
+import { unpackReplaceInFileArgs } from "./unpack-replace-in-file-args";
 import { updateJsonFile } from "./update-json-file";
 import { writeJsonFile } from "./write-json-file";
 
@@ -104,29 +105,14 @@ export function createInstallContext(options: {
                 throw error;
             }
         },
-        replaceInFile(
-            filePath: string,
-            ...args:
-                | [
-                      pattern: string | RegExp,
-                      replacement:
-                          | string
-                          | ((match: string, ...args: string[]) => string),
-                  ]
-                | [
-                      matcher: RegExp,
-                      pattern: string | RegExp,
-                      replacement:
-                          | string
-                          | ((match: string, ...args: string[]) => string),
-                  ]
-        ) {
-            const [match, pattern, replacement] =
-                args.length === 3 ? args : [undefined, ...args];
+        replaceInFile(filePath: string, ...args: unknown[]) {
+            const { match, pattern, replacement, graceful } =
+                unpackReplaceInFileArgs(args);
             return replaceInFile(path.join(targetDir, filePath), {
                 match,
                 pattern,
                 replacement,
+                graceful,
             });
         },
         writeFile(filePath, content) {

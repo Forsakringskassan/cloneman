@@ -8,6 +8,7 @@ export {
     type EnsureFileOptions,
     type InstallContext,
     type RenameFileOptions,
+    type ReplaceInFileOptions,
 } from "./hooks";
 export {
     type Marker,

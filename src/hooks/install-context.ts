@@ -22,6 +22,26 @@ export interface RenameFileOptions {
 }
 
 /**
+ * Options for replacing content in a file.
+ *
+ * @public
+ */
+export interface ReplaceInFileOptions {
+    /**
+     * Suppress errors if the file does not exist.
+     *
+     * @example
+     *
+     * ```ts
+     * await context.replaceInFile("missing.txt", "foo", "bar", {
+     *     graceful: true,
+     * });
+     * ```
+     */
+    graceful?: boolean;
+}
+
+/**
  * Options for ensuring a file exists.
  *
  * @public
@@ -225,12 +245,14 @@ export interface InstallContext {
      * @param filePath - Path relative to application root.
      * @param pattern - Pattern to replace in file.
      * @param replacement - Value to replace pattern with.
+     * @param options - Optional {@link ReplaceInFileOptions}.
      * @returns A promise resolved when the updated file has been written.
      */
     replaceInFile(
         filePath: string,
         pattern: string | RegExp,
         replacement: string | ((match: string, ...args: string[]) => string),
+        options?: ReplaceInFileOptions,
     ): Promise<void>;
 
     /**
@@ -252,6 +274,7 @@ export interface InstallContext {
      * @param matcher - RegExp to match a specific line to perform replacements on.
      * @param pattern - Pattern to replace in file.
      * @param replacement - Value to replace pattern with.
+     * @param options - Optional {@link ReplaceInFileOptions}.
      * @returns A promise resolved when the updated file has been written.
      */
     replaceInFile(
@@ -259,6 +282,7 @@ export interface InstallContext {
         matcher: RegExp,
         pattern: string | RegExp,
         replacement: string | ((match: string, ...args: string[]) => string),
+        options?: ReplaceInFileOptions,
     ): Promise<void>;
 
     /**
