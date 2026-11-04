@@ -29,12 +29,14 @@ interface InstallContext {
         filePath: string,
         pattern: string | RegExp,
         replacement: string | ((match: string, ...args: string[]) => string),
+        options?: ReplaceInFileOptions,
     ): Promise<void>;
     replaceInFile(
         filePath: string,
         matcher: RegExp,
         pattern: string | RegExp,
         replacement: string | ((match: string, ...args: string[]) => string),
+        options?: ReplaceInFileOptions,
     ): Promise<void>;
     setMessage(text: string | string[], delimiter?: string): void;
     updateJsonFile(filePath: string, content: object): Promise<void>;
@@ -400,7 +402,7 @@ Replacements happen line by line.
 **Syntax**
 
 ```js
-context.replaceInFile(filePath, [matcher], pattern, replacement);
+context.replaceInFile(filePath, [matcher], pattern, replacement, [options]);
 ```
 
 **Parameters**
@@ -417,14 +419,24 @@ Pattern to replace in the file.
 : `replacement: string | ((match: string, ...args: string[]) => string)`
 Replacement value. When using a function it receives the matched `pattern` as well as each regular expression capture group.
 
+: `options: ReplaceInFileOptions` (optional)
+Optional replacement settings.
+
+: `options.graceful: boolean` (optional)
+When `true`, suppresses the error if the file does not exist.
+
 **Return value**
 
 A promise resolved when the file has been updated.
+When `options.graceful` is `true`, it also resolves if an error prevents the file from being updated.
 
 **Example:**
 
 ```ts
 await context.replaceInFile("README.md", "Old name", "New name");
+await context.replaceInFile("optional.txt", "Old name", "New name", {
+    graceful: true,
+});
 ```
 
 ## setMessage method
