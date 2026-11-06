@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## [1.30.0](https://github.com/Forsakringskassan/cloneman/compare/v1.29.0...v1.30.0) (2026-11-06)
+
+### Features
+
+* add content option to ensureFile() ([d4be1c6](https://github.com/Forsakringskassan/cloneman/commit/d4be1c66f119697bb32855db8f0f4964c926ebe0))
+
 ## [1.29.0](https://github.com/Forsakringskassan/cloneman/compare/v1.28.1...v1.29.0) (2026-10-29)
 
 ### Features
