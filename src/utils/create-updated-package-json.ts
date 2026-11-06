@@ -55,6 +55,12 @@ export function createUpdatedPackageJson(
     } = options;
 
     const base = onlyDependencies ? currentPackageJson : templatePackageJson;
+    const currentCloneman =
+        typeof currentPackageJson.cloneman === "object" &&
+        currentPackageJson.cloneman !== null &&
+        !Array.isArray(currentPackageJson.cloneman)
+            ? currentPackageJson.cloneman
+            : {};
 
     const packageJson: PackageJson = {
         ...base,
@@ -64,6 +70,7 @@ export function createUpdatedPackageJson(
             [tarballPackageJson.name]: version,
         },
         cloneman: {
+            ...currentCloneman,
             version: tarballPackageJson.version,
             template: tarballPackageJson.name,
             parameters: Object.fromEntries(parameters),

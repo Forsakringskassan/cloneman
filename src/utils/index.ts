@@ -1,4 +1,5 @@
 export { assertPartiallyManagedFiles } from "./assert-partially-managed-files";
+export { assertIgnoreFilesAreUntracked } from "./assert-ignore-files-are-untracked";
 export { createInstallContext } from "./create-install-context";
 export { createUpdatedPackageJson } from "./create-updated-package-json";
 export { filterDependencies } from "./filter-dependencies";

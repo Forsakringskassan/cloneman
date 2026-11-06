@@ -16,5 +16,12 @@ export function isClientMetadata(value: unknown): value is ClientMetadata {
     if (typeof value.version !== "string" || value.version.trim() === "") {
         return false;
     }
+    if (
+        "ignoreFiles" in value &&
+        (!Array.isArray(value.ignoreFiles) ||
+            value.ignoreFiles.some((file) => typeof file !== "string"))
+    ) {
+        return false;
+    }
     return true;
 }

@@ -2,6 +2,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { getStoredFileName } from "../template/utils/get-stored-file-name";
 import { patchPartiallyManagedFile } from "../template/utils/patch-partially-managed-file";
+import { matchesPatterns } from "./matches-patterns";
 import type { TemplatePackageJson } from "./package-json";
 
 /**
@@ -10,6 +11,7 @@ import type { TemplatePackageJson } from "./package-json";
 export async function updatePartiallyManagedFiles(
     files: Map<string, Buffer>,
     cloneman: Partial<TemplatePackageJson["cloneman"]>,
+    ignoreFiles: string[],
     { cwd }: { cwd: string },
 ): Promise<void> {
     const { partiallyManagedFiles } = cloneman;
@@ -19,6 +21,10 @@ export async function updatePartiallyManagedFiles(
 
     await Promise.all(
         partiallyManagedFiles.map(async (partial) => {
+            if (matchesPatterns(partial.filename, ignoreFiles)) {
+                return;
+            }
+
             const tarEntryPath = `package/files/${getStoredFileName(partial.filename)}`;
             const tarContent = files.get(tarEntryPath);
             if (tarContent === undefined) {

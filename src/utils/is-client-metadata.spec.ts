@@ -48,3 +48,32 @@ it("should return true for a valid object", () => {
         true,
     );
 });
+
+it("should return false when ignoreFiles is not a string array", () => {
+    expect.assertions(2);
+    expect(
+        isClientMetadata({
+            template: "mock-pkg",
+            version: "1.0.0",
+            ignoreFiles: "managed.txt",
+        }),
+    ).toBe(false);
+    expect(
+        isClientMetadata({
+            template: "mock-pkg",
+            version: "1.0.0",
+            ignoreFiles: ["managed.txt", 1],
+        }),
+    ).toBe(false);
+});
+
+it("should return true when ignoreFiles is a string array", () => {
+    expect.assertions(1);
+    expect(
+        isClientMetadata({
+            template: "mock-pkg",
+            version: "1.0.0",
+            ignoreFiles: ["managed.txt"],
+        }),
+    ).toBe(true);
+});

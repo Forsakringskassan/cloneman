@@ -10,6 +10,7 @@ import { getStoredFileName } from "./template/utils";
 import {
     type PackageJson,
     type TemplatePackageJson,
+    assertIgnoreFilesAreUntracked,
     collectParameters,
     createInstallContext,
     createUpdatedPackageJson,
@@ -21,6 +22,7 @@ import {
     install,
     isClientMetadata,
     isTarball,
+    matchesPatterns,
     parseTarball,
     readJsonFile,
     runHook,
@@ -58,6 +60,7 @@ async function removeFiles(
 async function copyFiles(
     files: Map<string, Buffer>,
     cloneman: Partial<TemplatePackageJson["cloneman"]>,
+    ignoreFiles: string[],
     { cwd }: { cwd: string },
 ): Promise<void> {
     const { managedFiles } = cloneman;
@@ -66,6 +69,9 @@ async function copyFiles(
     }
     await Promise.all(
         managedFiles.map(async (filename) => {
+            if (matchesPatterns(filename, ignoreFiles)) {
+                return;
+            }
             /* Managed package.json will be handled separately */
             if (filename.includes("package.json")) {
                 return;
@@ -129,6 +135,10 @@ export async function update(options: {
     if (!isClientMetadata(cloneman)) {
         throw new InvalidClonemanFieldError(cloneman);
     }
+    const { ignoreFiles = [] } = cloneman;
+    await assertIgnoreFilesAreUntracked(ignoreFiles, {
+        cwd: appDir,
+    });
 
     let tarballBuffer: Buffer;
     /*
@@ -263,15 +273,19 @@ export async function update(options: {
                 });
 
                 await text("Copying managed files", () => {
-                    return copyFiles(files, tarballPackageJson.cloneman, {
-                        cwd: appDir,
-                    });
+                    return copyFiles(
+                        files,
+                        tarballPackageJson.cloneman,
+                        ignoreFiles,
+                        { cwd: appDir },
+                    );
                 });
 
                 await text("Updating partially managed files", () => {
                     return updatePartiallyManagedFiles(
                         files,
                         tarballPackageJson.cloneman,
+                        ignoreFiles,
                         {
                             cwd: appDir,
                         },
@@ -279,7 +293,10 @@ export async function update(options: {
                 });
             }
 
-            const nestedPackageJsons = await findPackageJson(filesDir);
+            const nestedPackageJsons = await findPackageJson(
+                filesDir,
+                ignoreFiles,
+            );
             for (const templatePackageJson of nestedPackageJsons) {
                 const currentPackageJson = await readJsonFile<PackageJson>(
                     path.join(appDir, templatePackageJson.path),

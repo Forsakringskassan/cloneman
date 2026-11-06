@@ -43,6 +43,23 @@ Following fields wont be modified during an update:
 - homepage
 - repository
 
+### Ignore files
+
+Set `cloneman.ignoreFiles` in the application's `package.json` to file paths or glob patterns for local files that should be left unchanged during updates, such as machine-specific configuration. These files must not be tracked by Git.
+
+Tracked files are part of the shared codebase and are expected to follow the template. If you exclude them from updates, your project drifts away from the template and misses its fixes and improvements. At that point, much of the benefit of using a template is lost. T
+
+The update command reports an error if a matching file is tracked.
+
+```diff
+{
+  "cloneman": {
+    ... # Version, filehash defined by Cloneman
++    "ignoreFiles": ["managed.txt", "config/*.json"]
+  }
+}
+```
+
 ## Local tarball
 
 As with the create command, you can also point to a local tarball:

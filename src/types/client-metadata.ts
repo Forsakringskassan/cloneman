@@ -12,4 +12,6 @@ export interface ClientMetadata {
     readonly fileHash: string;
     /** Parameter values collected from the user. */
     readonly parameters?: Record<string, string>;
+    /** File paths or glob patterns to leave unchanged during template updates. */
+    readonly ignoreFiles?: string[];
 }

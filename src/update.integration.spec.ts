@@ -1,5 +1,6 @@
 import fs from "node:fs/promises";
 import path from "node:path";
+import spawn from "nano-spawn";
 import {
     afterEach,
     beforeEach,
@@ -179,6 +180,79 @@ describe("update existing project with template from registry", () => {
                 template: "@forsakringskassan/base-template",
                 version: "1.0.1",
             },
+        });
+    });
+
+    describe("ignoreFiles", () => {
+        it("should not overwrite ignored files", async () => {
+            expect.assertions(2);
+            const packageJson =
+                await readJsonFile<ApplicationPackageJson>("package.json");
+            packageJson.cloneman = {
+                ...(packageJson.cloneman as ClientMetadata),
+                ignoreFiles: ["managed*.txt"],
+            };
+            await writeJsonFile(
+                path.join(appDir, "package.json"),
+                packageJson,
+                {
+                    indent: 2,
+                    trailer: "",
+                },
+            );
+            await writeFile("managed.txt", "locally customized content");
+
+            await update({
+                cwd: appDir,
+                version: "1.0.1",
+                env: userEnv,
+                parameters: new Map(),
+                ifSameFilehash: false,
+                npmInstall: false,
+            });
+
+            expect(await readFile("managed.txt")).toBe(
+                "locally customized content",
+            );
+            expect(await readJsonFile("package.json")).toMatchObject({
+                cloneman: {
+                    ignoreFiles: ["managed*.txt"],
+                },
+            });
+        });
+
+        it("should reject ignored files tracked by Git", async () => {
+            expect.assertions(2);
+            const packageJson =
+                await readJsonFile<ApplicationPackageJson>("package.json");
+            packageJson.cloneman = {
+                ...(packageJson.cloneman as ClientMetadata),
+                ignoreFiles: ["managed*.txt"],
+            };
+            await writeJsonFile(
+                path.join(appDir, "package.json"),
+                packageJson,
+                {
+                    indent: 2,
+                    trailer: "",
+                },
+            );
+            await spawn("git", ["init"], { cwd: appDir });
+            await spawn("git", ["add", "managed.txt"], { cwd: appDir });
+
+            await expect(
+                update({
+                    cwd: appDir,
+                    version: "1.0.1",
+                    env: userEnv,
+                    parameters: new Map(),
+                    ifSameFilehash: false,
+                    npmInstall: false,
+                }),
+            ).rejects.toThrow("must not be checked into Git: managed.txt");
+            expect(await readFile("managed.txt")).toContain(
+                "managed file at v1.0.0",
+            );
         });
     });
 

@@ -342,6 +342,41 @@ describe("createUpdatedPackageJson", () => {
         expect(Object.keys(result)).not.toContain("scripts");
     });
 
+    it("should preserve other cloneman metadata fields while updating managed fields", () => {
+        expect.assertions(1);
+
+        const currentPackageJson: PackageJson = {
+            ...baselinePackageJson,
+            cloneman: {
+                customField: "preserved",
+                version: "0.9.0",
+                template: "@old/template",
+                parameters: { old: "value" },
+                fileHash: "old-hash",
+            },
+        };
+
+        const result = createUpdatedPackageJson({
+            currentPackageJson,
+            templatePackageJson: baselinePackageJson,
+            dependencies: {},
+            devDependencies: {},
+            tarballPackageJson,
+            version: "1.2.3",
+            parameters: new Map([["new", "value"]]),
+            fileHash: "new-hash",
+            onlyDependencies: true,
+        });
+
+        expect(result.cloneman).toEqual({
+            customField: "preserved",
+            version: "1.2.3",
+            template: "@forsakringskassan/template",
+            parameters: { new: "value" },
+            fileHash: "new-hash",
+        });
+    });
+
     describe("with same filehash", () => {
         it("should retain user modifications when filehash is the same", () => {
             expect.assertions(1);
