@@ -145,6 +145,30 @@ describe("filterDependencies", () => {
         });
     });
 
+    it("should add new template dependencies matching an ignored glob pattern", () => {
+        expect.assertions(1);
+        const appDependencies = {
+            "@fkui/a": "1.0.0",
+        };
+        const templateDependencies = {
+            "@fkui/b": "2.0.0",
+            "@fkui/c": "3.0.0",
+        };
+
+        const result = filterDependencies({
+            appDependencies,
+            templateDependencies,
+            uninstallDependencies: undefined,
+            ignoredDependencies: ["@fkui/*"],
+        });
+
+        expect(result).toEqual({
+            "@fkui/a": "1.0.0",
+            "@fkui/b": "2.0.0",
+            "@fkui/c": "3.0.0",
+        });
+    });
+
     it("should not ignore dependencies excluded by a negation pattern in ignoredDependencies", () => {
         expect.assertions(1);
         const appDependencies = {

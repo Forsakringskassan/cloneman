@@ -12,7 +12,7 @@ import { matchesPatterns } from "./matches-patterns";
  *  - `appDependencies`: the current application's dependencies,
  *  - `templateDependencies`: the dependencies owned by the template,
  *  - `uninstallDependencies`: an optional list of names or glob patterns to remove from the application, and
- *  - `ignoredDependencies`: an optional list of names or glob patterns to remove from the template dependencies.
+ *  - `ignoredDependencies`: an optional list of names or glob patterns to prevent existing application dependencies from being updated.
  */
 export function filterDependencies(options: {
     appDependencies: Partial<Record<string, string>> | undefined;
@@ -30,7 +30,8 @@ export function filterDependencies(options: {
         matchesPatterns(key, ignoredDependencies);
     const filteredTemplateDependencies = Object.fromEntries(
         Object.entries(templateDependencies).filter(
-            ([key]) => !shouldIgnore(key),
+            ([key]) =>
+                !shouldIgnore(key) || !Object.hasOwn(appDependencies, key),
         ),
     );
     const templateKeys = new Set(Object.keys(filteredTemplateDependencies));
