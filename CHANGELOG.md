@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## [1.31.0](https://github.com/Forsakringskassan/cloneman/compare/v1.30.0...v1.31.0) (2026-11-09)
+
+### Features
+
+* add graceful option to `replaceInFile` ([f8aa0f2](https://github.com/Forsakringskassan/cloneman/commit/f8aa0f26e95917000e5473939a5c3d03307b3824))
+
 ## [1.30.0](https://github.com/Forsakringskassan/cloneman/compare/v1.29.0...v1.30.0) (2026-11-06)
 
 ### Features
