@@ -89,7 +89,7 @@
     "@microsoft/api-extractor": "7.60.1",
     "@tsconfig/node22": "22.0.7",
     "@tsconfig/recommended": "1.0.14",
-    "@tsconfig/strictest": "2.0.8",
+    "@tsconfig/strictest": "2.0.9",
     "@types/jsonwebtoken": "9.0.10",
     "@types/stream-buffers": "3.0.8",
     "@types/yargs": "17.0.35",
