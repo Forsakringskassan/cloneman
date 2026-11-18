@@ -72,7 +72,7 @@
     "is-ci": "4.1.0",
     "nano-spawn": "3.0.0",
     "sort-package-json": "4.1.0",
-    "tar": "7.5.22",
+    "tar": "7.5.23",
     "yargs": "18.2.0",
     "yocto-spinner": "1.2.2"
   },
