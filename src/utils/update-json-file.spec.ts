@@ -159,7 +159,7 @@ it("should preserve LF trailing newline when present", async () => {
     });
     await updateJsonFile("/path/to/file.json", { foo: "baz" });
     const raw = await fs.promises.readFile("/path/to/file.json", "utf8");
-    expect(raw.toString().endsWith("\n")).toBe(true);
+    expect(raw.endsWith("\n")).toBe(true);
 });
 
 it("should preserve CRLF trailing newline when present", async () => {
@@ -169,7 +169,7 @@ it("should preserve CRLF trailing newline when present", async () => {
     });
     await updateJsonFile("/path/to/file.json", { foo: "baz" });
     const raw = await fs.promises.readFile("/path/to/file.json", "utf8");
-    expect(raw.toString().endsWith("\r\n")).toBe(true);
+    expect(raw.endsWith("\r\n")).toBe(true);
 });
 
 it("should not add trailing newline when not present", async () => {
@@ -179,7 +179,7 @@ it("should not add trailing newline when not present", async () => {
     });
     await updateJsonFile("/path/to/file.json", { foo: "baz" });
     const raw = await fs.promises.readFile("/path/to/file.json", "utf8");
-    expect(raw.toString().endsWith("\n")).toBe(false);
+    expect(raw.endsWith("\n")).toBe(false);
 });
 
 it("should preserve 2-space indentation", async () => {
@@ -189,7 +189,7 @@ it("should preserve 2-space indentation", async () => {
     });
     await updateJsonFile("/path/to/file.json", { foo: "baz" });
     const raw = await fs.promises.readFile("/path/to/file.json", "utf8");
-    expect(raw.toString()).toBe('{\n  "foo": "baz"\n}\n');
+    expect(raw).toBe('{\n  "foo": "baz"\n}\n');
 });
 
 it("should preserve 4-space indentation", async () => {
@@ -199,7 +199,7 @@ it("should preserve 4-space indentation", async () => {
     });
     await updateJsonFile("/path/to/file.json", { foo: "baz" });
     const raw = await fs.promises.readFile("/path/to/file.json", "utf8");
-    expect(raw.toString()).toBe('{\n    "foo": "baz"\n}\n');
+    expect(raw).toBe('{\n    "foo": "baz"\n}\n');
 });
 
 it("should preserve tab indentation", async () => {
@@ -209,5 +209,5 @@ it("should preserve tab indentation", async () => {
     });
     await updateJsonFile("/path/to/file.json", { foo: "baz" });
     const raw = await fs.promises.readFile("/path/to/file.json", "utf8");
-    expect(raw.toString()).toBe('{\n\t"foo": "baz"\n}\n');
+    expect(raw).toBe('{\n\t"foo": "baz"\n}\n');
 });

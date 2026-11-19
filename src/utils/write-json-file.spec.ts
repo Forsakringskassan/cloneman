@@ -18,14 +18,14 @@ it("should write JSON to a new file", async () => {
     expect.assertions(1);
     await writeJsonFile(filename, { foo: "bar" }, { indent: 2, trailer: "" });
     const raw = await fs.promises.readFile(filename, "utf8");
-    expect(raw.toString()).toBe('{\n  "foo": "bar"\n}');
+    expect(raw).toBe('{\n  "foo": "bar"\n}');
 });
 
 it("should use trailing newline from options when file does not exist", async () => {
     expect.assertions(1);
     await writeJsonFile(filename, { foo: "bar" }, { indent: 2, trailer: "\n" });
     const raw = await fs.promises.readFile(filename, "utf8");
-    expect(raw.toString()).toBe('{\n  "foo": "bar"\n}\n');
+    expect(raw).toBe('{\n  "foo": "bar"\n}\n');
 });
 
 it("should overwrite an existing file", async () => {
@@ -33,7 +33,7 @@ it("should overwrite an existing file", async () => {
     vol.fromJSON({ [filename]: '{\n  "foo": "old"\n}' });
     await writeJsonFile(filename, { foo: "new" }, { indent: 2, trailer: "" });
     const raw = await fs.promises.readFile(filename, "utf8");
-    expect(raw.toString()).toBe('{\n  "foo": "new"\n}');
+    expect(raw).toBe('{\n  "foo": "new"\n}');
 });
 
 it("should preserve LF trailing newline from existing file", async () => {
@@ -41,7 +41,7 @@ it("should preserve LF trailing newline from existing file", async () => {
     vol.fromJSON({ [filename]: '{\n  "foo": "old"\n}\n' });
     await writeJsonFile(filename, { foo: "new" }, { indent: 4, trailer: "" });
     const raw = await fs.promises.readFile(filename, "utf8");
-    expect(raw.toString()).toBe('{\n  "foo": "new"\n}\n');
+    expect(raw).toBe('{\n  "foo": "new"\n}\n');
 });
 
 it("should preserve CRLF trailing newline from existing file", async () => {
@@ -49,7 +49,7 @@ it("should preserve CRLF trailing newline from existing file", async () => {
     vol.fromJSON({ [filename]: '{\n  "foo": "old"\n}\r\n' });
     await writeJsonFile(filename, { foo: "new" }, { indent: 4, trailer: "" });
     const raw = await fs.promises.readFile(filename, "utf8");
-    expect(raw.toString()).toBe('{\n  "foo": "new"\n}\r\n');
+    expect(raw).toBe('{\n  "foo": "new"\n}\r\n');
 });
 
 it("should not add trailing newline when existing file has none", async () => {
@@ -57,14 +57,14 @@ it("should not add trailing newline when existing file has none", async () => {
     vol.fromJSON({ [filename]: '{"foo":"old"}' });
     await writeJsonFile(filename, { foo: "new" }, { indent: 2, trailer: "\n" });
     const raw = await fs.promises.readFile(filename, "utf8");
-    expect(raw.toString().endsWith("\n")).toBe(false);
+    expect(raw.endsWith("\n")).toBe(false);
 });
 
 it("should use the given indent", async () => {
     expect.assertions(1);
     await writeJsonFile(filename, { foo: "bar" }, { indent: 4, trailer: "" });
     const raw = await fs.promises.readFile(filename, "utf8");
-    expect(raw.toString()).toBe('{\n    "foo": "bar"\n}');
+    expect(raw).toBe('{\n    "foo": "bar"\n}');
 });
 
 it("should preserve 2-space indentation from existing file", async () => {
@@ -72,7 +72,7 @@ it("should preserve 2-space indentation from existing file", async () => {
     vol.fromJSON({ [filename]: '{\n  "foo": "old"\n}' });
     await writeJsonFile(filename, { foo: "new" }, { indent: 4, trailer: "" });
     const raw = await fs.promises.readFile(filename, "utf8");
-    expect(raw.toString()).toBe('{\n  "foo": "new"\n}');
+    expect(raw).toBe('{\n  "foo": "new"\n}');
 });
 
 it("should preserve 4-space indentation from existing file", async () => {
@@ -80,7 +80,7 @@ it("should preserve 4-space indentation from existing file", async () => {
     vol.fromJSON({ [filename]: '{\n    "foo": "old"\n}' });
     await writeJsonFile(filename, { foo: "new" }, { indent: 2, trailer: "" });
     const raw = await fs.promises.readFile(filename, "utf8");
-    expect(raw.toString()).toBe('{\n    "foo": "new"\n}');
+    expect(raw).toBe('{\n    "foo": "new"\n}');
 });
 
 it("should preserve tab indentation from existing file", async () => {
@@ -88,14 +88,14 @@ it("should preserve tab indentation from existing file", async () => {
     vol.fromJSON({ [filename]: '{\n\t"foo": "old"\n}' });
     await writeJsonFile(filename, { foo: "new" }, { indent: 2, trailer: "" });
     const raw = await fs.promises.readFile(filename, "utf8");
-    expect(raw.toString()).toBe('{\n\t"foo": "new"\n}');
+    expect(raw).toBe('{\n\t"foo": "new"\n}');
 });
 
 it("should use indent from options when file does not exist", async () => {
     expect.assertions(1);
     await writeJsonFile(filename, { foo: "bar" }, { indent: 4, trailer: "" });
     const raw = await fs.promises.readFile(filename, "utf8");
-    expect(raw.toString()).toBe('{\n    "foo": "bar"\n}');
+    expect(raw).toBe('{\n    "foo": "bar"\n}');
 });
 
 it("should throw when value is undefined", async () => {
