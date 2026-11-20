@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## [1.32.0](https://github.com/Forsakringskassan/cloneman/compare/v1.31.0...v1.32.0) (2026-11-20)
+
+### Features
+
+* **deps:** update dependency nano-spawn to v3 ([3f4d151](https://github.com/Forsakringskassan/cloneman/commit/3f4d151f39a6960cc629f65c7651e6a4f893125b))
+
+### Bug Fixes
+
+* **deps:** update dependency tar to v7.5.23 ([073834c](https://github.com/Forsakringskassan/cloneman/commit/073834c43b728e60346168faefc9036049861d47))
+
 ## [1.31.0](https://github.com/Forsakringskassan/cloneman/compare/v1.30.0...v1.31.0) (2026-11-09)
 
 ### Features
